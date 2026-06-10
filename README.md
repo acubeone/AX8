@@ -1,4 +1,4 @@
-# AX8 -> Axle 8-bits
+# AX8: Axle 8-bits
 
 ## Overview
 
@@ -7,6 +7,11 @@ endereçável. Instruções são 8-bits com decodificação ortogonal: Os bits 7
 ditam a unidade funcional, enquanto bits 4:0 mais baixos configuram a operação.
 Algumas instruções são seguidas por um endereço de 12-bits ou um valor de
 8-bits, fazendo-os serem 3-bytes ou 2-bytes no total.
+
+&nbsp;&nbsp;&nbsp;&nbsp; Todos os programas se iniciam pelo endereço contido em `0x0000`,
+ao reset/powerup da CPU, esse endereço é lido e o valor contido nele é
+registrado no Program Counter. Por conveniência, o endereço `0x0002` pode ser
+utilizado como Stack Pointer.
 
 ### Registradores
 
@@ -114,7 +119,7 @@ Modos:
 
 ### Tabela de modos
 
-&nbsp;&nbsp;&nbsp;&nbsp; Os modos são ditos bits 4:0 do opcode. Sua encodificação
+&nbsp;&nbsp;&nbsp;&nbsp; Os modos são ditos pelos bits 4:0 do opcode. Sua encodificação
 é feita da seguinte forma[^1]: Os bits 4:3 determinam se o modo é a
 alternação de submodo, e os bits 2:0 ditam qual submodo deve ser configurado
 e executado. Qualquer modo não encodificado aqui deve gerar a instrução: `HALT`
