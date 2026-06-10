@@ -9,9 +9,9 @@ Algumas instruções são seguidas por um endereço de 12-bits ou um valor de
 8-bits, fazendo-os serem 3-bytes ou 2-bytes no total.
 
 &nbsp;&nbsp;&nbsp;&nbsp; Todos os programas se iniciam pelo endereço contido em `0x0000`,
-ao reset/powerup da CPU, esse endereço é lido e o valor contido nele é
-registrado no Program Counter. Por conveniência, o endereço `0x0002` pode ser
-utilizado como Stack Pointer.
+ao reset/powerup da CPU, dois bytes são lidos nesse endereço e registrados no
+Program Counter. Por conveniência, o endereço `0x0002` pode ser utilizado
+como Stack Pointer.
 
 ### Registradores
 
@@ -141,7 +141,7 @@ Grupo `001`: Memory
 | `00000` | `LD  addr` | `A <- mem[addr]`  |
 | `00001` | `ST  addr` | `mem[addr] <- A`  |
 | `00010` | `LD  [IY]` | `A <- mem[IY]`    |
-| `00011` | `ST  [IY]` | `mem[IX] <- A`    |
+| `00011` | `ST  [IY]` | `mem[IY] <- A`    |
 | `00100` | `LDX addr` | `IX <- mem[addr]` |
 | `00101` | `STX addr` | `mem[addr] <- IX` |
 | `00110` | `LDY addr` | `IY <- mem[addr]` |
@@ -240,15 +240,16 @@ Notas relevantes sobre cada instrução:
 
 - `SUB`: A operação pode ser implementada como: `A + (~B) + C`, já que,
   tecnicamente, isto é equivalente a: `A - B - (~C)`.
-- `SHL` e `SHR`: Operações são feitas como `ROL` e `ROR`, mas com a flag carry em `0`
+- `SHL` e `SHR`: Não tem opcodes próprios na ALU, as operações são feitas como
+  `ROL` e `ROR`, mas com a flag carry em `0`
 - `NOT`: Pode ser implementado como: `A XOR 0xFF`
 - `CMP`: O resultado da operação pode ser interpretado como:
 
-  | Relação  |  Z  |  C  |   N    |
-  | :------: | :-: | :-: | :----: |
-  | `A < OP` | `0` | `0` | `Y[7]` |
-  | `A = OP` | `1` | `1` |  `0`   |
-  | `A > OP` | `0` | `1` | `Y[7]` |
+  | Relação |  Z  |  C  |   N    |
+  | :-----: | :-: | :-: | :----: |
+  | `A < B` | `0` | `0` | `Y[7]` |
+  | `A = B` | `1` | `1` |  `0`   |
+  | `A > B` | `0` | `1` | `Y[7]` |
 
 ### Referências e materiais utilizados:
 
