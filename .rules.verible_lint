@@ -1,0 +1,20 @@
+# =====================================================================
+# Default Verible Linter Configuration File (.rules.verible_lint)
+# =====================================================================
+
+# 1. Enforce strict styling and formatting choices
++line-length=length:90           # Warn if lines exceed 100 characters
++no-tabs                          # Enforce spaces instead of tabs
++enum-name-style=style:under_case # Enforce under_case for enums
+
+# 2. Strict naming conventions for modules and files
++interface-name-style=style:under_case
++module-filename                  # Module name MUST match filename
+
+# 3. Disable annoying rules that trigger too often
+-invalid-parse-mode-directive     # Disable strict parsing directive warnings
+-explicit-parameter-storage-type  # Turn off explicit type enforcement for parameters
+
+# 4. Mandatory constructive rules
++always-comb                      # Force always_comb over always @(*)
++forbidden-macro                  # Restrict toxic macro structures
