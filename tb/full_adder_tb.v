@@ -2,7 +2,7 @@ module full_adder_tb;
   reg a, b, cin;
   wire y, cout;
 
-  full_adder u0 (
+  full_adder fa0 (
       .a(a),
       .b(b),
       .cin(cin),
