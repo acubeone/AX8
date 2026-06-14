@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module ripple_adder_4_tb;
   reg [3:0] a, b;
   reg cin;

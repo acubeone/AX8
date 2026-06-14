@@ -1,4 +1,3 @@
-+timescale+1ns/1ps
 +incdir+./src
 
 ./src/cpu.v
