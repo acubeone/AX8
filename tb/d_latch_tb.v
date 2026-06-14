@@ -1,3 +1,4 @@
+/* vim: set filetype=verilog : */
 `timescale 1ns / 1ps
 
 module d_latch_tb;

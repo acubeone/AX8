@@ -1,3 +1,4 @@
+/* vim: set filetype=verilog : */
 `timescale 1ns / 1ps
 
 module ripple_adder_8_tb;
