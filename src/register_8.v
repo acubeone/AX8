@@ -19,10 +19,12 @@ module register_8 (
       wire nwe;
       wire w0, w1;
 
-      not n0 (nwe, we);
-      and a0 (w0, we, d[i]);
-      and a1 (w1, nwe, q[i]);
-      or o0 (d_in[i], w0, w1);
+      mux_2x1 m0 (
+          .s(we),
+          .a(q[i]),
+          .b(d[i]),
+          .y(d_in[i])
+      );
 
       d_flipflop dff (
           .clk(clk),
