@@ -8,6 +8,7 @@ module mux_2to1 (
     output y
 );
   // y = (~s & a) | (s & b)
+  wire ns;
   wire w0, w1;
 
   not n0 (ns, s);
