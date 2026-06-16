@@ -1,7 +1,7 @@
 /* vim: set filetype=verilog : */
 `timescale 1ns / 1ps
 
-module mux_2x1 (
+module mux_2to1 (
     input  s,
     input  a,
     input  b,

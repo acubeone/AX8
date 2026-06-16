@@ -19,7 +19,7 @@ module register_8 (
       wire nwe;
       wire w0, w1;
 
-      mux_2x1 m0 (
+      mux_2to1 mux (
           .s(we),
           .a(q[i]),
           .b(d[i]),
