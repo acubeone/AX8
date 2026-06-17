@@ -40,7 +40,6 @@ module ripple_adder_4_tb;
     $dumpfile("ripple_adder_4.vcd");
     $dumpvars(0, ripple_adder_4_tb);
 
-
     check(4'h0, 4'h0, 1'b0, 4'h0, 1'b0);  // 0 + 0, C=0 -> 0, C=0
     check(4'h0, 4'h1, 1'b0, 4'h1, 1'b0);  // 0 + 1, C=0 -> 1, C=0
     check(4'hf, 4'h1, 1'b0, 4'h0, 1'b1);  // f + 1, C=0 -> 0, C=1
