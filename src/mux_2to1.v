@@ -7,15 +7,15 @@ module mux_2to1 (
     input  b,
     output y
 );
-  // y = (~s & a) | (s & b)
-  wire ns;
-  wire w0, w1;
+    // y = (~s & a) | (s & b)
+    wire ns;
+    wire w0, w1;
 
-  not n0 (ns, s);
+    not n0 (ns, s);
 
-  nand na0 (w0, ns, a);  // w0 = ~(~s & a)
-  nand na1 (w1, s, b);  // w1 = ~(s & b)
+    nand na0 (w0, ns, a);  // w0 = ~(~s & a)
+    nand na1 (w1, s, b);  // w1 = ~(s & b)
 
-  nand na2 (y, w0, w1);
+    nand na2 (y, w0, w1);
 
 endmodule

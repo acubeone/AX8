@@ -12,7 +12,6 @@
 +module-filename                  # Module name MUST match filename
 
 # 3. Disable annoying rules that trigger too often
--invalid-parse-mode-directive     # Disable strict parsing directive warnings
 -explicit-parameter-storage-type  # Turn off explicit type enforcement for parameters
 
 # 4. Mandatory constructive rules

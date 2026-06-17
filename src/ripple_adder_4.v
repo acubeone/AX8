@@ -8,21 +8,21 @@ module ripple_adder_4 (
     output [3:0] y,
     output cout
 );
-  wire [4:0] carry;
+    wire [4:0] carry;
 
-  assign carry[0] = cin;
-  assign cout = carry[4];
+    assign carry[0] = cin;
+    assign cout = carry[4];
 
-  genvar i;
-  generate
-    for (i = 0; i < 4; i = i + 1) begin : gen_add
-      full_adder fa (
-          .a(a[i]),
-          .b(b[i]),
-          .cin(carry[i]),
-          .y(y[i]),
-          .cout(carry[i+1])
-      );
-    end
-  endgenerate
+    genvar i;
+    generate
+        for (i = 0; i < 4; i = i + 1) begin : gen_add
+            full_adder fa (
+                .a   (a[i]),
+                .b   (b[i]),
+                .cin (carry[i]),
+                .y   (y[i]),
+                .cout(carry[i+1])
+            );
+        end
+    endgenerate
 endmodule

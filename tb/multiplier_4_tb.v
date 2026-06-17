@@ -21,7 +21,6 @@ module multiplier_4_tb;
       b = tb;
       #10;
 
-
       if (y !== expected_y) begin
         $display("FAIL: a=%h b=%h -> got y=%h, expected y=%h", ta, tb, y, expected_y);
         errors = errors + 1;
