@@ -41,16 +41,16 @@ module ripple_adder_4_tb;
     $dumpvars(0, ripple_adder_4_tb);
 
 
-    check(4'h0, 4'h0, 0, 4'h0, 0);  // 0 + 0, C=0 -> 0, C=0
-    check(4'h0, 4'h1, 0, 4'h1, 0);  // 0 + 1, C=0 -> 1, C=0
-    check(4'hf, 4'h1, 0, 4'h0, 1);  // f + 1, C=0 -> 0, C=1
+    check(4'h0, 4'h0, 1'b0, 4'h0, 1'b0);  // 0 + 0, C=0 -> 0, C=0
+    check(4'h0, 4'h1, 1'b0, 4'h1, 1'b0);  // 0 + 1, C=0 -> 1, C=0
+    check(4'hf, 4'h1, 1'b0, 4'h0, 1'b1);  // f + 1, C=0 -> 0, C=1
 
-    check(4'h0, 4'h0, 1, 4'h1, 0);  // 0 + 0, C=1 -> 1, C=0
-    check(4'h0, 4'h1, 1, 4'h2, 0);  // 0 + 1, C=1 -> 2, C=0
-    check(4'hf, 4'h1, 1, 4'h1, 1);  // f + 1, C=1 -> 1, C=1
+    check(4'h0, 4'h0, 1'b1, 4'h1, 1'b0);  // 0 + 0, C=1 -> 1, C=0
+    check(4'h0, 4'h1, 1'b1, 4'h2, 1'b0);  // 0 + 1, C=1 -> 2, C=0
+    check(4'hf, 4'h1, 1'b1, 4'h1, 1'b1);  // f + 1, C=1 -> 1, C=1
 
-    check(4'hf, 4'hf, 0, 4'he, 1);  // f + f, C=0 -> e, C=1
-    check(4'hf, 4'hf, 1, 4'hf, 1);  // f + f, C=1 -> f, C=1
+    check(4'hf, 4'hf, 1'b0, 4'he, 1'b1);  // f + f, C=0 -> e, C=1
+    check(4'hf, 4'hf, 1'b1, 4'hf, 1'b1);  // f + f, C=1 -> f, C=1
 
     if (errors == 0) $display("ALL TESTS PASSED!");
     else $display("%0d TEST(S) FAILED", errors);

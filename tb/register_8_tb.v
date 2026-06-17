@@ -33,7 +33,7 @@ module register_8_tb;
     $dumpvars(0, register_8_tb);
 
     // verilog_format: off
-    we = 1; d = 8'h00; // initial known state
+    we = 1'b1; d = 8'h00; // initial known state
     @(posedge clk); #1;
     check(8'h00);
 
@@ -41,7 +41,7 @@ module register_8_tb;
     @(posedge clk); #1;
     check(8'hAB);
 
-    we = 0; d = 8'hFF; // write-enable is low, no write is done
+    we = 1'b0; d = 8'hFF; // write-enable is low, no write is done
     @(posedge clk); #1;
     check(8'hAB);
 
@@ -49,7 +49,7 @@ module register_8_tb;
     @(posedge clk); #1;
     check(8'hAB);
 
-    we = 1; d = 8'h42;
+    we = 1'b1; d = 8'h42;
     @(posedge clk); #1;
     check(8'h42);
 
@@ -63,7 +63,7 @@ module register_8_tb;
     @(posedge clk); #1;
     check(8'h00);
 
-    we = 0; d = 8'hAA; // Q will never be 0xAA
+    we = 1'b0; d = 8'hAA; // Q will never be 0xAA
     @(posedge clk); #1;
     check(8'h00);
     // verilog_format: on

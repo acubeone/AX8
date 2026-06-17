@@ -18,14 +18,14 @@ module full_adder_tb;
     $dumpvars(0, full_adder_tb);
 
     // verilog_format: off
-    a = 0; b = 0; cin = 0; #10;
-    a = 0; b = 0; cin = 1; #10;
-    a = 0; b = 1; cin = 0; #10;
-    a = 0; b = 1; cin = 1; #10;
-    a = 1; b = 0; cin = 0; #10;
-    a = 1; b = 0; cin = 1; #10;
-    a = 1; b = 1; cin = 0; #10;
-    a = 1; b = 1; cin = 1; #10;
+    a = 1'b0; b = 1'b0; cin = 1'b0; #10;
+    a = 1'b0; b = 1'b0; cin = 1'b1; #10;
+    a = 1'b0; b = 1'b1; cin = 1'b0; #10;
+    a = 1'b0; b = 1'b1; cin = 1'b1; #10;
+    a = 1'b1; b = 1'b0; cin = 1'b0; #10;
+    a = 1'b1; b = 1'b0; cin = 1'b1; #10;
+    a = 1'b1; b = 1'b1; cin = 1'b0; #10;
+    a = 1'b1; b = 1'b1; cin = 1'b1; #10;
     // verilog_format: on
 
     $finish;

@@ -41,16 +41,16 @@ module ripple_adder_8_tb;
     $dumpvars(0, ripple_adder_8_tb);
 
 
-    check(8'h00, 8'h00, 0, 8'h00, 0);  // 00 + 0, C=00 -> 00, C=0
-    check(8'h00, 8'h10, 0, 8'h10, 0);  // 00 + 1, C=00 -> 10, C=0
-    check(8'hf0, 8'h10, 0, 8'h00, 1);  // f0 + 1, C=00 -> 00, C=1
+    check(8'h00, 8'h00, 1'b0, 8'h00, 1'b0);  // 00 + 0, C=00 -> 00, C=0
+    check(8'h00, 8'h10, 1'b0, 8'h10, 1'b0);  // 00 + 1, C=00 -> 10, C=0
+    check(8'hf0, 8'h10, 1'b0, 8'h00, 1'b1);  // f0 + 1, C=00 -> 00, C=1
 
-    check(8'h00, 8'h00, 1, 8'h01, 0);  // 00 + 00, C=1 -> 01, C=0
-    check(8'h00, 8'h10, 1, 8'h11, 0);  // 00 + 10, C=1 -> 11, C=0
-    check(8'hf0, 8'h10, 1, 8'h01, 1);  // f0 + 10, C=1 -> 01, C=1
+    check(8'h00, 8'h00, 1'b1, 8'h01, 1'b0);  // 00 + 00, C=1 -> 01, C=0
+    check(8'h00, 8'h10, 1'b1, 8'h11, 1'b0);  // 00 + 10, C=1 -> 11, C=0
+    check(8'hf0, 8'h10, 1'b1, 8'h01, 1'b1);  // f0 + 10, C=1 -> 01, C=1
 
-    check(8'hff, 8'hff, 0, 8'hfe, 1);  // ff + ff, C=0 -> fe, C=1
-    check(8'hff, 8'hff, 1, 8'hff, 1);  // ff + ff, C=1 -> ff, C=1
+    check(8'hff, 8'hff, 1'b0, 8'hfe, 1'b1);  // ff + ff, C=0 -> fe, C=1
+    check(8'hff, 8'hff, 1'b1, 8'hff, 1'b1);  // ff + ff, C=1 -> ff, C=1
 
     if (errors == 0) $display("ALL TESTS PASSED!");
     else $display("%0d TEST(S) FAILED", errors);

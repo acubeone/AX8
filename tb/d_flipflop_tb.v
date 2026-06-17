@@ -12,7 +12,7 @@ module d_flipflop_tb;
       .nq (nq)
   );
 
-  initial clk = 0;
+  initial clk = 1'b0;
   always #10 clk = ~clk;
 
   integer errors = 0;
@@ -35,27 +35,27 @@ module d_flipflop_tb;
 
     // verilog_format: off
     // Initial known state
-    d = 0;
+    d = 1'b0;
     @(posedge clk); #1 // Wait for rising edge
-    check(0, 1); // q=0, nq=1
+    check(1'b0, 1'b1); // q=0, nq=1
 
-    d = 1; #5; // CLK still high, Q must stay 0
-    check(0, 1); // q=0, nq=1 (latch is locked)
+    d = 1'b1; #5; // CLK still high, Q must stay 0
+    check(1'b0, 1'b1); // q=0, nq=1 (latch is locked)
     @(posedge clk); #1 // next rising edge captures D=1
-    check(1, 0); // q=1, nq=0
+    check(1'b1, 1'b0); // q=1, nq=0
 
-    d = 0; #5; // CLK still high, Q must stay 1
-    check(1, 0); // q=1, nq=0 (latch is locked)
+    d = 1'b0; #5; // CLK still high, Q must stay 1
+    check(1'b1, 1'b0); // q=1, nq=0 (latch is locked)
     @(posedge clk); #1 // next rising edge captures D=0
-    check(0, 1); // q=0, nq=1
+    check(1'b0, 1'b1); // q=0, nq=1
 
     // Fast D changes between edges does nothing. Only last state is matters
     @(negedge clk);
-    d = 1; #3;
-    d = 0; #3;
-    d = 1; #3;
+    d = 1'b1; #3;
+    d = 1'b0; #3;
+    d = 1'b1; #3;
     @(posedge clk); #1;
-    check(1, 0); // q=1, nq=0
+    check(1'b1, 1'b0); // q=1, nq=0
     // verilog_format: on
 
     if (errors == 0) $display("ALL TESTS PASSED");
