@@ -4,7 +4,8 @@
 module multiplier_4 (
     input  [3:0] a,
     input  [3:0] b,
-    output [7:0] y
+    output [7:0] y,
+    output       v
 );
     // P0 = A & B[0]
     // P1 = A & B[1]
@@ -40,6 +41,11 @@ module multiplier_4 (
 
     assign y = {c2, sum2[3], sum2[2], sum2[1], sum2[0], sum1[0], sum0[0], product[0][0]};
 
+    wire or46, or57;
+    or o0 (or46, y[4], y[6]);
+    or o1 (or57, y[5], y[7]);
+    or o2 (v, or46, or57);
+
     genvar i;
     generate
         for (i = 0; i < 4; i = i + 1) begin : gen_partial_products
@@ -51,24 +57,24 @@ module multiplier_4 (
     endgenerate
 
     ripple_adder_4 rp0 (
-        .a({1'b0, product[0][3:1]}),
-        .b(product[1]),
-        .cin(1'b0),
-        .y(sum0),
+        .a   ({1'b0, product[0][3:1]}),
+        .b   (product[1]),
+        .cin (1'b0),
+        .y   (sum0),
         .cout(c0)
     );
     ripple_adder_4 rp1 (
-        .a({c0, sum0[3:1]}),
-        .b(product[2]),
-        .cin(1'b0),
-        .y(sum1),
+        .a   ({c0, sum0[3:1]}),
+        .b   (product[2]),
+        .cin (1'b0),
+        .y   (sum1),
         .cout(c1)
     );
     ripple_adder_4 rp2 (
-        .a({c1, sum1[3:1]}),
-        .b(product[3]),
-        .cin(1'b0),
-        .y(sum2),
+        .a   ({c1, sum1[3:1]}),
+        .b   (product[3]),
+        .cin (1'b0),
+        .y   (sum2),
         .cout(c2)
     );
 

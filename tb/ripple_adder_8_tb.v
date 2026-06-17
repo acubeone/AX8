@@ -12,7 +12,8 @@ module ripple_adder_8_tb;
         .b   (b),
         .cin (cin),
         .y   (y),
-        .cout(cout)
+        .cout(cout),
+        .c6  ()
     );
 
     integer errors = 0;

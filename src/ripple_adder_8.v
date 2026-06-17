@@ -6,26 +6,25 @@ module ripple_adder_8 (
     input [7:0] b,
     input cin,
     output [7:0] y,
-    output cout
+    output cout,
+    output c6
 );
-    wire w0;
-    wire [3:0] lo_y;
-    wire [3:0] hi_y;
+    wire [8:0] carry;
 
-    assign y = {hi_y, lo_y};
+    assign carry[0] = cin;
+    assign cout = carry[8];
+    assign c6 = carry[7];
 
-    ripple_adder_4 ra4_0 (
-        .a   (a[3:0]),
-        .b   (b[3:0]),
-        .cin (cin),
-        .y   (lo_y),
-        .cout(w0)
-    );
-    ripple_adder_4 ra4_1 (
-        .a   (a[7:4]),
-        .b   (b[7:4]),
-        .cin (w0),
-        .y   (hi_y),
-        .cout(cout)
-    );
+    genvar i;
+    generate
+        for (i = 0; i < 8; i = i + 1) begin : gen_ripple
+            full_adder fan (
+                .a   (a[i]),
+                .b   (b[i]),
+                .cin (carry[i]),
+                .y   (y[i]),
+                .cout(carry[i+1])
+            );
+        end
+    endgenerate
 endmodule

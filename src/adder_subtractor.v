@@ -7,11 +7,15 @@ module adder_subtractor (
     input        cin,
     input        m,
     output [7:0] y,
-    output       cout
+    output       cout,
+    output       v
 );
     // b_in = (m & !b) | (!m & b)
     //      = m ^ b
     wire [7:0] b_in;
+
+    wire c6;
+    xor x0 (v, c6, cout);
 
     genvar i;
     generate
@@ -25,7 +29,8 @@ module adder_subtractor (
         .b   (b_in),
         .cin (cin),
         .y   (y),
-        .cout(cout)
+        .cout(cout),
+        .c6  (c6)
     );
 
 endmodule
