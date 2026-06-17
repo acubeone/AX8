@@ -64,7 +64,7 @@ pela ALU.
 |   `LD `   | `. . * *` | LoaD                     |
 |   `LDX`   | `. . * *` | LoaD iX                  |
 |   `LDY`   | `. . * *` | LoaD iY                  |
-|   `MUL`   | `* * * *` | MULtiply                 |
+|   `MUL`   | `* 0 * *` | MULtiply                 |
 |   `NOP`   | `. . . .` | No OPeration             |
 |   `NOT`   | `. . * *` | logical NOT              |
 |   `OR `   | `. . * *` | logical OR               |
@@ -223,7 +223,7 @@ sendo sua saída também limitada a 8-bits.
 | :----: | :---: | ---------------------- | -------------------- | ------------------- |
 | `0000` | `ADC` | `Y <- A + B + C`       | carry-out            | sobrecarga de sinal |
 | `0001` | `SBC` | `Y <- A - B - (~C)`    | borrow invertido     | sobrecarga de sinal |
-| `0010` | `MUL` | `Y <- A[3:0] * B[3:0]` | ---                  | Y > 0x0F            |
+| `0010` | `MUL` | `Y <- A[3:0] * B[3:0]` | zero                 | Y > 0x0F            |
 | `0011` | `AND` | `Y <- A & B`           | ---                  | ---                 |
 | `0100` | `OR ` | `Y <- A \| B`          | ---                  | ---                 |
 | `0101` | `XOR` | `Y <- A ^ B`           | ---                  | ---                 |
