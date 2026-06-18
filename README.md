@@ -183,11 +183,11 @@ Grupo `011`: Unary
 | :-----: | --------- | ------------------------------- |
 | `00000` | `INC`     | `A <- A + 1`                    |
 | `00001` | `DEC`     | `A <- A - 1`                    |
-| `00010` | `ROL`     | `A <- A <] 1; C <- [7..0] <- C` |
-| `00011` | `ROR`     | `A <- A [> 1; C -> [7..0] -> C` |
+| `00010` | `SHL`     | `A <- A << 1; C <- [7..0] <- 0` |
+| `00011` | `SHR`     | `A <- A >> 1; 0 -> [7..0] -> C` |
 | `00101` | `NOT`     | `A <- ~A`                       |
-| `00110` | `SHL`     | `A <- A << 1; C <- [7..0] <- 0` |
-| `00111` | `SHR`     | `A <- A >> 1; 0 -> [7..0] -> C` |
+| `00110` | `ROL`     | `A <- A <] 1; C <- [7..0] <- C` |
+| `00111` | `ROR`     | `A <- A [> 1; C -> [7..0] -> C` |
 | `01100` | `INC IX`  | `IX <- IX + 1`                  |
 | `01101` | `DEC IX`  | `IX <- IX - 1`                  |
 | `01110` | `INC IY`  | `IY <- IY + 1`                  |
@@ -227,9 +227,9 @@ sendo sua saída também limitada a 8-bits.
 | `0011` | `AND` | `Y <- A & B`           | ---                  | ---                 |
 | `0100` | `OR ` | `Y <- A \| B`          | ---                  | ---                 |
 | `0101` | `XOR` | `Y <- A ^ B`           | ---                  | ---                 |
-| `0111` | `MOV` | `Y <- B`               | ---                  | ---                 |
-| `1010` | `ROL` | `Y <- A <] 1`          | A\[7\] antes do roll | ---                 |
-| `1011` | `ROR` | `Y <- A [> 1`          | A\[0\] antes do roll | ---                 |
+| `0110` | `ROL` | `Y <- A <] 1`          | A\[7\] antes do roll | ---                 |
+| `0111` | `ROR` | `Y <- A [> 1`          | A\[0\] antes do roll | ---                 |
+| `1000` | `MOV` | `Y <- B`               | ---                  | ---                 |
 
 ### Notas sobre implementação:
 
@@ -248,6 +248,11 @@ Notas relevantes sobre cada instrução:
   `ROL` e `ROR`, mas com a flag carry em `0`
 - `NOT`: Pode ser implementado como: `A XOR 0xFF`
 - `CMP`: O resultado da operação pode ser interpretado como:
+
+Notas sobre as flags:
+
+- `V`: O resultado da sobrecarga de sinal em `ADC` e `SBC` vem do sexto
+  carry (`c6`) e o carry resultante (`cout`), então `V = c6 xor cout`
 
   | Relação |  Z  |  C  |   N    |
   | :-----: | :-: | :-: | :----: |
