@@ -13,7 +13,7 @@ IFLAGS := -g2012 -Wall
 # Each entry: name of module = name of .v file (without extension)
 MODULES := mux_2to1 mux_4to1 mux_8to1 demux_2to4 demux_3to8
 MODULES += d_latch d_flipflop register_8 full_adder ripple_adder_4 ripple_adder_8
-MODULES += adder_subtractor shifter_8 multiplier_4
+MODULES += adder_subtractor shifter_8 multiplier_4 alu
 
 SRC_FILES := $(patsubst %,$(SRC_DIR)/%.v,$(MODULES))
 TB_FILES  := $(patsubst %,$(TB_DIR)/%_tb.v,$(MODULES))

@@ -14,3 +14,4 @@
 ./src/adder_subtractor.v
 ./src/shifter_8.v
 ./src/multiplier_4.v
+./src/alu.v
