@@ -71,6 +71,7 @@ pela ALU.
 |   `ROL`   | `. * * *` | logical ROtate Left      |
 |   `ROR`   | `. * * *` | logical ROtate Right     |
 |   `SEC`   | `. 1 . .` | SEt Carry                |
+|   `SEV`   | `1 . . .` | SEt oVerflow             |
 |   `ST `   | `. . * *` | STore                    |
 |   `STX`   | `. . * *` | STore iX                 |
 |   `STY`   | `. . * *` | STore iY                 |
@@ -87,8 +88,12 @@ pela ALU.
 
 ```
 Instrução:
-  [7:5] opcode -> Seleciona a unidade funcional
-  [4:0] mode   -> Configura operação dentro da unidade
+  Bit  7 6 5 4 3 2 1 0
+  Name G G G S S C C C
+
+  [7:5] G = Group     -> Seleciona a unidade funcional
+  [4:3] S = Subgroup  -> Subgrupo funcional
+  [2:0] C = Execution -> Unidade de execução
 
 Modos:
   Implied: (1-byte) | MNEMONIC
@@ -132,6 +137,7 @@ Grupo `000`: System
 | `00100` | `CLC`     | `C <- 0`        |
 | `00101` | `SEC`     | `C <- 1`        |
 | `00110` | `CLV`     | `V <- 0`        |
+| `00111` | `SEV`     | `V <- 1`        |
 | `11111` | `HLT`     | `Halt CPU`      |
 
 Grupo `001`: Memory
