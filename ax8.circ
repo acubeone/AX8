@@ -83,7 +83,8 @@
       <a name="size" val="30"/>
     </tool>
     <tool lib="0" name="Splitter">
-      <a name="facing" val="west"/>
+      <a name="appear" val="right"/>
+      <a name="facing" val="north"/>
     </tool>
   </toolbar>
   <circuit name="main">
@@ -97,7 +98,6 @@
       <rect fill="none" height="30" stroke="#000000" stroke-width="2" width="200" x="60" y="50"/>
       <text dominant-baseline="alphabetic" fill="#ffffff" font-family="Dialog" font-size="14" font-weight="bold" text-anchor="middle" x="160" y="74">main</text>
       <circ-anchor facing="east" x="50" y="50"/>
-      <circ-port dir="in" pin="670,400" x="60" y="50"/>
     </appear>
     <comp lib="0" loc="(140,380)" name="Splitter">
       <a name="facing" val="north"/>
@@ -128,14 +128,6 @@
       <a name="facing" val="north"/>
       <a name="incoming" val="8"/>
       <a name="spacing" val="4"/>
-    </comp>
-    <comp lib="0" loc="(640,400)" name="Clock">
-      <a name="appearance" val="classic"/>
-      <a name="facing" val="south"/>
-    </comp>
-    <comp lib="0" loc="(670,400)" name="Pin">
-      <a name="appearance" val="classic"/>
-      <a name="facing" val="south"/>
     </comp>
     <comp lib="2" loc="(265,205)" name="Text">
       <a name="font" val="SansSerif bold 10"/>
@@ -217,7 +209,6 @@
       <a name="labelloc" val="north"/>
     </comp>
     <comp loc="(290,450)" name="alu"/>
-    <comp loc="(720,420)" name="flag_mux"/>
     <wire from="(140,380)" to="(140,410)"/>
     <wire from="(140,410)" to="(260,410)"/>
     <wire from="(150,380)" to="(150,490)"/>
@@ -238,18 +229,10 @@
     <wire from="(350,360)" to="(350,390)"/>
     <wire from="(400,400)" to="(400,510)"/>
     <wire from="(490,380)" to="(490,430)"/>
-    <wire from="(490,430)" to="(580,430)"/>
     <wire from="(500,380)" to="(500,440)"/>
-    <wire from="(500,440)" to="(590,440)"/>
     <wire from="(510,380)" to="(510,460)"/>
-    <wire from="(510,460)" to="(590,460)"/>
     <wire from="(520,380)" to="(520,470)"/>
-    <wire from="(520,470)" to="(580,470)"/>
     <wire from="(550,380)" to="(550,500)"/>
-    <wire from="(580,420)" to="(580,430)"/>
-    <wire from="(580,420)" to="(590,420)"/>
-    <wire from="(580,470)" to="(580,480)"/>
-    <wire from="(580,480)" to="(590,480)"/>
   </circuit>
   <circuit name="d_latch">
     <a name="appearance" val="custom"/>
@@ -1287,6 +1270,271 @@
     <wire from="(720,810)" to="(720,880)"/>
     <wire from="(720,810)" to="(750,810)"/>
     <wire from="(720,880)" to="(750,880)"/>
+  </circuit>
+  <circuit name="demux_2to1">
+    <a name="appearance" val="custom"/>
+    <a name="circuit" val="demux_2to1"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1.0"/>
+    <appear>
+      <rect height="11" stroke="none" width="4" x="88" y="109"/>
+      <polygon fill="none" points="60,140 120,140 110,120 69,120" stroke="#000000"/>
+      <text dominant-baseline="central" font-family="SansSerif" font-size="12" text-anchor="middle" x="89" y="130">DMX</text>
+      <rect height="3" stroke="none" width="6" x="59" y="129"/>
+      <rect height="10" stroke="none" width="4" x="78" y="140"/>
+      <rect height="10" stroke="none" width="4" x="98" y="140"/>
+      <circ-anchor facing="north" x="90" y="130"/>
+      <circ-port dir="in" pin="120,130" x="60" y="130"/>
+      <circ-port dir="in" pin="120,150" x="90" y="110"/>
+      <circ-port dir="out" pin="210,140" x="100" y="150"/>
+      <circ-port dir="out" pin="210,180" x="80" y="150"/>
+    </appear>
+    <comp lib="0" loc="(120,130)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="S"/>
+    </comp>
+    <comp lib="0" loc="(120,150)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="I"/>
+    </comp>
+    <comp lib="0" loc="(210,140)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y0"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(210,180)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y1"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="1" loc="(160,130)" name="NOT Gate">
+      <a name="size" val="20"/>
+    </comp>
+    <comp lib="1" loc="(210,140)" name="AND Gate">
+      <a name="size" val="30"/>
+    </comp>
+    <comp lib="1" loc="(210,180)" name="AND Gate">
+      <a name="size" val="30"/>
+    </comp>
+    <wire from="(120,130)" to="(130,130)"/>
+    <wire from="(120,150)" to="(170,150)"/>
+    <wire from="(130,130)" to="(130,170)"/>
+    <wire from="(130,130)" to="(140,130)"/>
+    <wire from="(130,170)" to="(180,170)"/>
+    <wire from="(160,130)" to="(180,130)"/>
+    <wire from="(170,150)" to="(170,190)"/>
+    <wire from="(170,150)" to="(180,150)"/>
+    <wire from="(170,190)" to="(180,190)"/>
+  </circuit>
+  <circuit name="demux_4to1">
+    <a name="appearance" val="custom"/>
+    <a name="circuit" val="demux_4to1"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1.0"/>
+    <appear>
+      <rect height="12" stroke="none" width="4" x="168" y="200"/>
+      <rect height="12" stroke="none" width="4" x="138" y="200"/>
+      <rect height="12" stroke="none" width="4" x="128" y="200"/>
+      <rect height="12" stroke="none" width="4" x="158" y="200"/>
+      <rect height="11" stroke="none" width="4" x="148" y="169"/>
+      <rect height="4" stroke="none" width="10" x="111" y="188"/>
+      <polygon fill="none" points="115,200 185,200 175,180 125,180" stroke="#000000"/>
+      <text dominant-baseline="central" font-family="SansSerif" font-size="12" text-anchor="middle" x="149" y="190">DMX</text>
+      <circ-anchor facing="north" x="150" y="190"/>
+      <circ-port dir="in" pin="210,170" x="150" y="170"/>
+      <circ-port dir="in" pin="210,250" x="110" y="190"/>
+      <circ-port dir="out" pin="320,130" x="170" y="210"/>
+      <circ-port dir="out" pin="320,150" x="160" y="210"/>
+      <circ-port dir="out" pin="320,190" x="140" y="210"/>
+      <circ-port dir="out" pin="320,210" x="130" y="210"/>
+    </appear>
+    <comp lib="0" loc="(210,170)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="I"/>
+    </comp>
+    <comp lib="0" loc="(210,250)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="S"/>
+      <a name="width" val="2"/>
+    </comp>
+    <comp lib="0" loc="(220,250)" name="Splitter">
+      <a name="appear" val="right"/>
+      <a name="facing" val="north"/>
+      <a name="spacing" val="4"/>
+    </comp>
+    <comp lib="0" loc="(320,130)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y0"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(320,150)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y1"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(320,190)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y2"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(320,210)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y3"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp loc="(230,170)" name="demux_2to1">
+      <a name="facing" val="west"/>
+    </comp>
+    <comp loc="(300,140)" name="demux_2to1">
+      <a name="facing" val="west"/>
+    </comp>
+    <comp loc="(300,200)" name="demux_2to1">
+      <a name="facing" val="west"/>
+    </comp>
+    <wire from="(210,250)" to="(220,250)"/>
+    <wire from="(230,200)" to="(230,230)"/>
+    <wire from="(250,160)" to="(260,160)"/>
+    <wire from="(250,180)" to="(260,180)"/>
+    <wire from="(260,140)" to="(260,160)"/>
+    <wire from="(260,140)" to="(280,140)"/>
+    <wire from="(260,180)" to="(260,200)"/>
+    <wire from="(260,200)" to="(280,200)"/>
+    <wire from="(270,170)" to="(270,230)"/>
+    <wire from="(270,170)" to="(300,170)"/>
+    <wire from="(270,230)" to="(300,230)"/>
+  </circuit>
+  <circuit name="demux_8to1">
+    <a name="appearance" val="custom"/>
+    <a name="circuit" val="demux_8to1"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1.0"/>
+    <appear>
+      <rect height="12" stroke="none" width="4" x="168" y="160"/>
+      <rect height="12" stroke="none" width="4" x="108" y="160"/>
+      <rect height="12" stroke="none" width="4" x="98" y="160"/>
+      <text dominant-baseline="central" font-family="SansSerif" font-size="12" text-anchor="middle" x="129" y="150">DMX</text>
+      <rect height="12" stroke="none" width="4" x="88" y="160"/>
+      <rect height="12" stroke="none" width="4" x="148" y="160"/>
+      <rect height="4" stroke="none" width="12" x="69" y="148"/>
+      <polygon fill="none" points="76,160 184,160 176,140 85,140" stroke="#000000"/>
+      <rect height="12" stroke="none" width="4" x="138" y="160"/>
+      <rect height="11" stroke="none" width="4" x="128" y="130"/>
+      <rect height="12" stroke="none" width="4" x="118" y="160"/>
+      <rect height="12" stroke="none" width="4" x="158" y="160"/>
+      <circ-anchor facing="north" x="130" y="150"/>
+      <circ-port dir="in" pin="360,180" x="130" y="130"/>
+      <circ-port dir="in" pin="370,280" x="70" y="150"/>
+      <circ-port dir="out" pin="480,110" x="170" y="170"/>
+      <circ-port dir="out" pin="480,130" x="160" y="170"/>
+      <circ-port dir="out" pin="480,150" x="150" y="170"/>
+      <circ-port dir="out" pin="480,170" x="140" y="170"/>
+      <circ-port dir="out" pin="480,190" x="120" y="170"/>
+      <circ-port dir="out" pin="480,210" x="110" y="170"/>
+      <circ-port dir="out" pin="480,230" x="100" y="170"/>
+      <circ-port dir="out" pin="480,250" x="90" y="170"/>
+    </appear>
+    <comp lib="0" loc="(360,180)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="I"/>
+    </comp>
+    <comp lib="0" loc="(370,280)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="S"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(370,280)" name="Splitter">
+      <a name="appear" val="right"/>
+      <a name="bit1" val="0"/>
+      <a name="bit2" val="1"/>
+      <a name="facing" val="north"/>
+      <a name="incoming" val="3"/>
+      <a name="spacing" val="4"/>
+    </comp>
+    <comp lib="0" loc="(480,110)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y0"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(480,130)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y1"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(480,150)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y2"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(480,170)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y3"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(480,190)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y4"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(480,210)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y5"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(480,230)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y6"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(480,250)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Y7"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp loc="(380,180)" name="demux_2to1">
+      <a name="facing" val="west"/>
+    </comp>
+    <comp loc="(450,140)" name="demux_4to1">
+      <a name="facing" val="west"/>
+    </comp>
+    <comp loc="(450,220)" name="demux_4to1">
+      <a name="facing" val="west"/>
+    </comp>
+    <wire from="(380,210)" to="(380,260)"/>
+    <wire from="(400,170)" to="(410,170)"/>
+    <wire from="(400,190)" to="(410,190)"/>
+    <wire from="(410,140)" to="(410,170)"/>
+    <wire from="(410,140)" to="(430,140)"/>
+    <wire from="(410,190)" to="(410,220)"/>
+    <wire from="(410,220)" to="(430,220)"/>
+    <wire from="(420,180)" to="(420,260)"/>
+    <wire from="(420,180)" to="(450,180)"/>
+    <wire from="(420,260)" to="(450,260)"/>
+    <wire from="(470,120)" to="(480,120)"/>
+    <wire from="(470,130)" to="(480,130)"/>
+    <wire from="(470,150)" to="(480,150)"/>
+    <wire from="(470,160)" to="(480,160)"/>
+    <wire from="(470,200)" to="(480,200)"/>
+    <wire from="(470,210)" to="(480,210)"/>
+    <wire from="(470,230)" to="(480,230)"/>
+    <wire from="(470,240)" to="(480,240)"/>
+    <wire from="(480,110)" to="(480,120)"/>
+    <wire from="(480,160)" to="(480,170)"/>
+    <wire from="(480,190)" to="(480,200)"/>
+    <wire from="(480,240)" to="(480,250)"/>
   </circuit>
   <circuit name="full_adder">
     <a name="appearance" val="custom"/>
@@ -3359,38 +3607,31 @@
     <a name="circuitnamedboxfixedsize" val="true"/>
     <a name="simulationFrequency" val="1.0"/>
     <appear>
-      <rect height="10" stroke="none" width="4" x="98" y="80"/>
-      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="start" x="63" y="104">Zin</text>
-      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="start" x="62" y="124">Nin</text>
-      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="start" x="62" y="144">Cin</text>
-      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="start" x="63" y="164">Vin</text>
-      <rect height="4" stroke="none" width="10" x="50" y="118"/>
-      <polyline fill="none" points="105,92 100,98 95,91" stroke="#000000" stroke-width="2"/>
-      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="start" x="89" y="108">CLK</text>
-      <rect height="4" stroke="none" width="10" x="50" y="158"/>
-      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="start" x="121" y="108">WE</text>
-      <rect height="3" stroke="none" width="10" x="170" y="99"/>
-      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="end" x="167" y="104">Z</text>
-      <rect height="3" stroke="none" width="10" x="170" y="119"/>
-      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="end" x="167" y="124">N</text>
-      <rect height="3" stroke="none" width="10" x="170" y="139"/>
-      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="end" x="167" y="144">C</text>
-      <rect height="3" stroke="none" width="10" x="170" y="159"/>
-      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="end" x="167" y="164">V</text>
-      <rect height="20" stroke="none" width="111" x="60" y="170"/>
-      <rect fill="none" height="99" stroke="#000000" stroke-width="2" width="111" x="60" y="91"/>
-      <text dominant-baseline="alphabetic" fill="#ffffff" font-family="Dialog" font-size="14" font-weight="bold" text-anchor="middle" x="111" y="185">flag_register</text>
-      <rect height="10" stroke="none" width="4" x="128" y="80"/>
       <rect height="4" stroke="none" width="10" x="50" y="138"/>
-      <rect height="4" stroke="none" width="11" x="50" y="98"/>
-      <circ-anchor facing="east" x="180" y="100"/>
-      <circ-port dir="in" pin="220,170" x="50" y="90"/>
-      <circ-port dir="in" pin="220,230" x="50" y="100"/>
-      <circ-port dir="in" pin="220,260" x="50" y="140"/>
-      <circ-port dir="in" pin="220,320" x="50" y="150"/>
-      <circ-port dir="in" pin="220,380" x="50" y="160"/>
-      <circ-port dir="in" pin="220,440" x="50" y="170"/>
-      <circ-port dir="out" pin="420,170" x="180" y="90"/>
+      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="start" x="65" y="144">CurFR</text>
+      <rect height="4" stroke="none" width="10" x="50" y="158"/>
+      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="start" x="65" y="164">NewFR</text>
+      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="start" x="70" y="122">SelZ</text>
+      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="start" x="98" y="122">SelN</text>
+      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="start" x="129" y="122">SelC</text>
+      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="start" x="159" y="121">SelV</text>
+      <rect height="4" stroke="none" width="10" x="190" y="148"/>
+      <text dominant-baseline="alphabetic" fill="#404040" font-family="Dialog" font-size="12" text-anchor="end" x="185" y="154">FR</text>
+      <rect height="20" stroke="none" width="131" x="60" y="170"/>
+      <rect fill="none" height="80" stroke="#000000" stroke-width="2" width="130" x="60" y="110"/>
+      <text dominant-baseline="alphabetic" fill="#ffffff" font-family="Dialog" font-size="14" font-weight="bold" text-anchor="middle" x="125" y="184">flag_mux</text>
+      <rect height="10" stroke="none" width="4" x="168" y="100"/>
+      <rect height="10" stroke="none" width="4" x="138" y="100"/>
+      <rect height="10" stroke="none" width="4" x="108" y="100"/>
+      <rect height="10" stroke="none" width="4" x="78" y="99"/>
+      <circ-anchor facing="east" x="200" y="150"/>
+      <circ-port dir="in" pin="220,170" x="50" y="140"/>
+      <circ-port dir="in" pin="220,230" x="50" y="160"/>
+      <circ-port dir="in" pin="220,260" x="80" y="100"/>
+      <circ-port dir="in" pin="220,320" x="110" y="100"/>
+      <circ-port dir="in" pin="220,380" x="140" y="100"/>
+      <circ-port dir="in" pin="220,440" x="170" y="100"/>
+      <circ-port dir="out" pin="420,170" x="200" y="150"/>
     </appear>
     <comp lib="0" loc="(220,170)" name="Pin">
       <a name="appearance" val="NewPins"/>
@@ -3434,6 +3675,7 @@
     <comp lib="0" loc="(420,170)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
+      <a name="label" val="FR"/>
       <a name="type" val="output"/>
       <a name="width" val="8"/>
     </comp>
