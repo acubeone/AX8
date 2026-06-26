@@ -373,6 +373,9 @@ Notas relevantes sobre cada instrução:
 - `CMP`: O resultado da operação pode ser interpretado como: `ZC = A <=> B`
 - `STY` e `LDY`: O modo indireto dessas instruções são válidos, mas raramente
   úteis na prática
+- `INC` e `DEC`: Ambos são lidos como `ADC` pela ULA, mas a diferença é que
+  `INC` sempre terá `B` como `0x00` e `Cin` como `1`, e que `DEC` sempre terá `B`
+  como `0xFF` e `Cin` como `0`.
 - `SIZE`: Internatemente, cada instrução é codificada com um tamanho, sendo
   estes tamanhos a quantidade de bytes que necessárias para fetch:
   `00=None; 01=Byte; 10=Word; 11=None`

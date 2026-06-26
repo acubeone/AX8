@@ -40,7 +40,7 @@ FR_DATA[3:0]:
   bit2 = FR.C | 1 | 0
   bit3 = FR.V | 1 | 0
 
-FR_WE[3:0]:
+FR_WE[3:0] - Force Value:
   bit0 = FR.WE_Z
   bit1 = FR.WE_N
   bit2 = FR.WE_C
