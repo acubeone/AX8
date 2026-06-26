@@ -148,7 +148,7 @@ Encoding:
     4 3 2 1 0
     0 1 x x x -> HALT
     1 0 x x x -> HALT
-    1 1 x x x -> HALT
+    1 1 x x 0 -> HALT
     1 1 1 1 1 -> Official HALT
 ```
 
@@ -161,7 +161,7 @@ Encoding:
 | `00111` | `SEV`     | `V <- 1`        |
 | `01xxx` | `XXX`     | `Halt CPU`      |
 | `10xxx` | `XXX`     | `Halt CPU`      |
-| `11xxx` | `XXX`     | `Halt CPU`      |
+| `11xx0` | `XXX`     | `Halt CPU`      |
 | `11111` | `HLT`     | `Halt CPU`      |
 
 Grupo `001`: Memory
@@ -219,7 +219,7 @@ Grupo `010`: Arithmetic
 Encoding:
   4 3 2 1 0
   S S O O O
-  - SS  = Source    -> 00=IX, 01=HALT, 10=Immediate, 11=Absolute
+  - SS  = Source    -> 00=IX, 01=HALT, 10=Absolute, 11=Immediate
   - OOO = Operation -> 000=ADC, 001=SBC, 010=MUL, 011=AND,
                        100=OR, 101=XOR, 110=CMP, 111=HALT
 ```
@@ -235,21 +235,21 @@ Encoding:
 | `00110` | `CMP IX`   | `A - IX, sem writeback`        |
 | `00111` | `XXX`      | `Halt CPU`                     |
 | `01xxx` | `XXX`      | `Halt CPU`                     |
-| `10000` | `ADC imm8` | `A <- A + imm8 + C`            |
-| `10001` | `SBC imm8` | `A <- A - imm8 - (1 - C)`      |
-| `10010` | `MUL imm8` | `A <- A[3:0] * imm8[3:0]`      |
-| `10011` | `AND imm8` | `A <- A & imm8`                |
-| `10100` | `OR  imm8` | `A <- A \| imm8`               |
-| `10101` | `XOR imm8` | `A <- A ^ imm8`                |
-| `10110` | `CMP imm8` | `A - imm8, sem writeback`      |
+| `10000` | `ADC addr` | `A <- A + mem[addr] + C`       |
+| `10001` | `SBC addr` | `A <- A - mem[addr] - (1 - C)` |
+| `10010` | `MUL addr` | `A <- A[3:0] * mem[addr][3:0]` |
+| `10011` | `AND addr` | `A <- A & mem[addr]`           |
+| `10100` | `OR  addr` | `A <- A \| mem[addr]`          |
+| `10101` | `XOR addr` | `A <- A ^ mem[addr]`           |
+| `10110` | `CMP addr` | `A - mem[addr], sem writeback` |
 | `10111` | `XXX`      | `Halt CPU`                     |
-| `11000` | `ADC addr` | `A <- A + mem[addr] + C`       |
-| `11001` | `SBC addr` | `A <- A - mem[addr] - (1 - C)` |
-| `11010` | `MUL addr` | `A <- A[3:0] * mem[addr][3:0]` |
-| `11011` | `AND addr` | `A <- A & mem[addr]`           |
-| `11100` | `OR  addr` | `A <- A \| mem[addr]`          |
-| `11101` | `XOR addr` | `A <- A ^ mem[addr]`           |
-| `11110` | `CMP addr` | `A - mem[addr], sem writeback` |
+| `11000` | `ADC imm8` | `A <- A + imm8 + C`            |
+| `11001` | `SBC imm8` | `A <- A - imm8 - (1 - C)`      |
+| `11010` | `MUL imm8` | `A <- A[3:0] * imm8[3:0]`      |
+| `11011` | `AND imm8` | `A <- A & imm8`                |
+| `11100` | `OR  imm8` | `A <- A \| imm8`               |
+| `11101` | `XOR imm8` | `A <- A ^ imm8`                |
+| `11110` | `CMP imm8` | `A - imm8, sem writeback`      |
 | `11111` | `XXX`      | `Halt CPU`                     |
 
 Grupo `011`: Unary
@@ -352,6 +352,7 @@ sendo sua saída também limitada a 8-bits.
 | `0110` | `ROL` | `Y <- A <] 1`          | A\[7\] antes do roll | ---                 |
 | `0111` | `ROR` | `Y <- A [> 1`          | A\[0\] antes do roll | ---                 |
 | `1000` | `MOV` | `Y <- B`               | ---                  | ---                 |
+| `1xx1` | `HLT` | `Sem operação`         | ---                  | ---                 |
 
 ### Notas sobre implementação:
 
