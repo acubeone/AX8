@@ -2,34 +2,33 @@ inputs:
   clk
   reset
   enable
-  addr_mode[2:0]:
-    000 = Implied
-    001 = Indirect
-    010 = Immediate
-    011 = Relative
-    100 = Absolute
   rw:
     0 = Write
     1 = Read
-  pc_op[1:0]:
+  pc_op_in[1:0]:
     00 = Hold
     01 = Branch
     10 = Jump
     11 = Advance
+  mode[1:0]:
+    00 = Implied
+    01 = Indirect
+    10 = Immediate/Relative
+    11 = Absolute
 
 outputs:
   mem_re
   mem_we
-  data_latch_we
+  data_latch_we -> dl_we
   ir_we
-  operand_lo_we
-  operand_hi_we
+  operand_lo_we -> op_lo_we
+  operand_hi_we -> op_hi_we
   addr_sel[1:0]:
     00 = PC
     01 = EA
     10 = IY
     11 = Reserved
-  pc_op_out[1:0]:
+  pc_op[1:0]:
     00 = Hold
     01 = Branch
     10 = Jump
@@ -47,23 +46,38 @@ F3a W | EA/IY    | 0      | 1      | 0     | 0        | 0        | 0            
 F3b   | EA/IY    | 0      | 0      | 0     | 0        | 0        | 0             | Hold    | 0
 EX    | PC       | 0      | 0      | 0     | 0        | 0        | 0             | PC_OP   | 1
 
-
 Internal Encoding:
   4 3 2 1 0
   S S S S P
-  SSSS -> Each bit represents a State
-  P    -> 0=Phase A, 1=Phase B
+  SSSS -> Each bit represents a state: bit4=EX bit3=F3 bit2=F2 bit1=F1. 0000=F0
+  P     -> 0=Phase A, 1=Phase B
 
-  00000 - F0a
-  00001 - F0b
-  00010 - F1a
-  00011 - F1b
-  00100 - F2a
-  00101 - F2b
-  01000 - F3a
-  01001 - F3b
-  10000 - EX
+State Machine:
+F0a: next=F0b
+F0b: IF MODE=Implied THEN next=EX
+     IF MODE=Indirect THEN next=F3a
+     IF MODE=Imm/Rel or MODE=Absolute THEN next=F1a
+F1a: next=F1b
+F1b: IF MODE=Imm/Rel THEN next=F3a
+     IF MODE=Absolute THEN next=F2a
+F2a: next=F2b
+F2b: next=F3a
+F3a: IF RW=0 THEN next=EX
+     IF RW=1 THEN next=F3b
+F3b: next=EX
+EX:  next=F0a
 
+IMP = M1' * M0'
+IND = M1' * M0
+IMM = M1  * M0'
+ABS = M1  * M0
+F0 = EX' * F3' * F2' * F1'
+
+PHN = PH' * EX' * (F3 * RW')'
+F1N = (F1 * PH') + (F0 * PH * M1)
+F2N = (F2 * PH') + (F1 * PH * ABS)
+F3N = (F3 * PH' * RW) + (F2 * PH) + (F1 * PH * IMM) + (F0 * PH * IND)
+EXN = (F3 * PH) + (F3 * PH' * RW') + (F0 * PH * IMP)
 
 Instruction Flow:
 Implied:
