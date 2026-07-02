@@ -402,6 +402,8 @@ Notas sobre as flags:
 - [Wikipédia - Arithmetic Logic Unit](https://en.wikipedia.org/wiki/Arithmetic_logic_unit)
 - [Wikipédia - Adder Eletronics](<https://en.wikipedia.org/wiki/Adder_(electronics)>)
 - [Wikipédia - Adder Subtractor](https://en.wikipedia.org/wiki/Adder%E2%80%93subtractor)
+- [decoding.txt](./decoding.txt)
+- [sequencer.txt](./sequencer.txt)
 
 [^1]:
     Em fato, essa encodificação não é obrigatória, mas uma forma de facilitar
