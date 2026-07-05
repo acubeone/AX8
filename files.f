@@ -13,3 +13,17 @@
 ./src/shifter_8.v
 ./src/multiplier_4.v
 ./src/alu.v
+src/decode_memory.v
+src/decode_arithmetic.v
+src/decode_unary.v
+src/decode_jump.v
+src/instruction_decoder.v
+src/sequencer.v
+src/register_4.v
+src/flag_register.v
+src/program_counter.v
+src/decode_system.v
+src/instruction_sequencer.v
+src/interrupt_sequencer.v
+src/cpu.v
+src/toplevel.v
