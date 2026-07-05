@@ -5,7 +5,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp; O AX8 ou Axle é uma CPU CISC little-endian de 8-bits com um bus de 16-bits
 endereçável. Instruções são 8-bits com decodificação ortogonal: Os bits 7:5
 ditam a unidade funcional, enquanto bits 4:0 mais baixos configuram a operação.
-Algumas instruções são seguidas por um endereço de 12-bits ou um valor de
+Algumas instruções são seguidas por um endereço de 16-bits ou um valor de
 8-bits, fazendo-os serem 3-bytes ou 2-bytes no total.
 
 &nbsp;&nbsp;&nbsp;&nbsp; Todos os programas se iniciam pelo endereço contido em `0xfff1:0xfff0`,
@@ -15,13 +15,13 @@ como Stack Pointer.
 
 ### Registradores
 
-| Registrador | Tamanho | Descrição                                                                                             |
-| ----------- | :-----: | ----------------------------------------------------------------------------------------------------- |
-| A           |  8-bit  | Acumulador -> Operador primário para todas as operações                                               |
-| IX          |  8-bit  | Index register X -> Operador secundário                                                               |
-| IY          |  8-bit  | Index register Y -> Operador secundário                                                               |
-| PC          | 16-bit  | Program Counter (Contador do Programa). <br>Internamente é 16-bits, mas o nibble mais alto é ignorado |
-| FR          | 8-bits  | Flag Register (V, C, N, Z).                                                                           |
+| Registrador | Tamanho | Descrição                                               |
+| ----------- | :-----: | ------------------------------------------------------- |
+| A           |  8-bit  | Acumulador -> Operador primário para todas as operações |
+| IX          |  8-bit  | Index register X -> Operador secundário                 |
+| IY          |  8-bit  | Index register Y -> Operador secundário                 |
+| PC          | 16-bit  | Program Counter (Contador do Programa).                 |
+| FR          | 4-bits  | Flag Register (V, C, N, Z).                             |
 
 \* Não há ponteiro de stack, controle de stack deve ser feita pelo usuário.
 
@@ -37,8 +37,6 @@ sejam modificadas por outras operações.
 
 \* As flags N e Z sempre são modificadas por qualquer instrução que passe
 pela ALU.
-
-\* O nibble mais alto sempre é preenchido com zeros.
 
 ### Instruções
 
@@ -113,7 +111,7 @@ Modos:
   Absolute: (3-bytes) | MNEMONIC addr
     byte 0: instrução
     byte 1: addr[7:0]
-    byte 2: addr[11:8] (nibble mais alto é ignorado)
+    byte 2: addr[11:8]
 ```
 
 ### Tabela de opcodes
@@ -415,6 +413,7 @@ Notas sobre as flags:
 - [Wikipédia - Adder Subtractor](https://en.wikipedia.org/wiki/Adder%E2%80%93subtractor)
 - [decoding.txt](./decoding.txt)
 - [sequencer.txt](./sequencer.txt)
+- [datapath.txt](./datapath.txt)
 
 [^1]:
     Em fato, essa encodificação não é obrigatória, mas uma forma de facilitar
