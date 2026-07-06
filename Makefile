@@ -11,12 +11,13 @@ FILELIST := files.f
 IFLAGS := -g2012 -Wall
 
 # Each entry: name of module = name of .v file (without extension)
-MODULES := mux_2to1 mux_4to1 mux_8to1 interrupt_sequencer cpu toplevel
+MODULES += toplevel cpu instruction_sequencer interrupt_sequencer
+MODULES := mux_2to1 mux_4to1 mux_8to1
 MODULES += d_latch d_flipflop register_8 register_4 flag_register program_counter
 MODULES += full_adder ripple_adder_4 ripple_adder_8
-MODULES += adder_subtractor shifter_8 multiplier_4 alu decode_system decode_system decode_memory decode_arithmetic decode_unary decode_jump instruction_decoder sequencer
+MODULES += adder_subtractor shifter_8 multiplier_4 alu
+MODULES += decode_system decode_memory decode_arithmetic decode_unary decode_jump instruction_decoder
 
-MODULES += instruction_sequencer
 SRC_FILES := $(patsubst %,$(SRC_DIR)/%.v,$(MODULES))
 TB_FILES  := $(patsubst %,$(TB_DIR)/%_tb.v,$(MODULES))
 
