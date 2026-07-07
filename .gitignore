@@ -1,5 +1,10 @@
+# Directiories
+.cache/
+.github/
 build/
-vvp/
-*.o
-*.vvp
-*.vcd
+__pycache__
+tests/src/output/
+
+# Files
+.gdb_history
+tests/src/sst_all.h

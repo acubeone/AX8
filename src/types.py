@@ -1,11 +1,29 @@
 from typing import Optional, Literal
 
 AddrMode = Literal["IMP", "IND", "IMM", "ABS", "REL"]
+
+# fmt: off
+Mnemonic = Literal[
+    "ADC", "AND", "BCC", "BCS",
+    "BEQ", "BMI", "BNQ", "BPL",
+    "BRA", "BVC", "BVS", "CLC",
+    "CLV", "CMP", "DEC", "DEX",
+    "DEY", "HLT", "INC", "INX",
+    "INY", "JMP", "LD",  "LDI",
+    "LDX", "LDY", "MUL", "NOP",
+    "NOT", "OR",  "ROL", "ROR",
+    "SEC", "SEV", "ST",  "STX",
+    "STY", "SBC", "SHL", "SHR",
+    "XOR", "TAX", "TAY", "TXA",
+    "TXY", "TYA", "TYX",
+]
+# fmt: on
+
 Opcode = Optional[int]
 OpEntry = dict[AddrMode, Opcode]
-OpTable = dict[str, OpEntry]
+OpTable = dict[Mnemonic, OpEntry]
 
-MODE_SIZE = dict[AddrMode, int] = {
+MODE_SIZE: dict[AddrMode, int] = {
     "IMP": 1,
     "IND": 1,
     "IMM": 2,
@@ -30,15 +48,12 @@ OP_TABLE: OpTable = {
     "ST":  {"IMP": None, "IND": 0x2C, "IMM": None, "ABS": 0x24, "REL": None},
     "STX": {"IMP": None, "IND": 0x2D, "IMM": None, "ABS": 0x25, "REL": None},
     "STY": {"IMP": None, "IND": 0x2E, "IMM": None, "ABS": 0x26, "REL": None},
-    "TAA": {"IMP": 0x30, "IND": None, "IMM": None, "ABS": None, "REL": None},
     "TAX": {"IMP": 0x31, "IND": None, "IMM": None, "ABS": None, "REL": None},
     "TAY": {"IMP": 0x32, "IND": None, "IMM": None, "ABS": None, "REL": None},
     "TXA": {"IMP": 0x34, "IND": None, "IMM": None, "ABS": None, "REL": None},
-    "TXX": {"IMP": 0x35, "IND": None, "IMM": None, "ABS": None, "REL": None},
     "TXY": {"IMP": 0x36, "IND": None, "IMM": None, "ABS": None, "REL": None},
     "TYA": {"IMP": 0x37, "IND": None, "IMM": None, "ABS": None, "REL": None},
     "TYX": {"IMP": 0x38, "IND": None, "IMM": None, "ABS": None, "REL": None},
-    "TYY": {"IMP": 0x39, "IND": None, "IMM": None, "ABS": None, "REL": None},
 
     # Group 010: Arithmetic
     "ADC": {"IMP": 0x40, "IND": 0x48, "IMM": 0x50, "ABS": 0x58, "REL": None},
