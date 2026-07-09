@@ -1,0 +1,66 @@
+whitespace = " " | "\n" | "\t" ;
+
+program = { statement } , EOF ;
+
+statement = label_decl
+		| directive
+		| instruction ;
+
+
+label_decl = identifier , ":" ;
+
+directive = org_directive
+		| byte_directive
+		| word_directive
+		| text_directive ;
+
+org_directive = ".ORG" , operand_imm ;
+byte_directive = ".BYTE" , number_list ;
+word_directive = ".WORD" , number_list ;
+text_directive = ".TEXT" , string , { string | number_list } ;
+
+number_list = number , { "," , number } ;
+
+string = '"' , { ASCII } , '"' ;
+
+instruction = mnemonic , [ operand ] ;
+
+mnemonic = "ADC" | "AND" | "BCC" | "BCS"
+		| "BEQ" | "BMI" | "BNQ" | "BPL"
+		| "BRA" | "BVC" | "BVS" | "CLC"
+		| "CLV" | "CMP" | "DEC" | "DEX"
+		| "DEY" | "HLT" | "INC" | "INX"
+		| "INY" | "JMP" | "LD"  | "LDI"
+		| "LDX" | "LDY" | "MUL" | "NOP"
+		| "NOT" | "OR"  | "ROL" | "ROR"
+		| "SEC" | "SEV" | "ST"  | "STX"
+		| "STY" | "SBC" | "SHL" | "SHR"
+		| "TAX" | "TAY" | "TXA" | "TXY"
+		| "TYA" | "TYX" | "XOR" ;
+
+operand = operand_imp
+		| operand_ind
+		| operand_imm
+		| operand_abs
+		| operand_ref ;
+
+operand_imp = "IX" | "IY" ;      (* e.g. "ADC IX" *)
+operand_ind = "[" , "IY" , "]" ; (* e.g. "[IY]" *)
+operand_imm = "#" , number ;     (* e.g. "#$0a" *)
+operand_abs = number ;           (* Literal address or offset *)
+operand_ref = label ;            (* ":label" -> ABS or REL *)
+
+label = ":" , identifier ;
+
+identifier = letter , { letter | digit | "_" } ;
+
+number = [ "+" | "-" ] , ( dec | hex | bin ) ;
+
+dec = digit , { digit | "_" } ;
+hex = "$" , hexdigit , { hexdigit | "_" } ;
+bin = "%" , bindigit , { bindigit | "_" } ;
+
+hexdigit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7"
+		| "8" | "9" | "a" | "b" | "c" | "d" | "e" | "f" ;
+
+bindigit = "0" | "1" ;
