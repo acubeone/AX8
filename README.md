@@ -48,7 +48,7 @@ pela ALU.
 |   `BCS`   | `. . . .` | Branch if Carry Set      |
 |   `BEQ`   | `. . . .` | Branch if EQual          |
 |   `BMI`   | `. . . .` | Branch if MInus          |
-|   `BNQ`   | `. . . .` | Branch if Not eQual      |
+|   `BNE`   | `. . . .` | Branch if Not Equal      |
 |   `BPL`   | `. . . .` | Branch if PLus           |
 |   `BRA`   | `. . . .` | BRAnch                   |
 |   `BVC`   | `. . . .` | Branch if oVerflow Clear |
@@ -322,7 +322,7 @@ Encoding
 
 |  Mode   | Mnemônico  | Operação                     |
 | :-----: | ---------- | ---------------------------- |
-| `00000` | `BNQ rel8` | `if Z=0: PC = PC + 2 + rel8` |
+| `00000` | `BNE rel8` | `if Z=0: PC = PC + 2 + rel8` |
 | `00001` | `BPL rel8` | `if N=0: PC = PC + 2 + rel8` |
 | `00010` | `BCC rel8` | `if C=0: PC = PC + 2 + rel8` |
 | `00011` | `BVC rel8` | `if V=0: PC = PC + 2 + rel8` |
@@ -394,11 +394,11 @@ Notas sobre as flags:
 - `V`: O resultado da sobrecarga de sinal em `ADC` e `SBC` vem do sexto
   carry (`c6`) e o carry resultante (`cout`), então `V = c6 xor cout`
 
-  | Relação |  Z  |  C  |   N    |
-  | :-----: | :-: | :-: | :----: |
-  | `A < B` | `0` | `0` | `Y[7]` |
-  | `A = B` | `1` | `1` |  `0`   |
-  | `A > B` | `0` | `1` | `Y[7]` |
+    | Relação |  Z  |  C  |   N    |
+    | :-----: | :-: | :-: | :----: |
+    | `A < B` | `0` | `0` | `Y[7]` |
+    | `A = B` | `1` | `1` |  `0`   |
+    | `A > B` | `0` | `1` | `Y[7]` |
 
 ### Referências e materiais utilizados:
 
