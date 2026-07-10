@@ -3,8 +3,7 @@ program = { whitespace | statement } , EOF ;
 whitespace = " " | "\n" | "\t" | comment ;
 comment = ";" , { ? any character except newline ? } ;
 
-statement = comment
-          | label_decl
+statement = label_decl
           | directive
           | instruction ;
 
@@ -24,9 +23,9 @@ text_directive = ".TEXT" , text_list ;   (* .TEXT "Hello", $0a, "world", 0 *)
 number_list = number , { "," , number } ;
 text_list = string , { "," , ( string | number ) } ;
 
-string = '"' , { ASCII } , '"' ;
-
-ASCII  = ? any 8-bit character except `"` and newline ? ;
+string = '"' , { string_char } , '"' ;
+string_char = ? any ASCII except `"` and `\` ?
+            | escape_sequence ;
 
 instruction = mnemonic , [ operand ] ;
 
@@ -62,13 +61,20 @@ identifier = letter , { letter | digit | "_" } ; (* case-sensitive *)
 
 letter = "A" | ... | "Z" | "a" | ... | "z" ;
 
-number = [ "+" | "-" ] , ( dec | hex | bin ) ;
+number = character | ( [ "+" | "-" ] , ( dec | hex | bin) );
 
 dec = digit , { digit | "_" } ;
 hex = "$" , hexdigit , { hexdigit | "_" } ;
 bin = "%" , bindigit , { bindigit | "_" } ;
 
-hexdigit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7"
-		| "8" | "9" | "a" | "b" | "c" | "d" | "e" | "f" ;
+character = "'" , char_char , "'" ;
+char_char = ? any ASCII except `'` and `\` ?
+          | escape_sequence ;
+
+escape_sequence = "\\" , ( "n" | "t" | "r" | "\\" | "\"" | "\'" | "\0" | ( "x" , hexdigit , hexdigit ) ) ;
+
+digit = "0" | ... | "9" ;
+
+hexdigit = "0" | ... | 9" | "a" | ... | "f" ;
 
 bindigit = "0" | "1" ;

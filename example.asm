@@ -15,9 +15,9 @@ start:
 	BNE :END   ; This is stored as a signed 8-bit in 2's complement
 
 Data:
-	.BYTE $55, %1010_1010, 1_0_00      ; Numbers can have _ to separate values
-	.WOrd $aa_55, -42                  ; Numbers can be signed(stored in 2's complement)
-	.TEXT "\tHello", $0A, "World\n", 0 ; All texts are Ascii and support escape-sequences
+	.BYTE $55, %1010_1010, 1_0_00, '99' ; Numbers can have _ to separate values
+	.WOrd $aa_55, -42                   ; Numbers can be signed(stored in 2's complement)
+	.TEXT "\tHello", $0A, "World\n", 0  ; All texts are ASCII and support escape-sequences
 
 END:
 	HLT
