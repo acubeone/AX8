@@ -20,38 +20,26 @@
 // 3. This notice may not be removed or altered from any source
 //    distribution.
 
-#include "error.h"
-#include "lexer.h"
+#pragma once
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <stddef.h>
+#include <stdint.h>
 
-int main(int argc, char *argv[]) {
-	atexit(err_flush);
+#define ALLOC(size)		   malloc(size)
+#define REALLOC(ptr, size) realloc(ptr, size)
+#define FREE(ptr)		   free(ptr)
 
-	FILE *file = stdin;
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
 
-	if (argc > 1) {
-		file = fopen(argv[1], "rb");
-		if (!file)
-			log_warn("Failed to open file at '%s'... reading from STDIN", argv[1]);
-	}
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
 
-	LexerState lex;
-	lex_init(&lex, file);
+typedef float f32;
+typedef double f64;
 
-	Token tk = { .kind = TK_NONE, .pos = {} };
-	while (tk.kind != TK_EOF) {
-		ErrorCode err = lex_scan(&lex, &tk);
-		if (err)
-			break;
-
-		if (tk.kind == TK_STRING) {
-			log_info("%s", tk.str.ptr);
-			free(tk.str.ptr);
-		}
-	}
-
-	lex_close(&lex);
-	return EXIT_SUCCESS;
-}
+typedef size_t usize;

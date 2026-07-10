@@ -27,6 +27,7 @@
 #include <assert.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 
 typedef struct ErrorContext {
@@ -120,4 +121,7 @@ void _err_push(
 	va_start(args, fmt);
 	vsnprintf(entry->msg, ERR_MAX_MESSAGE_LENGTH, fmt, args);
 	va_end(args);
+
+	if (severity == SEVERITY_FATAL)
+		exit(EXIT_FAILURE);
 }

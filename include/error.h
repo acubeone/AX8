@@ -46,11 +46,16 @@ enum {
 };
 
 typedef enum ErrorCode {
-	ERR_SUCCESS = 0,
-	ERR_GENERIC,
-	ERR_INVALID_ARGS,
-	ERR_OUT_OF_MEMORY,
-	ERR_IO,
+	// Generic (0x00 - 0x0f)
+	ERR_SUCCESS = 0x00,
+	ERR_GENERIC = 0x01,
+	ERR_INVALID_ARGS = 0x02,
+	ERR_OUT_OF_MEMORY = 0x03,
+	ERR_IO = 0x04,
+
+	// Lexer (0x10 - 0x1f)
+	ERR_LEX_EOF = 0x10,
+	ERR_LEX_INVALID = 0x11,
 } ErrorCode;
 
 typedef enum ErrorSeverity {

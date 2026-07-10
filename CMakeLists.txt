@@ -31,6 +31,7 @@ target_sources(
 	${PROJECT_NAME}
 	PRIVATE
 		"src/error.c"
+		"src/lexer.c"
 		"src/main.c"
 )
 
