@@ -29,6 +29,10 @@
 
 typedef enum TokenKind {
 	// Keywords
+	TK_BYTE, // .BYTE
+	TK_ORG,	 // .ORG
+	TK_TEXT, // .TEXT
+	TK_WORD, // .WORD
 	TK_ADC,
 	TK_AND,
 	TK_BCC,
@@ -38,7 +42,6 @@ typedef enum TokenKind {
 	TK_BNE,
 	TK_BPL,
 	TK_BRA,
-	TK_BYTE, // .BYTE
 	TK_BVC,
 	TK_BVS,
 	TK_CLC,
@@ -62,7 +65,6 @@ typedef enum TokenKind {
 	TK_NOP,
 	TK_NOT,
 	TK_OR,
-	TK_ORG, // .ORG
 	TK_ROL,
 	TK_ROR,
 	TK_SEC,
@@ -75,25 +77,27 @@ typedef enum TokenKind {
 	TK_SHR,
 	TK_TAX,
 	TK_TAY,
-	TK_TEXT, // .TEXT
 	TK_TXA,
 	TK_TXY,
 	TK_TYA,
 	TK_TYX,
-	TK_WORD, // .WORD
 	TK_XOR,
+	TK_LAST_KEYWORD = TK_XOR,
 
 	// Symbols
+	TK_MINUS,	 // -
 	TK_COLLON,	 // :
 	TK_COMMA,	 // ,
 	TK_HASH,	 // #
 	TK_LBRACKET, // [
+	TK_PLUS,	 // +
 	TK_RBRACKET, // ]
+	TK_LAST_SYMBOL = TK_RBRACKET,
 
 	// Data
 	TK_NUMBER,
 	TK_STRING,
-	TK_LABEL,
+	TK_IDENTIFIER,
 
 	TK_NONE,
 	TK_EOF,
@@ -109,7 +113,8 @@ typedef struct Token {
 	Position pos;
 
 	union {
-		i64 number;
+		char *ident;
+		u16 number;
 
 		struct {
 			usize len;
@@ -132,3 +137,5 @@ void lex_init(LexerState *lex, FILE *file);
 void lex_close(LexerState *lex);
 
 ErrorCode lex_scan(LexerState *lex, Token *tk);
+
+const char *lex_tok2str(TokenKind kind);

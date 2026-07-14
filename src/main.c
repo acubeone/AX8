@@ -46,10 +46,27 @@ int main(int argc, char *argv[]) {
 		if (err)
 			break;
 
-		if (tk.kind == TK_STRING) {
-			log_info("%s", tk.str.ptr);
-			free(tk.str.ptr);
+		if (tk.kind <= TK_LAST_SYMBOL)
+			printf("%zu:%zu -> %s\n", tk.pos.lineno, tk.pos.colno, lex_tok2str(tk.kind));
+
+		if (tk.kind == TK_NUMBER)
+			printf("%zu:%zu -> %hu\n", tk.pos.lineno, tk.pos.colno, tk.number);
+
+		if (tk.kind == TK_IDENTIFIER && tk.ident) {
+			printf("%zu:%zu -> %s\n", tk.pos.lineno, tk.pos.colno, tk.ident);
+
+			free(tk.ident);
+			tk.ident = nullptr;
 		}
+
+		if (tk.kind == TK_STRING && tk.str.ptr) {
+			printf("%zu:%zu -> %s\n", tk.pos.lineno, tk.pos.colno, tk.str.ptr);
+
+			free(tk.str.ptr);
+			tk.str.ptr = nullptr;
+		}
+
+		err_flush();
 	}
 
 	lex_close(&lex);

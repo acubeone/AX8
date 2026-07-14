@@ -56,6 +56,7 @@ typedef enum ErrorCode {
 	// Lexer (0x10 - 0x1f)
 	ERR_LEX_EOF = 0x10,
 	ERR_LEX_INVALID = 0x11,
+	ERR_LEX_EXPECTED_DIGIT = 0x12,
 } ErrorCode;
 
 typedef enum ErrorSeverity {
