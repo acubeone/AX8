@@ -1,0 +1,153 @@
+Example groups:
+System:
+  HALT
+  TRAP
+  NOP
+  FSET
+  FCLR
+  PUSH
+  PULL
+Transfers:
+  MOV
+  EXG
+Arithmetic:
+  ADC
+  SBC
+  MUL ; Unsigned, push result into stack
+  DIV ; Unsigned, push result into stack; If divisor=0, raise exception
+  AND
+  OR
+  XOR
+  CMP
+  NOT
+  SHL
+  SHR
+  CLR
+  INC
+  DEC
+  ROL
+  ROR
+Control:
+  JMP
+  JSR
+  BRA
+  BSR
+  Bcc
+  RTI
+  RTS
+
+; Note: Groups shouldn't be reflected into encoding. So no bits are used to
+; determine which group the instruction is from.
+; Note: Encoding can create groups to simplify encoding, but it is not tied to
+; operation
+
+
+Examples of possible addressing modes:
+
+; No operand or Implied
+HALT
+TRAP
+NOP
+
+; Embedded values
+TRAP #n2
+FSET #n3 ; Set bit in status register
+FCLR #n3 ; Clear bit in status register
+
+; Binary Arithmetic
+ADC <dregx>, <dregy>      ; dregx <- dregx + dregy + C
+ADC <dreg>, #imm8         ; dreg <- dreg + #imm8 + C
+ADC <dreg>, abs16         ; dreg <- dreg + mem[abs16] + C
+ADC <dreg>, [imm8:<ireg>] ; dreg <- dreg + mem[imm8:ireg] + C
+ADC <dreg>, [r16]         ; dreg <- dreg + mem[16] + C
+
+MUL <dregx>, <dregy>      ; hi, lo <- dregx * dregy; push lo; push hi
+MUL <dreg>, #imm8         ; hi, lo <- dreg * #imm8; push lo; push hi
+MUL <dreg>, abs16         ; hi, lo <- dreg * mem[abs16]; push lo; push hi
+MUL <dreg>, [imm8:<ireg>] ; hi, lo <- dreg * mem[imm8:ireg]; push lo; push hi
+MUL <dreg>, [r16]         ; hi, lo <- dreg * mem[r16]; push lo; push hi
+
+DIV <dregx>, <dregy>      ; quot, rem <- dregx / dregy; push quot; push rem
+DIV <dreg>, #imm8         ; quot, rem <- dreg / #imm8; push quot; push rem
+DIV <dreg>, abs16         ; quot, rem <- dreg / mem[abs16]; push quot; push rem
+DIV <dreg>, [imm8:<ireg>] ; quot, rem <- dreg / mem[imm8:ireg]; push quot; push rem
+DIV <dreg>, [r16]         ; quot, rem <- dreg / mem[r16]; push quot; push rem
+
+; Unary Arithmetic
+SHR <dreg>
+SHL <dreg>
+NOT <dreg>
+CLR <dreg> ; reg <- 0
+
+; Jumps
+JMP imm16
+JMP imm8:<ireg>
+JMP Z
+JSR imm16       ; Push PC to SP; PC <- imm16
+JSR imm8:<ireg> ; Push PC to SP; PC <- imm8:ireg
+JSR Z           ; Push PC to SP; PC <- Y:X
+
+; Branchs
+BRA rel8 ; PC <- PC + 2 + rel8
+BSR rel8 ; Push PC to SP; PC <- PC + 2 + rel8
+Bcc rel8 ; IF <condition> THEN PC <- PC + 2 + rel8
+
+; Returning
+RTI ; Pull PC and SR from SP
+RTS ; Pull PC from SP
+
+; Data Manipulation
+EXG <dreg>, <ireg>   ; dreg <-> ireg
+EXG <dregx>, <dregy> ; dregx <-> dregy
+EXG <iregx>, <iregy> ; iregx <-> iregy
+
+MOV <dregx>, <dregy> ; dregx <- dregy
+MOV <dreg>, #imm8    ; dreg <- #imm8
+
+MOV <dreg>, abs16   ; dreg <- mem[abs16]
+MOV abs16, <dreg>   ; mem[abs16] <- dreg
+
+MOV <dreg>, [imm8:<ireg>] ; dreg <- mem[imm8:ireg]
+MOV [imm8:<ireg>], <dreg> ; mem[imm8:ireg] <- dreg
+
+MOV <dreg>, [Z] ; dreg <- mem[Z]
+MOV [Z], <dreg> ; mem[Z] <- dreg
+
+MOV <dreg>, SR ; dreg <- SR
+MOV SR, <dreg> ; SR <- dreg
+
+MOV <iregx>, <iregy> ; iregx <- iregy
+MOV <ireg>, #imm8    ; ireg <- #imm8
+MOV <r16>, #imm16    ; r16 <- #imm16
+
+MOV <ireg>, abs16 ; ireg <- mem[abs16]
+MOV abs16, <ireg> ; mem[abs16] <- ireg
+
+MOV <r16>, abs16  ; r16 <- mem[abs16 + 1]:mem[abs16]
+MOV abs16, <r16>  ; mem[abs16+1]:mem[abs16] <- r16
+
+; Stack Manipulation
+PUSH <dreg> ; Push dreg into stack, and decrement SP
+PULL <dreg> ; Pull dreg from stack, and increment SP
+PUSH X      ; Push X into stack, and decrement SP
+PULL X      ; Pull X from stack, and increment SP
+PUSH Y      ; Push Y into stack, and decrement SP
+PULL Y      ; Pull Y from stack, and increment SP
+PUSH SR     ; Push SR into stack, and decrement SP
+PULL SR     ; Pull SR from stack, and increment SP
+
+<dreg> = A | B | C | D
+<ireg> = X | Y | L | H
+Z = Y:X
+SP = H:L
+<r16> = Z | SP
+
+rel8 = signed 8-bits 2's complement number
+imm8 = unsigned 8-bits number
+imm16 = unsigned 16-bits number
+abs16 = unsigned 16-bits number
+
+SR = 8-bits status register [I000VCNZ]
+
+n2 = 2-bits trap number ; Only used in TRAP
+n3 = 3-bits flag number ; Only used in FSET and FCLR
