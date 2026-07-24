@@ -1,0 +1,287 @@
+HALT
+NOP
+
+; TRAP #n2
+TRAP 0
+TRAP 1
+TRAP 2
+TRAP 3
+
+; FSET #n3
+FSET 0
+FSET 1
+FSET 2
+FSET 3
+FSET 4
+FSET 5
+FSET 6
+FSET 7
+
+; FCLR #n3
+FCLR 0
+FCLR 1
+FCLR 2
+FCLR 3
+FCLR 4
+FCLR 5
+FCLR 6
+FCLR 7
+
+; PULL <reg>
+PULL A
+PULL B
+PULL C
+PULL D
+PULL X
+PULL Y
+PULL SR
+
+; PUSH <reg>
+PUSH A
+PUSH B
+PUSH C
+PUSH D
+PUSH X
+PUSH Y
+PUSH SR
+
+; EXG <dreg>, <ireg>
+EXG A, X
+EXG A, Y
+EXG A, H
+EXG A, L
+EXG B, X
+EXG B, Y
+EXG B, H
+EXG B, L
+EXG C, X
+EXG C, Y
+EXG C, H
+EXG C, L
+EXG D, X
+EXG D, Y
+EXG D, H
+EXG D, L
+
+; EXG <dregx>, <dregy>
+EXG A, A
+EXG A, B
+EXG A, C
+EXG A, D
+EXG B, A
+EXG B, B
+EXG B, C
+EXG B, D
+EXG C, A
+EXG C, B
+EXG C, C
+EXG C, D
+EXG D, A
+EXG D, B
+EXG D, C
+EXG D, D
+
+; EXG <iregx>, <iregy>
+EXG X, X
+EXG X, Y
+EXG X, L
+EXG X, H
+EXG Y, X
+EXG Y, Y
+EXG Y, L
+EXG Y, H
+EXG L, X
+EXG L, Y
+EXG L, L
+EXG L, H
+EXG H, X
+EXG H, Y
+EXG H, L
+EXG H, H
+
+; MOV <dregx>, <dregy>
+MOV A, A
+MOV A, B
+MOV A, C
+MOV A, D
+MOV B, A
+MOV B, B
+MOV B, C
+MOV B, D
+MOV C, A
+MOV C, B
+MOV C, C
+MOV C, D
+MOV D, A
+MOV D, B
+MOV D, C
+MOV D, D
+
+; MOV <iregx>, <iregy>
+MOV X, X
+MOV X, Y
+MOV X, L
+MOV X, H
+MOV Y, X
+MOV Y, Y
+MOV Y, L
+MOV Y, H
+MOV L, X
+MOV L, Y
+MOV L, L
+MOV L, H
+MOV H, X
+MOV H, Y
+MOV H, L
+MOV H, H
+
+; MOV <dreg>, #imm8
+MOV A, #imm8
+MOV B, #imm8
+MOV C, #imm8
+MOV D, #imm8
+
+; MOV <ireg>, #imm8
+MOV X, #imm8
+MOV Y, #imm8
+MOV L, #imm8
+MOV H, #imm8
+
+; MOV <r16>, #imm16
+MOV Z, #imm16
+MOV SP, #imm16
+
+; MOV <dreg>, abs16
+MOV A, abs16
+MOV B, abs16
+MOV C, abs16
+MOV D, abs16
+
+; MOV <ireg>, abs16
+MOV X, abs16
+MOV Y, abs16
+MOV L, abs16
+MOV H, abs16
+
+; MOV <r16>, abs16
+MOV Z, abs16
+MOV SP, abs16
+
+; MOV <dreg>, [imm8:<ireg>]
+MOV A, [imm8:X]
+MOV A, [imm8:Y]
+MOV A, [imm8:L]
+MOV A, [imm8:H]
+MOV B, [imm8:X]
+MOV B, [imm8:Y]
+MOV B, [imm8:L]
+MOV B, [imm8:H]
+MOV C, [imm8:X]
+MOV C, [imm8:Y]
+MOV C, [imm8:L]
+MOV C, [imm8:H]
+MOV D, [imm8:X]
+MOV D, [imm8:Y]
+MOV D, [imm8:L]
+MOV D, [imm8:H]
+
+; MOV <dreg>, [Z]
+MOV A, [Z]
+MOV B, [Z]
+MOV C, [Z]
+MOV D, [Z]
+
+; MOV <dreg>, SR
+MOV A, SR
+MOV B, SR
+MOV C, SR
+MOV D, SR
+
+; MOV abs16, <dreg>
+MOV abs16, A
+MOV abs16, B
+MOV abs16, C
+MOV abs16, D
+
+; MOV abs16, <ireg>
+MOV abs16, X
+MOV abs16, Y
+MOV abs16, L
+MOV abs16, H
+
+; MOV abs16, <r16>
+MOV abs16, Z
+MOV abs16, SR
+
+; MOV [imm8:<ireg>], <dreg>
+MOV [imm8:X], A
+MOV [imm8:X], B
+MOV [imm8:X], C
+MOV [imm8:X], D
+MOV [imm8:Y], A
+MOV [imm8:Y], B
+MOV [imm8:Y], C
+MOV [imm8:Y], D
+MOV [imm8:L], A
+MOV [imm8:L], B
+MOV [imm8:L], C
+MOV [imm8:L], D
+MOV [imm8:H], A
+MOV [imm8:H], B
+MOV [imm8:H], C
+MOV [imm8:H], D
+
+; MOV [Z], <dreg>
+MOV [Z], A
+MOV [Z], B
+MOV [Z], C
+MOV [Z], D
+
+; MOV SR, <dreg>
+MOV SR, A
+MOV SR, B
+MOV SR, C
+MOV SR, D
+
+RTI
+RTS
+
+JMP imm16
+
+; JMP imm8:<ireg>
+JMP imm8:X
+JMP imm8:Y
+JMP imm8:L
+JMP imm8:H
+
+JMP Z
+
+JSR imm16
+
+; JSR imm8:<ireg>
+JSR imm8:X
+JSR imm8:Y
+JSR imm8:L
+JSR imm8:H
+
+JSR Z
+
+BRA rel8
+
+BSR rel8
+
+BNE rel8
+
+BPL rel8
+
+BCC rel8
+
+BVC rel8
+
+BEQ rel8
+
+BMI rel8
+
+BCS rel8
+
+BVS rel8

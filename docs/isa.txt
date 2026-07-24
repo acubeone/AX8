@@ -1,0 +1,128 @@
+;=======  REGISTERS  ========
+<dreg> = A | B | C | D
+<ireg> = X | Y | L | H
+Z = Y:X
+SP = H:L
+<r16> = Z | SP
+
+
+;========   SYSTEM   ========
+HALT ; Trigger HALT
+NOP  ; Do Nothing
+
+TRAP #n2 ; Trigger Nth TRAP vector
+
+FSET #n3 ; Set bit in Status Register
+FCLR #n3 ; Clear bit in Status Register
+
+PUSH <dreg> ; Push dreg into stack, decrement SP
+PUSH X      ; Push X into stack, decrement SP
+PUSH Y      ; Push Y into stack, decrement SP
+PUSH SR     ; Push SR into stack, decrement SP
+
+PULL <dreg> ; Pull dreg from stack, increment SP
+PULL X      ; Pull X from stack, increment SP
+PULL Y      ; Pull Y from stack, increment SP
+PULL SR     ; Pull SR from stack, increment SP
+
+;========  TRANSFER  ========
+EXG <dreg>, <ireg>   ; dreg <-> ireg
+EXG <dregx>, <dregy> ; dregx <-> dregy
+EXG <iregx>, <iregy> ; iregx <-> iregy
+
+MOV <dregx>, <dregy> ; dregx <- dregy
+MOV <iregx>, <iregy> ; iregx <- iregy
+
+MOV <dreg>, #imm8 ; dreg <- mem[PC]
+MOV <ireg>, #imm8 ; ireg <- mem[PC]
+MOV <r16>, #imm16 ; r16 <- mem[PC+1]:mem[PC]
+
+MOV <dreg>, abs16 ; dreg <- mem[abs16]
+MOV <ireg>, abs16 ; ireg <- mem[abs16]
+MOV <r16>, abs16  ; r16 <- mem[abs16+1]:mem[abs16]
+
+MOV <dreg>, [imm8:<ireg>] ; dreg <- mem[imm8:ireg]
+MOV <dreg>, [Z]           ; dreg <- mem[Z]
+MOV <dreg>, SR            ; dreg <- SR
+
+MOV abs16, <dreg> ; mem[abs16] <- dreg
+MOV abs16, <ireg> ; mem[abs16] <- ireg
+MOV abs16, <r16>  ; mem[abs16] <- r16[7:0], mem[abs16+1] <- r16[15:8]
+
+MOV [imm8:<ireg>], <dreg> ; mem[imm8:ireg] <- dreg
+MOV [Z], <dreg>           ; mem[Z] <- dreg
+MOV SR, <dreg>            ; SR <- dreg
+
+;======== ARITHMETIC ========
+ADC <dregx>, <dregy> ; dregx <- dregx + dregy + C
+SBC <dregx>, <dregy> ; dregx <- dregx - dregy - (~C)
+MUL <dregx>, <dregy> ; hi:lo <- dregx * dregy, PUSH lo, PUSH hi
+DIV <dregx>, <dregy> ; quot, rem <- dregx / dregy, PUSH quot, PUSH rem
+AND <dregx>, <dregy> ; dregx <- dregx & dregy
+OR  <dregx>, <dregy> ; dregx <- dregx | dregy
+XOR <dregx>, <dregy> ; dregx <- dregx ^ dregy
+CMP <dregx>, <dregy> ; dregx - dregy, update SR from results, no writeback
+
+ADC <dreg>, #imm8 ; dreg <- dreg + mem[PC] + C
+SBC <dreg>, #imm8 ; dreg <- dreg - mem[PC] - (~C)
+MUL <dreg>, #imm8 ; hi:lo <- dreg * mem[PC], PUSH lo, PUSH hi
+DIV <dreg>, #imm8 ; quot, rem <- dregx / mem[PC], PUSH quot, PUSH rem
+AND <dreg>, #imm8 ; dreg <- dreg & mem[PC]
+OR  <dreg>, #imm8 ; dreg <- dreg | mem[PC]
+XOR <dreg>, #imm8 ; dreg <- dreg ^ mem[PC]
+CMP <dreg>, #imm8 ; dreg - mem[PC], update SR from results, no writeback
+
+ADC <dreg>, abs16 ; dreg <- dreg + mem[abs16] + C
+SBC <dreg>, abs16 ; dreg <- dreg - mem[abs16] - (~C)
+MUL <dreg>, abs16 ; hi:lo <- dreg * mem[abs16], PUSH lo, PUSH hi
+DIV <dreg>, abs16 ; quot, rem <- dregx / mem[abs16], PUSH quot, PUSH rem
+AND <dreg>, abs16 ; dreg <- dreg & mem[abs16]
+OR  <dreg>, abs16 ; dreg <- dreg | mem[abs16]
+XOR <dreg>, abs16 ; dreg <- dreg ^ mem[abs16]
+CMP <dreg>, abs16 ; dreg - mem[abs16], update SR from results, no writeback
+
+ADC <dreg>, [imm8:<ireg>] ; dreg <- dreg + mem[imm8:ireg] + C
+SBC <dreg>, [imm8:<ireg>] ; dreg <- dreg - mem[imm8:ireg] - (~C)
+CMP <dreg>, [imm8:<ireg>] ; dreg - mem[imm8:ireg], update SR from results, no writeback
+
+ADC <dreg>, [Z] ; dreg <- dreg + mem[Z] + C
+SBC <dreg>, [Z] ; dreg <- dreg - mem[Z] - (~C)
+CMP <dreg>, [Z] ; dreg - mem[Z], update SR from results, no writeback
+
+INC <dreg> ; dreg <- dreg + 1
+DEC <dreg> ; dreg <- dreg - 1
+ROL <dreg> ; dreg <- dreg <] 1
+ROR <dreg> ; dreg <- dreg [> 1
+ASR <dreg> ; dreg <- dreg >> 1, sign-extended
+LSL <dreg> ; dreg <- dreg << 1
+LSR <dreg> ; dreg <- dreg >> 1
+NOT <dreg> ; dreg <- ~dreg
+CLR <dreg> ; dreg <- 0x00
+
+INC <ireg> ; ireg <- ireg + 1
+DEC <ireg> ; ireg <- ireg - 1
+CLR <ireg> ; ireg <- 0x00
+
+;========  CONTROL   ========
+RTI ; PULL SR, PULL PC
+RTS ; PULL PC
+
+JMP imm16       ; PC <- mem[PC+1]:mem[PC]
+JMP imm8:<ireg> ; PC <- mem[imm8:ireg+1]:mem[imm8:ireg]
+JMP Z           ; PC <- Z
+
+JSR imm16       ; PUSH PC, PC <- mem[PC+1]:mem[PC]
+JSR imm8:<ireg> ; PUSH PC, PC <- mem[imm8:ireg+1]:mem[imm8:ireg]
+JSR Z           ; PUSH PC, PC <- Z
+
+BRA rel8 ; PC <- PC + rel8
+BSR rel8 ; PUSH PC, PC <- PC + rel8
+
+BNE rel8 ; IF Z=0 THEN PC <- PC + rel8
+BPL rel8 ; IF N=0 THEN PC <- PC + rel8
+BCC rel8 ; IF C=0 THEN PC <- PC + rel8
+BVC rel8 ; IF V=0 THEN PC <- PC + rel8
+BEQ rel8 ; IF Z=1 THEN PC <- PC + rel8
+BMI rel8 ; IF N=1 THEN PC <- PC + rel8
+BCS rel8 ; IF C=1 THEN PC <- PC + rel8
+BVS rel8 ; IF V=1 THEN PC <- PC + rel8
