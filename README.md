@@ -2,9 +2,9 @@
 
 ## Overview
 
-> &emsp;&emsp;The AX8 or Axle is a 8-bit CISC microprocessor with a strictly little-endian
-> memory model. It provides an 8-bit internal data path and a 16-bit address bus,
-> enabling direct addressing of up to 64KB of memory space.
+&ensp;&ensp;&ensp;&ensp;The AX8 or Axle is a 8-bit CISC microprocessor with a strictly little-endian
+memory model. It provides an 8-bit internal data path and a 16-bit address bus,
+enabling direct addressing of up to 64KB of memory space.
 
 ---
 
@@ -35,6 +35,37 @@
 - `POP` increments `SP`.
 - The initial value of `SP` is set from the vector address: `$fffd:$fffc`.
 
+### Status Register (SR):
+
+- The Status Register is a 8-bit register containing condition flags and interrupt
+  mask bits.
+- Each bit represents the outcome of arithmetc, logic and data movement operations.
+- Conditional branch instructions can inspect specific flags to determine whether
+  to alter program flow.
+- Bit Layout:
+
+| Bit | Name | Description                                                                                                                                                      |
+| :-: | :--: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `7` | `I1` | **Interrupt Mask 1**. When set to `1`, IRQ1 interrupts are disabled (masked). When cleared, IRQ1 is enabled                                                      |
+| `6` | `I0` | **Interrupt Mask 0**. When set to `1`, IRQ0 interrupts are disabled (masked). When cleared, IRQ0 is enabled                                                      |
+| `5` | `__` | **Reserved**. Reads as `0`. Must be written as `0` for future compatibility                                                                                      |
+| `4` | `__` | **Reserved**. Reads as `0`. Must be written as `0` for future compatibility                                                                                      |
+| `3` | `V`  | **Overflow**. Set to `1` if a signed arithmetic operation produces a result outside the range of an 8-bit two's complement integer. Cleared otherwise            |
+| `2` | `C`  | **Carry/Borrow**. Set to `1` if an addition generates a carry out of bit 7, or if as subtraction requires a borrow. Also affected by shift and rotate operations |
+| `1` | `N`  | **Negative**. Set to `1` if result of operation has bit 7 set. Cleared otherwise                                                                                 |
+| `0` | `Z`  | **Zero**. Set to `1` if result of an operation is zero (`$00`). Cleared otherwise                                                                                |
+
+- Flag Behaviour:
+
+| Operation Type                   | Affected Flags     | Behaviour                                      |
+| :------------------------------- | :----------------- | :--------------------------------------------- |
+| Arithmetic (`ADC`, `SBC`, etc.)  | `v`, `C`, `N`, `Z` | All four flags are updated based on the result |
+| Logic (`AND`, `OR`, `XOR`, etc.) | `N`, `Z`           | `V` is cleared to `0`. `C` is untouched        |
+| Shift/Rotates                    | `C`, `N`, `Z`      | `V` is cleared to `0`                          |
+| Move (`MOV`)                     | `N`, `Z`           | `V` and `C` are untouched                      |
+| Compare (`CMP`)                  | `V`, `C`, `N`, `Z` | All four flags are updated based on the result |
+| Increment/Decrement              | `N`, `Z`           | `V` and `C` are untouched                      |
+
 ### Vector Base Register (VBR):
 
 - VBR controls the location of the relocatable vector table.
@@ -57,8 +88,8 @@
 
 ## Interrupts and Exceptions
 
-> The AX8 implements a vectored exception system. Vectors are 16-bit addressed
-> stored in a vector table. The table location depends on vector type:
+&ensp;&ensp;&ensp;&ensp;The AX8 implements a vectored exception system. Vectors are 16-bit addressed
+stored in a vector table. The table location depends on vector type:
 
 - **Fixed vectors** (0-1) reside at hardwired low address and are not affected
   by **Vector Base Register (VBR)**.
@@ -102,8 +133,8 @@
 
 ### Interrupt behaviour
 
-> Interrupts always (except reset) always stores previous processor state
-> into stack:
+&ensp;&ensp;&ensp;&ensp;Interrupts always (except reset) always stores previous processor state
+into stack:
 
 - Push high-byte of `PC` into stack, and decrement `SP`
 - Push low-byte of `PC` into stack, and decrement `SP`
