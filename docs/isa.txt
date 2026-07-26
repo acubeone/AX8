@@ -5,7 +5,6 @@ Z = Y:X
 SP = H:L
 <r16> = Z | SP
 
-
 ;========   SYSTEM   ========
 HALT ; Trigger HALT
 NOP  ; Do Nothing
@@ -14,6 +13,9 @@ TRAP #n2 ; Trigger Nth TRAP vector
 
 FSET #n3 ; Set bit in Status Register
 FCLR #n3 ; Clear bit in Status Register
+
+BIT <dreg>, #imm8 ; <dreg> & #imm8, update SR from results, no writeback
+BIT <ireg>, #imm8 ; <ireg> & #imm8, update SR from results, no writeback
 
 PUSH <dreg> ; Push dreg into stack, decrement SP
 PUSH X      ; Push X into stack, decrement SP
@@ -55,7 +57,9 @@ MOV SR, <dreg>            ; SR <- dreg
 
 ;======== ARITHMETIC ========
 ADC <dregx>, <dregy> ; dregx <- dregx + dregy + C
+ADD <dregx>, <dregy> ; dregx <- dregx + dregy
 SBC <dregx>, <dregy> ; dregx <- dregx - dregy - (~C)
+SUB <dregx>, <dregy> ; dregx <- dregx - dregy
 MUL <dregx>, <dregy> ; hi:lo <- dregx * dregy, PUSH lo, PUSH hi
 DIV <dregx>, <dregy> ; quot, rem <- dregx / dregy, PUSH quot, PUSH rem
 AND <dregx>, <dregy> ; dregx <- dregx & dregy
@@ -64,7 +68,9 @@ XOR <dregx>, <dregy> ; dregx <- dregx ^ dregy
 CMP <dregx>, <dregy> ; dregx - dregy, update SR from results, no writeback
 
 ADC <dreg>, #imm8 ; dreg <- dreg + mem[PC] + C
+ADD <dreg>, #imm8 ; dreg <- dreg + mem[PC]
 SBC <dreg>, #imm8 ; dreg <- dreg - mem[PC] - (~C)
+SUB <dreg>, #imm8 ; dreg <- dreg - mem[PC]
 MUL <dreg>, #imm8 ; hi:lo <- dreg * mem[PC], PUSH lo, PUSH hi
 DIV <dreg>, #imm8 ; quot, rem <- dregx / mem[PC], PUSH quot, PUSH rem
 AND <dreg>, #imm8 ; dreg <- dreg & mem[PC]
@@ -73,7 +79,9 @@ XOR <dreg>, #imm8 ; dreg <- dreg ^ mem[PC]
 CMP <dreg>, #imm8 ; dreg - mem[PC], update SR from results, no writeback
 
 ADC <dreg>, abs16 ; dreg <- dreg + mem[abs16] + C
+ADD <dreg>, abs16 ; dreg <- dreg + mem[abs16]
 SBC <dreg>, abs16 ; dreg <- dreg - mem[abs16] - (~C)
+SUB <dreg>, abs16 ; dreg <- dreg - mem[abs16]
 MUL <dreg>, abs16 ; hi:lo <- dreg * mem[abs16], PUSH lo, PUSH hi
 DIV <dreg>, abs16 ; quot, rem <- dregx / mem[abs16], PUSH quot, PUSH rem
 AND <dreg>, abs16 ; dreg <- dreg & mem[abs16]
@@ -86,7 +94,9 @@ SBC <dreg>, [imm8:<ireg>] ; dreg <- dreg - mem[imm8:ireg] - (~C)
 CMP <dreg>, [imm8:<ireg>] ; dreg - mem[imm8:ireg], update SR from results, no writeback
 
 ADC <dreg>, [Z] ; dreg <- dreg + mem[Z] + C
+ADD <dreg>, [Z] ; dreg <- dreg + mem[Z]
 SBC <dreg>, [Z] ; dreg <- dreg - mem[Z] - (~C)
+SUB <dreg>, [Z] ; dreg <- dreg - mem[Z]
 CMP <dreg>, [Z] ; dreg - mem[Z], update SR from results, no writeback
 
 INC <dreg> ; dreg <- dreg + 1
@@ -97,11 +107,12 @@ ASR <dreg> ; dreg <- dreg >> 1, sign-extended
 LSL <dreg> ; dreg <- dreg << 1
 LSR <dreg> ; dreg <- dreg >> 1
 NOT <dreg> ; dreg <- ~dreg
-CLR <dreg> ; dreg <- 0x00
+CLR <dreg> ; dreg <- $00
+NEG <dreg> ; dreg <- $00 - dreg
 
 INC <ireg> ; ireg <- ireg + 1
 DEC <ireg> ; ireg <- ireg - 1
-CLR <ireg> ; ireg <- 0x00
+CLR <ireg> ; ireg <- $00
 
 ;========  CONTROL   ========
 RTI ; PULL SR, PULL PC
