@@ -59,3 +59,8 @@ whether to alter program flow.
     N  -> Negative. Set if result of an operation has bit 7 set. Cleared
           otherwise
     Z  -> Zero. Set if result of an operation is zero ($00). Cleared otherwise
+
+---
+
+> Documentation is licensed under CC BY-SA 4.0. <br>
+> See https://creativecommons.org/licenses/by-sa/4.0/

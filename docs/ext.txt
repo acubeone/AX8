@@ -63,3 +63,8 @@ MOV extension:
         D  -> 0=mem <- <dreg>, 1=<dreg> <- mem
         a  -> 0=PostIncrement [Z+], 1=PreDecrement [-Z]
         dd -> dreg, One of data registers
+
+---
+
+> Documentation is licensed under CC BY-SA 4.0. <br>
+> See https://creativecommons.org/licenses/by-sa/4.0/

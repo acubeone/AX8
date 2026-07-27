@@ -56,3 +56,8 @@ Number | Offset  | Description
 2. Read vector 0 address and store contents into SP
 3. Read vector 1 address and store contents into PC
 4. Starts execution at PC address
+
+---
+
+> Documentation is licensed under CC BY-SA 4.0. <br>
+> See https://creativecommons.org/licenses/by-sa/4.0/

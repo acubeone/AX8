@@ -161,3 +161,8 @@ BEQ rel8 ; IF Z=1 THEN PC <- PC + rel8
 BMI rel8 ; IF N=1 THEN PC <- PC + rel8
 BCS rel8 ; IF C=1 THEN PC <- PC + rel8
 BVS rel8 ; IF V=1 THEN PC <- PC + rel8
+
+---
+
+> Documentation is licensed under CC BY-SA 4.0. <br>
+> See https://creativecommons.org/licenses/by-sa/4.0/
