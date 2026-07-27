@@ -20,31 +20,17 @@
 // 3. This notice may not be removed or altered from any source
 //    distribution.
 
-#pragma once
+#include "parser.h"
 
-#include <stddef.h>
-#include <stdint.h>
+#include "error.h"
+#include "utils.h"
 
-#define ALLOC(size)		   malloc(size)
-#define REALLOC(ptr, size) realloc(ptr, size)
-#define FREE(ptr)		   free(ptr)
+#include <assert.h>
 
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef uint64_t u64;
+ErrorCode parser_parse(Parser *p, Statement **out_stmts, usize *out_count) {
+	assert(p);
+	assert(out_stmts && *out_stmts);
+	assert(out_count);
 
-typedef int8_t i8;
-typedef int16_t i16;
-typedef int32_t i32;
-typedef int64_t i64;
-
-typedef float f32;
-typedef double f64;
-
-typedef size_t usize;
-
-typedef struct Position {
-	usize lineno;
-	usize colno;
-} Position;
+	return ERR_SUCCESS;
+}

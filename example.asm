@@ -1,4 +1,6 @@
-	.ORG $fff0  ; Directives are case-insensitive
+reset = $fff0
+
+	.ORG reset  ; Directives are case-insensitive
 vectors:        ; Labels are case-sensitive
 	.WORD $8000 ; Stored in little-endian
 
@@ -15,9 +17,10 @@ start:
 	BNE :END   ; This is stored as a signed 8-bit in 2's complement
 
 Data:
-	.BYTE $55, %1010_1010, 1_0_00, '9' ; Numbers can have _ to separate values
+	.BYTE $55, %1010_1010, 1_0_00, '9'  ; Numbers can have _ to separate values
 	.WOrd $aa_55, -42                   ; Numbers can be signed(stored in 2's complement)
-	.TEXT "\tHello", $0A, "World\n", 0  ; All texts are ASCII and support escape-sequences
+	.DWORD $1234_5678                   ; Should store 4-bytes in little-endian
+	.BYTE "\tHello", $0A, "World\n", 0  ; All texts are ASCII and support escape-sequences
 
 END:
 	HLT

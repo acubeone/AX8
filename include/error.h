@@ -40,6 +40,14 @@
 #define log_fatal(code, ...)                                                        \
 	_err_push(SEVERITY_FATAL, code, __func__, __FILE_NAME__, __LINE__, __VA_ARGS__)
 
+#define _PUSH_ERROR(pos, code, msg, ...)                                                \
+	{                                                                                   \
+		log_error(                                                                      \
+			code, "At %zu:%zu - " msg, pos.lineno, pos.colno __VA_OPT__(, ) __VA_ARGS__ \
+		);                                                                              \
+		return code;                                                                    \
+	}
+
 enum {
 	ERR_MAX_STACK_DEPTH = 64,
 	ERR_MAX_MESSAGE_LENGTH = 256,

@@ -29,10 +29,10 @@
 
 typedef enum TokenKind {
 	// Keywords
-	TK_BYTE, // .BYTE
-	TK_ORG,	 // .ORG
-	TK_TEXT, // .TEXT
-	TK_WORD, // .WORD
+	TK_BYTE,  // .BYTE
+	TK_DWORD, // .DWORD
+	TK_ORG,	  // .ORG
+	TK_WORD,  // .WORD
 	TK_ADC,
 	TK_AND,
 	TK_BCC,
@@ -85,11 +85,12 @@ typedef enum TokenKind {
 	TK_LAST_KEYWORD = TK_XOR,
 
 	// Symbols
-	TK_MINUS,	 // -
 	TK_COLLON,	 // :
 	TK_COMMA,	 // ,
+	TK_EQUAL,	 // =
 	TK_HASH,	 // #
 	TK_LBRACKET, // [
+	TK_MINUS,	 // -
 	TK_PLUS,	 // +
 	TK_RBRACKET, // ]
 	TK_LAST_SYMBOL = TK_RBRACKET,
@@ -103,18 +104,13 @@ typedef enum TokenKind {
 	TK_EOF,
 } TokenKind;
 
-typedef struct Position {
-	usize lineno;
-	usize colno;
-} Position;
-
 typedef struct Token {
 	TokenKind kind;
 	Position pos;
 
 	union {
 		char *ident;
-		u16 number;
+		u64 number;
 
 		struct {
 			usize len;

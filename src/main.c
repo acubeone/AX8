@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 			printf("%zu:%zu -> %s\n", tk.pos.lineno, tk.pos.colno, lex_tok2str(tk.kind));
 
 		if (tk.kind == TK_NUMBER)
-			printf("%zu:%zu -> %hu\n", tk.pos.lineno, tk.pos.colno, tk.number);
+			printf("%zu:%zu -> %zu\n", tk.pos.lineno, tk.pos.colno, tk.number);
 
 		if (tk.kind == TK_IDENTIFIER && tk.ident) {
 			printf("%zu:%zu -> %s\n", tk.pos.lineno, tk.pos.colno, tk.ident);

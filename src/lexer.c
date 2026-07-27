@@ -41,14 +41,6 @@
 #	include <strings.h>
 #endif
 
-#define _PUSH_ERROR(pos, code, msg, ...)                                                \
-	{                                                                                   \
-		log_error(                                                                      \
-			code, "At %zu:%zu - " msg, pos.lineno, pos.colno __VA_OPT__(, ) __VA_ARGS__ \
-		);                                                                              \
-		return code;                                                                    \
-	}
-
 enum {
 	NUL_CHAR = '\0',
 	EOF_CHAR = UINT32_MAX,
@@ -59,8 +51,8 @@ enum {
 static const char *const _token_names[] = {
 	// Keywords (MUST BE SORTED!)
 	[TK_BYTE] = ".BYTE",
+	[TK_DWORD] = ".DWORD",
 	[TK_ORG] = ".ORG",
-	[TK_TEXT] = ".TEXT",
 	[TK_WORD] = ".WORD",
 	[TK_ADC] = "ADC",
 	[TK_AND] = "AND",
@@ -113,11 +105,12 @@ static const char *const _token_names[] = {
 	[TK_XOR] = "XOR",
 
 	// Symbols
-	[TK_MINUS] = "-",
 	[TK_COLLON] = ":",
 	[TK_COMMA] = ",",
+	[TK_EQUAL] = "=",
 	[TK_HASH] = "#",
 	[TK_LBRACKET] = "[",
+	[TK_MINUS] = "-",
 	[TK_PLUS] = "+",
 	[TK_RBRACKET] = "]",
 };
@@ -480,12 +473,13 @@ ErrorCode lex_scan(LexerState *lex, Token *tk) {
 	case '\'': //
 		_stack_push(lex, c, false);
 		return _lex_string(lex, tk);
-	case '#': tk->kind = TK_HASH; break;
-	case '+': tk->kind = TK_PLUS; break;
-	case ',': tk->kind = TK_COMMA; break;
-	case '-': tk->kind = TK_MINUS; break;
 	case ':': tk->kind = TK_COLLON; break;
+	case ',': tk->kind = TK_COMMA; break;
+	case '=': tk->kind = TK_EQUAL; break;
+	case '#': tk->kind = TK_HASH; break;
 	case '[': tk->kind = TK_LBRACKET; break;
+	case '-': tk->kind = TK_MINUS; break;
+	case '+': tk->kind = TK_PLUS; break;
 	case ']': tk->kind = TK_RBRACKET; break;
 	default:  _PUSH_ERROR(lex->pos, ERR_LEX_INVALID, "Unknown symbol found: %c", c);
 	}
