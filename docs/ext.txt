@@ -11,7 +11,7 @@ MOV extension:
     7 6 5 4 3 2 1 0
     0 0 T T y y x x
 
-    TT  -> 00=Data<-Data, 01=Index<-Index, 10=Data<-Index, 11=Index<-Data
+    TT -> 00=Data<-Data, 01=Index<-Index, 10=Data<-Index, 11=Index<-Data
     yy -> regy, one of data/index registers
     xx -> regx, one of data/index registers
 
