@@ -5,38 +5,38 @@ registers, 4 are index registers. Each register can be used in a variety of
 ways in a program. Index registers can be paired to create two word-wide
 pseudo-registers, which one is the treated as the hardware stack pointer.
 
-Data Registers:
+- Data Registers:
   Are byte-wide registers named: A, B, C and D. Which are used in arithmetic,
 logic and data movement operations.
 
-Index Registers:
+- Index Registers:
   Are byte-wide registers named: X, Y, L and H. Which are used for indirect
 addressing and stack related operations. Can be merged to form two 16-bit
 registers.
 
-Pointer Register (Z):
+- Pointer Register (Z):
   Is a word-wide register. Created by the paired form of 'Y' as the high byte
 and 'X' as the low byte. This register can be used for indirect addressing and
 can use the pre-decrement and post-increment addressing modes.
 
-Hardware Stack Pointer (SP):
+- Hardware Stack Pointer (SP):
   Is a word-wide register. Created by the paired form of 'H' as the high byte
 and 'Y' as the low byte. This register is used by the processor as the main
 stack pointer, which is always modified by any stack related operation.
 
-Vector Base Register (VBR):
+- Vector Base Register (VBR):
   Is a byte-wide register. Used to select the base register of the
 relocatable exception vector table. It is readable and writable only
 through 'MOV'. It is initialized to $00 at reset.
 
-Program Counter (PC):
+- Program Counter (PC):
   Is a word-wide register, which holds the address of the next byte to be
 fetched. During sequential execution it is incremented automatically by the
 processor. Can be overwritten by jump, branches and subroutine calls. It is
 saved on the stack during interrupts and subroutine calls, then restored on
 return. At reset it is initialized from vector table entry '1'.
 
-Status Register (SR):
+- Status Register (SR):
   This is an 8-bit field containing condition flags and interrupt mask bits.
 These flags reflect the outcome of arithmetic, logic and data movement
 operations. Conditional branch instruction examine specific flags to determine

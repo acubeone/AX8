@@ -25,6 +25,10 @@ data path and a 16-bit address bus, allowing direct access to up 64KB of memory.
 
 - [TXT documentation](./docs/vecs.txt)
 
+## Addressing Modes
+
+- [Documentation](./docs/AddressModes.md)
+
 ---
 
 > Documentation is licensed under CC BY-SA 4.0. <br>
