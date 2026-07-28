@@ -164,6 +164,7 @@ used by:
 
 - Implied instructions
 - Single-register instructions
+- `JMP Z` and `JSR Z` uses this encoding
 
 No extension or operand bytes follows the opcode.
 
@@ -225,3 +226,8 @@ selected format, additional operand bytes may follow.
 > the `BIT` instruction uses Immediate addressing without an extension byte,
 > whereas binary arithmetic and data movement use the same addressing mode with
 > an extension byte.
+
+---
+
+> Documentation is licensed under CC BY-SA 4.0. <br>
+> See https://creativecommons.org/licenses/by-sa/4.0/

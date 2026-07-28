@@ -19,11 +19,11 @@ data path and a 16-bit address bus, allowing direct access to up 64KB of memory.
 
 ### Registers
 
-- [TXT documentation](./docs/regs.txt)
+- [Documentation](./docs/Registers.md)
 
 ## Interrupts and Exceptions
 
-- [TXT documentation](./docs/vecs.txt)
+- [Documentation](./docs/Vectors.md)
 
 ## Addressing Modes
 

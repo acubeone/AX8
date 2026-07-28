@@ -1,0 +1,76 @@
+## General Registers
+
+The AX8 expose 11 registerrs for manipulation, which 4 are general data
+registers and 4 are index registers. Index registers can be paired to create
+two word-wide pseudo-registers, which one is treated as the hardware stack
+pointer.
+
+### Data Registers
+
+Are byte-wide, and named: `A`, `B`, `C` and `D`. Which are used in arithmetic,
+logic and data movement operations.
+
+### Index Registers
+
+Are byte-wide, and named: `X`, `Y`, `L` and `H`. Which are used for indirect
+addressing and stack related operations. can be merged to form two 16-bit
+registers.
+
+### Pointer Register (Z)
+
+Is a word-wide register. Created by the paired form of `Y` as the high byte
+and `X` as the low byte. This register can be used for indirect addressing and
+can be use pre-decrement and post-increment addressing modes.
+
+### Hardware Stack Pointer (SP)
+
+Is a word-wide register. Created by the paired form of `H` as the high byte
+and `L` as the low byte. This register is used by the processor as the main
+stack pointer, which is always modified by any stack related operation.
+
+### Vector Base Register (VBR)
+
+Is a byte-wide register. Used to select the base address of the relocatable
+exception vector table. It is readable and writable only through `MOV`. It is
+initialized to `$00` at reset.
+
+### Program Counter (PC)
+
+Is a word-wide register, which holds the address of the next byte to be
+fetched. During sequential execution it is incremented automatically by the
+processor. Can be overwritten by jump, branches and subroutine calls. It is
+saved on the stack during interrupts and subroutine calls, then restored on
+return. At reset it is initialized from vector table entry `1`.
+
+### Status Register (SR)
+
+This is an 8-bit field containing condition flags and interrupt mask bits.
+These flags reflect the outcome of arithmetic, logic and data movement
+operations. Conditional branch instructions can examine specific flags to
+determine whether to alter program flow.
+
+#### Bit-field layout
+
+```
+7  6  4 5 3 2 1 0
+I1 I0 0 0 V C N Z
+
+I1 -> Interupt Mask 1. When set, IRQ1 interrupts are disabled/masked. When
+      clear, IRQ1 is enabled
+I0 -> Interupt Mask 0. When set, IRQ0 interrupts are disabled/masked. When
+      clear, IRQ0 is enabled
+V  -> Overflow. Set if a signed arithmetic operation produces a result
+      outside the range of an 8-bit two's complement integer(-128 to +127).
+      Cleared otherwise
+C  -> Carry/Borrow. Set if an addition generates a carry-out of bit 7, or
+      if subtraction requires a borrow. Also affected by shift and rotate
+      operations
+N  -> Negative. Set if result of an operation has bit 7 set. Cleared
+      otherwise
+Z  -> Zero. Set if result of an operation is zero ($00). Cleared otherwise
+```
+
+---
+
+> Documentation is licensed under CC BY-SA 4.0. <br>
+> See https://creativecommons.org/licenses/by-sa/4.0/
