@@ -52,21 +52,21 @@ determine whether to alter program flow.
 #### Bit-field layout
 
 ```
-7  6  4 5 3 2 1 0
-I1 I0 0 0 V C N Z
+7 6 4  5  3 2 1 0
+N V I1 I0 0 0 C Z
 
+N  -> Negative. Set if result of an operation has bit 7 set. Cleared
+      otherwise
+V  -> Overflow. Set if a signed arithmetic operation produces a result
+      outside the range of an 8-bit two's complement integer(-128 to +127).
+      Cleared otherwise
 I1 -> Interupt Mask 1. When set, IRQ1 interrupts are disabled/masked. When
       clear, IRQ1 is enabled
 I0 -> Interupt Mask 0. When set, IRQ0 interrupts are disabled/masked. When
       clear, IRQ0 is enabled
-V  -> Overflow. Set if a signed arithmetic operation produces a result
-      outside the range of an 8-bit two's complement integer(-128 to +127).
-      Cleared otherwise
 C  -> Carry/Borrow. Set if an addition generates a carry-out of bit 7, or
       if subtraction requires a borrow. Also affected by shift and rotate
       operations
-N  -> Negative. Set if result of an operation has bit 7 set. Cleared
-      otherwise
 Z  -> Zero. Set if result of an operation is zero ($00). Cleared otherwise
 ```
 

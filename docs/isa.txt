@@ -71,7 +71,7 @@ ADD <dregx>, <dregy> ; dregx <- dregx + dregy
 SBC <dregx>, <dregy> ; dregx <- dregx - dregy - (~C)
 SUB <dregx>, <dregy> ; dregx <- dregx - dregy
 MUL <dregx>, <dregy> ; hi:lo <- dregx * dregy, PUSH lo, PUSH hi
-DIV <dregx>, <dregy> ; quot, rem <- dregx / dregy, PUSH quot, PUSH rem
+DIV <dregx>, <dregy> ; rem, quot <- dregx / dregy, PUSH rem, PUSH quot
 AND <dregx>, <dregy> ; dregx <- dregx & dregy
 OR  <dregx>, <dregy> ; dregx <- dregx | dregy
 XOR <dregx>, <dregy> ; dregx <- dregx ^ dregy
@@ -82,7 +82,7 @@ ADD <dreg>, #imm8 ; dreg <- dreg + mem[PC]
 SBC <dreg>, #imm8 ; dreg <- dreg - mem[PC] - (~C)
 SUB <dreg>, #imm8 ; dreg <- dreg - mem[PC]
 MUL <dreg>, #imm8 ; hi:lo <- dreg * mem[PC], PUSH lo, PUSH hi
-DIV <dreg>, #imm8 ; quot, rem <- dregx / mem[PC], PUSH quot, PUSH rem
+DIV <dreg>, #imm8 ; rem, quot <- dregx / mem[PC], PUSH rem, PUSH quot
 AND <dreg>, #imm8 ; dreg <- dreg & mem[PC]
 OR  <dreg>, #imm8 ; dreg <- dreg | mem[PC]
 XOR <dreg>, #imm8 ; dreg <- dreg ^ mem[PC]
@@ -93,7 +93,7 @@ ADD <dreg>, abs16 ; dreg <- dreg + mem[abs16]
 SBC <dreg>, abs16 ; dreg <- dreg - mem[abs16] - (~C)
 SUB <dreg>, abs16 ; dreg <- dreg - mem[abs16]
 MUL <dreg>, abs16 ; hi:lo <- dreg * mem[abs16], PUSH lo, PUSH hi
-DIV <dreg>, abs16 ; quot, rem <- dregx / mem[abs16], PUSH quot, PUSH rem
+DIV <dreg>, abs16 ; rem, quot <- dregx / mem[abs16], PUSH rem, PUSH quot
 AND <dreg>, abs16 ; dreg <- dreg & mem[abs16]
 OR  <dreg>, abs16 ; dreg <- dreg | mem[abs16]
 XOR <dreg>, abs16 ; dreg <- dreg ^ mem[abs16]
@@ -153,14 +153,14 @@ JSR Z           ; PUSH PC, PC <- Z
 BRA rel8 ; PC <- PC + rel8
 BSR rel8 ; PUSH PC, PC <- PC + rel8
 
-BNE rel8 ; IF Z=0 THEN PC <- PC + rel8
 BPL rel8 ; IF N=0 THEN PC <- PC + rel8
-BCC rel8 ; IF C=0 THEN PC <- PC + rel8
 BVC rel8 ; IF V=0 THEN PC <- PC + rel8
-BEQ rel8 ; IF Z=1 THEN PC <- PC + rel8
+BCC rel8 ; IF C=0 THEN PC <- PC + rel8
+BNE rel8 ; IF Z=0 THEN PC <- PC + rel8
 BMI rel8 ; IF N=1 THEN PC <- PC + rel8
-BCS rel8 ; IF C=1 THEN PC <- PC + rel8
 BVS rel8 ; IF V=1 THEN PC <- PC + rel8
+BCS rel8 ; IF C=1 THEN PC <- PC + rel8
+BEQ rel8 ; IF Z=1 THEN PC <- PC + rel8
 
 ---
 
