@@ -1,32 +1,23 @@
+;== LEGEND ==
+<dreg> = A | B | C | D
+<ireg> = X | Y | L | H
+Z = Y:X
+SP = H:L
+<r16> = Z | SP
+;== ====== ==
+
 RegReg (MM -> 00):
   7 6 5 4 3 2 1 0
-  0 0 T T y y x x
+  0 0 T T y y x x ; <regx>,<regy>
 
   TT -> 00=Data/Data, 01=Index/Index, 10=Data/Index, 11=Index/Data
   yy -> regy, one of data/index registers
   xx -> regx, one of data/index registers
 
-Immediate/Special (MM -> 01):
+Absolute (MM -> 01):
   7 6 5 4 3 2 1 0
-  0 1 0 0 0 T x x ; #imm8  (byte)
-  0 1 0 0 1 0 0 0 ; (Z/SP) (word)
-  0 1 1 D t t x x ; (SR/VBR)
-
-  IF bit5=0 THEN
-    IF bit3=0 THEN
-      T  -> 0=Data, 1=Index
-      xx -> reg, One of 8-bit registers
-    ELSE
-      T  -> 0=Z, 1=SP
-  ELSE
-    D  -> 0=(SR|VBR) <- <regx>, 1=<regx> <- (SR|VBR)
-    tt -> 00=SR, 01=VBR, 10=SR, 11=VBR
-    xx -> IF tt=SR THEN regx is Data ELSE regx is Index
-
-Absolute (MM -> 10):
-  7 6 5 4 3 2 1 0
-  1 0 0 T D 0 x x ; abs16  (byte)
-  1 0 1 T D 0 0 0 ; (Z/SP) (word)
+  0 1 0 T D 0 x x ; abs16 <- <reg> | <reg> <- abs16
+  0 1 1 T D 0 d d ; abs16 <- <r16> | <r16> <- abs16
 
   IF bit5=0 THEN
     T  -> 0=Data, 1=Index
@@ -35,25 +26,35 @@ Absolute (MM -> 10):
   ELSE
     T  -> 0=Z, 1=SP
     D  -> 0=mem <- <reg>, 1=<reg> <- mem
+    dd -> dreg, One of data registers
 
-Indirect (MM -> 11):
+Indirect (MM -> 10):
   7 6 5 4 3 2 1 0
-  1 1 0 D i i d d ; [imm8:<ireg>]
-  1 1 1 D 0 0 d d ; [Z]
-  1 1 1 D 1 a d d ; [Z+] | [-Z]
+  1 0 0 D i i d d ; [imm8:<ireg>] <- <dreg> | <dreg> <- [imm8:<ireg>]
+  1 0 1 D 0 t d d ; [<r16>] <- <dreg> | <dreg> <- [<r16>]
 
   IF bit5=0 THEN
     D  -> 0=mem <- <dreg>, 1=<dreg> <- mem
     ii -> ireg, One of index registers
     dd -> dreg, One of data registers
   ELSE
-    IF bit3=0 THEN
-      D  -> 0=mem <- <dreg>, 1=<dreg> <- mem
-      dd -> dreg, One of data registers
-    ELSE
-      D  -> 0=mem <- <dreg>, 1=<dreg> <- mem
-      a  -> 0=PostIncrement [Z+], 1=PreDecrement [-Z]
-      dd -> dreg, One of data registers
+    D  -> 0=[<r16>] <- <dreg>, 1=<dreg> <- [<r16>]
+    t  -> 0=Z, 1=SP
+    dd -> dreg, One of data registers
+
+Miscellaneous (MM -> 11):
+  7 6 5 4 3 2 1 0
+  1 1 0 D 0 t d d ; [<r16>+] <- <dreg> | <dreg> <- [<r16>+]
+  1 1 0 D 1 t d d ; [-<r16>] <- <dreg> | <dreg> <- [-<r16>]
+
+  IF bit3=0 THEN
+    D  -> 0=[<r16>+] <- <dreg>, 1=<dreg> <- [<r16>+]
+    t  -> 0=Z, 1=SP
+    dd -> dreg, One of data registers
+  ELSE
+    D  -> 0=[-<r16>] <- <dreg>, 1=<dreg> <- [-<r16>]
+    t  -> 0=Z, 1=SP
+    dd -> dreg, One of data registers
 
 ---
 

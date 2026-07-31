@@ -112,38 +112,38 @@ Address = (imm8 << 8) | <ireg>
 #### Syntax
 
 ```
-[Z]
+[<r16>]
 ```
 
 #### Description
 
-The register pair `Z` contains the complete 16-bit memory address. The operand
-is accessed through the address stored in `Z`.
+The pair-register contains the complete 16-bit memory address. The operand
+is accessed through the address stored in register-pair.
 
 ### Register Indirect with Post-Increment
 
 #### Syntax
 
 ```
-[Z+]
+[<r16>+]
 ```
 
 #### Description
 
-The operand is accessed through the address stored in `Z`. Then immediately
-after the memory access, `Z` is incremented.
+The operand is accessed through the address stored in the pair-register. Then
+immediately after the memory access, the pair-register is incremented.
 
 ### Register Indirect with Pre-Decrement
 
 #### Syntax
 
 ```
-[-Z]
+[-<r16>]
 ```
 
 #### Description
 
-The `Z` register is immediately decremented before the memory access. Then the
+The pair-register is immediately decremented before the memory access. Then the
 operand is accessed through the resulting address.
 
 ## Operand Encoding
@@ -223,9 +223,9 @@ selected format, additional operand bytes may follow.
 
 > NOTE: Addressing modes are independent of instruction encoding. The same
 > addressing mode may appear in different instruction formats. For example,
-> the `BIT` instruction uses Immediate addressing without an extension byte,
-> whereas binary arithmetic and data movement use the same addressing mode with
-> an extension byte.
+> the `BIT` instruction uses Immediate, Absolute or Indirect addressing modes
+> without an extension byte, whereas binary arithmetic and data movement use
+> the same addressing mode with an extension byte.
 
 ---
 

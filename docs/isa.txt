@@ -1,9 +1,10 @@
-;=======  REGISTERS  ========
+;== LEGEND ==
 <dreg> = A | B | C | D
 <ireg> = X | Y | L | H
 Z = Y:X
 SP = H:L
 <r16> = Z | SP
+;== ====== ==
 
 ;========   SYSTEM   ========
 HALT ; Trigger HALT
@@ -15,19 +16,22 @@ FSET #n3 ; Set bit in Status Register
 FCLR #n3 ; Clear bit in Status Register
 
 BIT <dreg>, #imm8 ; <dreg> & #imm8, update SR from results, no writeback
-BIT <ireg>, #imm8 ; <ireg> & #imm8, update SR from results, no writeback
-
-PUSH <dreg> ; Push dreg into stack, decrement SP
-PUSH X      ; Push X into stack, decrement SP
-PUSH Y      ; Push Y into stack, decrement SP
-PUSH SR     ; Push SR into stack, decrement SP
-
-PULL <dreg> ; Pull dreg from stack, increment SP
-PULL X      ; Pull X from stack, increment SP
-PULL Y      ; Pull Y from stack, increment SP
-PULL SR     ; Pull SR from stack, increment SP
+BIT <dreg>, abs16 ; <dreg> & mem[abs16], update SR from results, no writeback
+BIT <dreg>, [Z]   ; <dreg> & mem[Z], update SR from results, no writeback
 
 ;========  TRANSFER  ========
+; These do not use extension byte
+MOVI <dreg>, #imm8 ; dreg <- mem[PC]
+MOVI <ireg>, #imm8 ; ireg <- mem[PC]
+MOVI <r16>, #imm16 ; r16 <- mem[PC+1]:mem[PC]
+
+MOV <dreg>, SR  ; dreg <- SR
+MOV <ireg>, VBR ; ireg <- VBR
+
+MOV SR, <dreg>  ; SR <- dreg
+MOV VBR, <ireg> ; VBR <- ireg
+
+; Those do use extension byte
 EXG <dreg>, <ireg>   ; dreg <-> ireg
 EXG <dregx>, <dregy> ; dregx <-> dregy
 EXG <iregx>, <iregy> ; iregx <-> iregy
@@ -37,63 +41,49 @@ MOV <iregx>, <iregy> ; iregx <- iregy
 MOV <dregx>, <iregy> ; dregx <- iregy
 MOV <iregx>, <dregy> ; iregx <- dregy
 
-MOV <dreg>, SR  ; dreg <- SR
-MOV <ireg>, VBR ; ireg <- VBR
-
-MOV SR, <dreg>  ; SR <- dreg
-MOV VBR, <ireg> ; VBR <- ireg
-
-MOV <dreg>, #imm8 ; dreg <- mem[PC]
-MOV <ireg>, #imm8 ; ireg <- mem[PC]
-MOV <r16>, #imm16 ; r16 <- mem[PC+1]:mem[PC]
-
 MOV <dreg>, abs16 ; dreg <- mem[abs16]
 MOV <ireg>, abs16 ; ireg <- mem[abs16]
 MOV <r16>, abs16  ; r16 <- mem[abs16+1]:mem[abs16]
 
 MOV <dreg>, [imm8:<ireg>] ; dreg <- mem[imm8:ireg]
-MOV <dreg>, [Z]           ; dreg <- mem[Z]
-MOV <dreg>, [Z+]          ; dreg <- mem[Z], increment Z
-MOV <dreg>, [-Z]          ; decrement Z, dreg <- mem[Z]
+MOV <dreg>, [<r16>]       ; dreg <- mem[r16]
+MOV <dreg>, [<r16>+]      ; dreg <- mem[r16], increment r16
+MOV <dreg>, [-<r16>]      ; decrement r16, dreg <- mem[r16]
 
 MOV abs16, <dreg> ; mem[abs16] <- dreg
 MOV abs16, <ireg> ; mem[abs16] <- ireg
 MOV abs16, <r16>  ; mem[abs16] <- r16[7:0], mem[abs16+1] <- r16[15:8]
 
 MOV [imm8:<ireg>], <dreg> ; mem[imm8:ireg] <- dreg
-MOV [Z], <dreg>           ; mem[Z] <- dreg
-MOV [Z+], <dreg>          ; mem[Z] <- dreg, increment Z
-MOV [-Z], <dreg>          ; decrement Z, mem[Z] <- dreg
+MOV [<r16>], <dreg>       ; mem[r16] <- dreg
+MOV [<r16>+], <dreg>      ; mem[r16] <- dreg, increment r16
+MOV [-<r16>], <dreg>      ; decrement r16, mem[r16] <- dreg
 
 ;======== ARITHMETIC ========
+; These do not use extension byte
+ADCI <dreg>, #imm8 ; dreg <- dreg + mem[PC] + C
+ADDI <dreg>, #imm8 ; dreg <- dreg + mem[PC]
+SBCI <dreg>, #imm8 ; dreg <- dreg - mem[PC] - (~C)
+SUBI <dreg>, #imm8 ; dreg <- dreg - mem[PC]
+ANDI <dreg>, #imm8 ; dreg <- dreg & mem[PC]
+ORI  <dreg>, #imm8 ; dreg <- dreg | mem[PC]
+XORI <dreg>, #imm8 ; dreg <- dreg ^ mem[PC]
+CMPI <dreg>, #imm8 ; dreg - mem[PC], update SR from results, no writeback
+
+; These do use extension byte
 ADC <dregx>, <dregy> ; dregx <- dregx + dregy + C
 ADD <dregx>, <dregy> ; dregx <- dregx + dregy
 SBC <dregx>, <dregy> ; dregx <- dregx - dregy - (~C)
 SUB <dregx>, <dregy> ; dregx <- dregx - dregy
-MUL <dregx>, <dregy> ; hi:lo <- dregx * dregy, PUSH lo, PUSH hi
-DIV <dregx>, <dregy> ; rem, quot <- dregx / dregy, PUSH rem, PUSH quot
 AND <dregx>, <dregy> ; dregx <- dregx & dregy
 OR  <dregx>, <dregy> ; dregx <- dregx | dregy
 XOR <dregx>, <dregy> ; dregx <- dregx ^ dregy
 CMP <dregx>, <dregy> ; dregx - dregy, update SR from results, no writeback
 
-ADC <dreg>, #imm8 ; dreg <- dreg + mem[PC] + C
-ADD <dreg>, #imm8 ; dreg <- dreg + mem[PC]
-SBC <dreg>, #imm8 ; dreg <- dreg - mem[PC] - (~C)
-SUB <dreg>, #imm8 ; dreg <- dreg - mem[PC]
-MUL <dreg>, #imm8 ; hi:lo <- dreg * mem[PC], PUSH lo, PUSH hi
-DIV <dreg>, #imm8 ; rem, quot <- dregx / mem[PC], PUSH rem, PUSH quot
-AND <dreg>, #imm8 ; dreg <- dreg & mem[PC]
-OR  <dreg>, #imm8 ; dreg <- dreg | mem[PC]
-XOR <dreg>, #imm8 ; dreg <- dreg ^ mem[PC]
-CMP <dreg>, #imm8 ; dreg - mem[PC], update SR from results, no writeback
-
 ADC <dreg>, abs16 ; dreg <- dreg + mem[abs16] + C
 ADD <dreg>, abs16 ; dreg <- dreg + mem[abs16]
 SBC <dreg>, abs16 ; dreg <- dreg - mem[abs16] - (~C)
 SUB <dreg>, abs16 ; dreg <- dreg - mem[abs16]
-MUL <dreg>, abs16 ; hi:lo <- dreg * mem[abs16], PUSH lo, PUSH hi
-DIV <dreg>, abs16 ; rem, quot <- dregx / mem[abs16], PUSH rem, PUSH quot
 AND <dreg>, abs16 ; dreg <- dreg & mem[abs16]
 OR  <dreg>, abs16 ; dreg <- dreg | mem[abs16]
 XOR <dreg>, abs16 ; dreg <- dreg ^ mem[abs16]
@@ -123,6 +113,12 @@ SBC <dreg>, [-Z] ; decrement Z, dreg <- dreg - mem[Z] - (~C)
 SUB <dreg>, [-Z] ; decrement Z, dreg <- dreg - mem[Z]
 CMP <dreg>, [-Z] ; decrement Z, dreg - mem[Z], update SR from results, no writeback
 
+MULU <dregx>, <dregy> ; y = x * y; dregx <- y[7:0]; dregy <- y[15:8]
+DIVU <dregx>, <dregy> ; q = x/y; r = x%y; dregx <- q; dregy <- r
+MULS <dregx>, <dregy> ; signed multiply; dregx <- y[7:0]; dregy <- y[15:8]
+DIVS <dregx>, <dregy> ; signed divide; r = x%y; dregx <- q; dregy <- r
+
+; These do not use extension byte
 INC <dreg> ; dreg <- dreg + 1
 DEC <dreg> ; dreg <- dreg - 1
 ROL <dreg> ; dreg <- dreg <] 1

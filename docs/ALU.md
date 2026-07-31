@@ -56,32 +56,35 @@ All operations can take multiple cycles to complete.
 
 - MULU - Multiply Unsigned
   - OP: `00`
-  - Operation: `Y <- A * B`
+  - Operation: `Y <- A * B; A <- Y[7:0]; B <- Y[15:8]`
   - Flags: `[V=0, C=0, N=*, Z=*]`
-  - Notes: Multiplication uses unsigned arithmetic.
+  - Notes: Multiplication uses unsigned arithmetic. The `Y` low-byte is stored
+    in operand `A` and `Y` high byte is stored in operand `B`.
 - DIVU - Divide Unsigned
   - OP: `01`
-  - Operation: `Y <- A / B`
+  - Operation: `Q <- A / B; R <- A % B; A <- Q; B <- R`
   - Flags: `[V=*, C=0, N=*, Z=*]`
   - Notes: Division uses unsigned arithmetic. Exception is triggered if operand
     `B` is zero. Overflow flag is set if operand `B` is greater than `A`. The
-    quocient is stored in the low byte of `Y`, and the remainder is stored in
-    the high-byte.
+    quocient is stored in operand `A`, and the remainder is stored in
+    operand `B`.
 - MULS - Multiply Signed
   - OP: `10`
-  - Operation: `Y <- A * B`
+  - Operation: `signed multiply; A <- Y[7:0]; B <- Y[15:8]`
   - Flags: `[V=0, C=0, N=*, Z=*]`
-  - Notes: Multiplication uses signed arithmetic in two's complement.
+  - Notes: Multiplication uses signed arithmetic in two's complement. The `Y`
+    low-byte is stored in operand `A` and `Y` high byte is stored in operand `B`.
 - DIVS - Divide Signed
   - OP: `11`
-  - Operation: `Y <- A / B`
+  - Operation: `signed divide; R <- A % B; A <- Q; B <- R`
   - Flags: `[V=*, C=0, N=*, Z=*]`
   - Notes: Division uses signed arithmetic in two's complement. Exception is
     triggered if operand `B` is zero. Overflow flag is set if operand `B` is
-    greater than `A`. The quocient is stored in the low byte of `Y`, and the
-    remainder is stored in the high-byte.
+    greater than `A`. The quocient is stored in operand `A`, and the remainder
+    is stored in operand `B`.
 
-The `Y` result is always 16-bits.
+The `Y` result is always 16-bits. Differently the Unit `U`, the unit `V` always
+write back the results into the operand.
 
 ### Composition
 
