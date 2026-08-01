@@ -21,13 +21,21 @@ data path and a 16-bit address bus, allowing direct access to up 64KB of memory.
 
 - [Documentation](./docs/Registers.md)
 
-## Interrupts and Exceptions
+### Interrupts and Exceptions
 
 - [Documentation](./docs/Vectors.md)
 
-## Addressing Modes
+### Addressing Modes
 
 - [Documentation](./docs/AddressModes.md)
+
+### Arithmetic Logic Unit
+
+- [Documentation](./docs/ALU.md)
+
+### Instruction Set
+
+- [ADC/ADD](./docs/instructions/adc_add.md)
 
 ---
 
