@@ -37,6 +37,18 @@ registers may also participate in address formation.
 
 The operand is stored in a 16-bit register pair (`Z` or `SP`).
 
+### System Register
+
+#### Syntax
+
+```
+<r8>
+```
+
+#### Description
+
+The operand is stored in a 8-bit system register (`SR` or `VBR`)
+
 ### Implied
 
 #### Syntax
@@ -65,6 +77,8 @@ immediate value directly within the opcode.
 #imm8
 
 #imm16
+
+rel8
 ```
 
 #### Description

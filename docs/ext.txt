@@ -4,6 +4,7 @@
 Z = Y:X
 SP = H:L
 <r16> = Z | SP
+<r8> = SR | VBR
 ;== ====== ==
 
 RegReg (MM -> 00):
