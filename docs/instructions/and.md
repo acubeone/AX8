@@ -2,8 +2,8 @@
 
 ### Summary
 
-Performs logical operation `AND` at the source with the destination, then
-stores the result in destination.
+Performs logical operation `AND` at the source with the destination and store
+the result in destination location.
 
 ### Operation
 
