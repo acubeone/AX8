@@ -152,32 +152,32 @@ ADD <dreg>, [imm8:<ireg>] ; dreg <- dreg + mem[imm8:ireg]
 SUB <dreg>, [imm8:<ireg>] ; dreg <- dreg - mem[imm8:ireg]
 CMP <dreg>, [imm8:<ireg>] ; dreg - mem[imm8:ireg], update SR from results, no writeback
 
-ADC <dreg>, [Z] ; dreg <- dreg + mem[Z] + C
-SBC <dreg>, [Z] ; dreg <- dreg - mem[Z] - (~C)
-AND <dreg>, [Z] ; dreg <- dreg & mem[Z]
-OR  <dreg>, [Z] ; dreg <- dreg | mem[Z]
-XOR <dreg>, [Z] ; dreg <- dreg ^ mem[Z]
-ADD <dreg>, [Z] ; dreg <- dreg + mem[Z]
-SUB <dreg>, [Z] ; dreg <- dreg - mem[Z]
-CMP <dreg>, [Z] ; dreg - mem[Z], update SR from results, no writeback
+ADC <dreg>, [<r16>] ; dreg <- dreg + mem[r16] + C
+SBC <dreg>, [<r16>] ; dreg <- dreg - mem[r16] - (~C)
+AND <dreg>, [<r16>] ; dreg <- dreg & mem[r16]
+OR  <dreg>, [<r16>] ; dreg <- dreg | mem[r16]
+XOR <dreg>, [<r16>] ; dreg <- dreg ^ mem[r16]
+ADD <dreg>, [<r16>] ; dreg <- dreg + mem[r16]
+SUB <dreg>, [<r16>] ; dreg <- dreg - mem[r16]
+CMP <dreg>, [<r16>] ; dreg - mem[r16], update SR from results, no writeback
 
-ADC <dreg>, [Z+] ; dreg <- dreg + mem[Z] + C, increment Z
-SBC <dreg>, [Z+] ; dreg <- dreg - mem[Z] - (~C), increment Z
-AND <dreg>, [Z+] ; dreg <- dreg & mem[Z], increment Z
-OR  <dreg>, [Z+] ; dreg <- dreg | mem[Z], increment Z
-XOR <dreg>, [Z+] ; dreg <- dreg ^ mem[Z], increment Z
-ADD <dreg>, [Z+] ; dreg <- dreg + mem[Z], increment Z
-SUB <dreg>, [Z+] ; dreg <- dreg - mem[Z], increment Z
-CMP <dreg>, [Z+] ; dreg - mem[Z], increment Z, update SR from results, no writeback
+ADC <dreg>, [<r16>+] ; dreg <- dreg + mem[r16] + C, increment r16
+SBC <dreg>, [<r16>+] ; dreg <- dreg - mem[r16] - (~C), increment r16
+AND <dreg>, [<r16>+] ; dreg <- dreg & mem[r16], increment r16
+OR  <dreg>, [<r16>+] ; dreg <- dreg | mem[r16], increment r16
+XOR <dreg>, [<r16>+] ; dreg <- dreg ^ mem[r16], increment r16
+ADD <dreg>, [<r16>+] ; dreg <- dreg + mem[r16], increment r16
+SUB <dreg>, [<r16>+] ; dreg <- dreg - mem[r16], increment r16
+CMP <dreg>, [<r16>+] ; dreg - mem[r16], increment r16, update SR from results, no writeback
 
-ADC <dreg>, [-Z] ; decrement Z, dreg <- dreg + mem[Z] + C
-SBC <dreg>, [-Z] ; decrement Z, dreg <- dreg - mem[Z] - (~C)
-AND <dreg>, [-Z] ; decrement Z, dreg <- dreg & mem[Z]
-OR  <dreg>, [-Z] ; decrement Z, dreg <- dreg | mem[Z]
-XOR <dreg>, [-Z] ; decrement Z, dreg <- dreg ^ mem[Z]
-ADD <dreg>, [-Z] ; decrement Z, dreg <- dreg + mem[Z]
-SUB <dreg>, [-Z] ; decrement Z, dreg <- dreg - mem[Z]
-CMP <dreg>, [-Z] ; decrement Z, dreg - mem[Z], update SR from results, no writeback
+ADC <dreg>, [-<r16>] ; decrement r16, dreg <- dreg + mem[r16] + C
+SBC <dreg>, [-<r16>] ; decrement r16, dreg <- dreg - mem[r16] - (~C)
+AND <dreg>, [-<r16>] ; decrement r16, dreg <- dreg & mem[r16]
+OR  <dreg>, [-<r16>] ; decrement r16, dreg <- dreg | mem[r16]
+XOR <dreg>, [-<r16>] ; decrement r16, dreg <- dreg ^ mem[r16]
+ADD <dreg>, [-<r16>] ; decrement r16, dreg <- dreg + mem[r16]
+SUB <dreg>, [-<r16>] ; decrement r16, dreg <- dreg - mem[r16]
+CMP <dreg>, [-<r16>] ; decrement r16, dreg - mem[r16], update SR from results, no writeback
 
 MULU <dregx>, <dregy> ; y = x * y; dregx <- y[7:0]; dregy <- y[15:8]
 DIVU <dregx>, <dregy> ; q = x/y; r = x%y; dregx <- q; dregy <- r

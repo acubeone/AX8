@@ -163,9 +163,9 @@ operand is accessed through the resulting address.
 ## Operand Encoding
 
 Instructions may be encoded in more than one byte following the opcode. They
-may be encoded in one of these encodings:
+may be encoded in one of these formats:
 
-### Single-byte Encoding
+#### Format A - Opcode Only
 
 ```
 +--------+
@@ -173,67 +173,120 @@ may be encoded in one of these encodings:
 +--------+
 ```
 
-The opcode completely defines the instruction and its operands. This format is
-used by:
+The opcode completely defines the instruction and its operands. Examples:
 
-- Implied instructions
-- Single-register instructions
-- `JMP Z` and `JSR Z` uses this encoding
-
-No extension or operand bytes follows the opcode.
-
-### Operand Encoding
-
-```
-+--------+--------------+
-| Opcode | Byte Operand |
-+--------+--------------+
-```
-
-or
-
-```
-+--------+--------------+--------------+
-| Opcode | Byte Operand | Byte Operand |
-+--------+--------------+--------------+
+```asm
+HALT
+NOP
+TRAP #n3
+BIT [<r16>]
+MOV <ireg>, VBR
+MOV SR, <dreg>
+INC <dreg>
+MULU <dregx>, <dregy>
+DIVS <dregx>, <dregy>
+RTS
+JMP [<r16>]
 ```
 
-Following the opcode there may be operand bytes which specifies operand data or
-address. This format is used by:
-
-- Branch and Jump instructions
-- The `BIT` instruction
-
-### Extended Encoding
+#### Format B - Opcode + Byte
 
 ```
-+--------+-----------+
-| Opcode | Extension |
-+--------+-----------+
++--------+------+
+| Opcode | Byte |
++--------+------+
 ```
 
-or
+After the opcode byte there is an additional byte as an operand. The
+byte operand can encode either an unsigned or a signed integer. Examples:
 
-```
-+--------+-----------+--------------+
-| Opcode | Extension | Byte Operand |
-+--------+-----------+--------------+
-```
-
-or
-
-```
-+--------+-----------+--------------+--------------+
-| Opcode | Extension | Byte Operand | Byte Operand |
-+--------+-----------+--------------+--------------+
+```asm
+BCLR <dreg>, #imm8
+BIT <dreg>, #imm8
+MOVI <dreg>, #imm8
+CMPI <dreg>, #imm8
+BRA rel8
+Bcc rel8
 ```
 
-The extension by specifies the operand format, including register selection,
-transfer direction, operand size, and addressing mode. Depending on the
-selected format, additional operand bytes may follow.
+#### Format C - Opcode + Word
 
-- Data Movement instructions (`MOV`, `EXG`)
-- Binary Arithmetic instructions (`ADC`, `SUB`, `CMP`, `AND`, etc...)
+```
++--------+----------+-----------+
+| Opcode | Low Byte | High Byte |
++--------+----------+-----------+
+```
+
+After the opcode byte there is two additional bytes as an operand. The bytes
+following the opcode form a 16-bit word. Examples:
+
+```asm
+BIT <dreg>, abs16
+MOVI <r16>, #imm16
+JMP abs16
+JSR abs16
+```
+
+#### Format D - Opcode + Extension
+
+```
++--------+-----+
+| Opcode | Ext |
++--------+-----+
+```
+
+The opcode can be extended to 16-bit, which the extension byte encodes
+additional operands and data. Examples:
+
+```asm
+EXG <dreg>, <ireg>
+MOV <dreg>, <dregy>
+MOV <dreg>, [<r16>]
+MOV [<r16>+], <dreg>
+ADC <dreg>, [-<r16>]
+CMP <dreg>, [<r16>]
+XOR [<r16>+], <dreg>
+```
+
+#### Format E - Opcode + Extension + Byte
+
+```
++--------+-----+------+
+| Opcode | Ext | Byte |
++--------+-----+------+
+```
+
+After the extended opcode, there is an additional byte as an operand. This
+operand encodes an unsigned or signed integer data. Examples:
+
+```asm
+MOV <dreg>, [imm8:<ireg>]
+MOV [imm8:<ireg>], <dreg>
+XOR <dreg>, [imm8:<ireg>]
+XOR [imm8:<ireg>], <dreg>
+```
+
+#### Format F - Opcode + Extension + Word
+
+```
++--------+-----+----------+-----------+
+| Opcode | Ext | Low Byte | High Byte |
++--------+-----+----------+-----------+
+```
+
+After the extended opcode, there are two additional bytes as an operand. The
+bytes following the extended opcode form a 16-bit word. Examples:
+
+```asm
+MOV <dreg>, abs16
+MOV abs16, <dreg>
+MOV <ireg>, abs16
+MOV abs16, <ireg>
+AND <dreg>, abs16
+CMP abs16, <dreg>
+OR  <ireg>, abs16
+SUB abs16, <ireg>
+```
 
 > NOTE: Addressing modes are independent of instruction encoding. The same
 > addressing mode may appear in different instruction formats. For example,

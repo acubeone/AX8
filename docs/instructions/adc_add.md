@@ -2,8 +2,8 @@
 
 ### Summary
 
-Adds the source operand to the destination operand with carry and stores the
-result in the destination.
+Adds the source operand with carry to the destination operand and stores the
+result in the destination location.
 
 ### Operation
 
@@ -53,7 +53,7 @@ ADC [-<r16>], <dreg>
 ### Summary
 
 Adds the source operand to the destination operand and stores the result in the
-destination.
+destination location.
 
 ### Operation
 
