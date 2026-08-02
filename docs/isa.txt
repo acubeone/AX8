@@ -4,7 +4,59 @@
 Z = Y:X
 SP = H:L
 <r16> = Z | SP
+<r8> = SR | VBR
 ;== ====== ==
+
+;== ADDRMODE ==
+DataRegister   | <dreg>            ; Single do not use Extesnion
+IndexRegister  | <ireg>            ; Single do not use Extension
+RegisterPair   | <r16>             ; Single do not use Extension
+SystemRegister | <r8>              ; Doesn't use Extension
+Implied        | ... or #n         ; Doesn't use Extension
+Immediate      | #imm8/#imm16/rel8 ; Doesn't use Extension
+Absolute       | abs16
+PagedAddress   | [imm8:<ireg>]     ; Single not use Extension
+Indirect       | [<r16>]
+PostIncrement  | [<r16>+]
+PreDecrement   | [-<r16>]
+
+None
+#n
+rel8
+
+<dregx>, <dregy>
+<dregx>, <iregy>
+<iregx>, <iregy>
+<iregx>, <dregy>
+
+<dreg>, SR
+<ireg>, VBR
+SR, <dreg>
+VBR, <ireg>
+
+<dreg>, #imm8
+<ireg>, #imm8
+<r16>, #imm16
+
+<dreg>, abs16
+<ireg>, abs16
+<r16>, abs16
+
+abs16, <dreg>
+abs16, <ireg>
+asb16, <r16>
+
+<dreg>, [imm8:<ireg>]
+[imm8:<ireg>], <dreg>
+
+<dreg>, [<r16>]
+<dreg>, [<r16>+]
+<dreg>, [-<r16>]
+
+[<r16>], <dreg>
+[<r16>+], <dreg>
+[-<r16>], <dreg>
+;== ======== ==
 
 ;========   SYSTEM   ========
 HALT ; Trigger HALT
@@ -12,12 +64,14 @@ NOP  ; Do Nothing
 
 TRAP #n2 ; Trigger Nth TRAP vector
 
-FSET #n3 ; Set bit in Status Register
-FCLR #n3 ; Clear bit in Status Register
+BCLR <dreg>, #imm8 ; Clear bit in register, immediate is module 8
+BSET <dreg>, #imm8 ; Set bit in register, immediate is module 8
+BTST <dreg>, #imm8 ; Test bit in register, immediate is module 8
+BCHG <dreg>, #imm8 ; Change bit in register, immediate is module 8
 
-BIT <dreg>, #imm8 ; <dreg> & #imm8, update SR from results, no writeback
-BIT <dreg>, abs16 ; <dreg> & mem[abs16], update SR from results, no writeback
-BIT <dreg>, [Z]   ; <dreg> & mem[Z], update SR from results, no writeback
+BIT <dreg>, #imm8   ; <dreg> & #imm8, update SR from results, no writeback
+BIT <dreg>, abs16   ; <dreg> & mem[abs16], update SR from results, no writeback
+BIT <dreg>, [<r16>] ; <dreg> & mem[r16], update SR from results, no writeback
 
 ;========  TRANSFER  ========
 ; These do not use extension byte
@@ -62,54 +116,66 @@ MOV [-<r16>], <dreg>      ; decrement r16, mem[r16] <- dreg
 ;======== ARITHMETIC ========
 ; These do not use extension byte
 ADCI <dreg>, #imm8 ; dreg <- dreg + mem[PC] + C
-ADDI <dreg>, #imm8 ; dreg <- dreg + mem[PC]
 SBCI <dreg>, #imm8 ; dreg <- dreg - mem[PC] - (~C)
-SUBI <dreg>, #imm8 ; dreg <- dreg - mem[PC]
 ANDI <dreg>, #imm8 ; dreg <- dreg & mem[PC]
 ORI  <dreg>, #imm8 ; dreg <- dreg | mem[PC]
 XORI <dreg>, #imm8 ; dreg <- dreg ^ mem[PC]
+ADDI <dreg>, #imm8 ; dreg <- dreg + mem[PC]
+SUBI <dreg>, #imm8 ; dreg <- dreg - mem[PC]
 CMPI <dreg>, #imm8 ; dreg - mem[PC], update SR from results, no writeback
 
 ; These do use extension byte
 ADC <dregx>, <dregy> ; dregx <- dregx + dregy + C
-ADD <dregx>, <dregy> ; dregx <- dregx + dregy
 SBC <dregx>, <dregy> ; dregx <- dregx - dregy - (~C)
-SUB <dregx>, <dregy> ; dregx <- dregx - dregy
 AND <dregx>, <dregy> ; dregx <- dregx & dregy
 OR  <dregx>, <dregy> ; dregx <- dregx | dregy
 XOR <dregx>, <dregy> ; dregx <- dregx ^ dregy
+ADD <dregx>, <dregy> ; dregx <- dregx + dregy
+SUB <dregx>, <dregy> ; dregx <- dregx - dregy
 CMP <dregx>, <dregy> ; dregx - dregy, update SR from results, no writeback
 
 ADC <dreg>, abs16 ; dreg <- dreg + mem[abs16] + C
-ADD <dreg>, abs16 ; dreg <- dreg + mem[abs16]
 SBC <dreg>, abs16 ; dreg <- dreg - mem[abs16] - (~C)
-SUB <dreg>, abs16 ; dreg <- dreg - mem[abs16]
 AND <dreg>, abs16 ; dreg <- dreg & mem[abs16]
 OR  <dreg>, abs16 ; dreg <- dreg | mem[abs16]
 XOR <dreg>, abs16 ; dreg <- dreg ^ mem[abs16]
+ADD <dreg>, abs16 ; dreg <- dreg + mem[abs16]
+SUB <dreg>, abs16 ; dreg <- dreg - mem[abs16]
 CMP <dreg>, abs16 ; dreg - mem[abs16], update SR from results, no writeback
 
 ADC <dreg>, [imm8:<ireg>] ; dreg <- dreg + mem[imm8:ireg] + C
-ADD <dreg>, [imm8:<ireg>] ; dreg <- dreg + mem[imm8:ireg]
 SBC <dreg>, [imm8:<ireg>] ; dreg <- dreg - mem[imm8:ireg] - (~C)
+AND <dreg>, [imm8:<ireg>] ; dreg <- dreg & mem[imm8:ireg]
+OR  <dreg>, [imm8:<ireg>] ; dreg <- dreg | mem[imm8:ireg]
+XOR <dreg>, [imm8:<ireg>] ; dreg <- dreg ^ mem[imm8:ireg]
+ADD <dreg>, [imm8:<ireg>] ; dreg <- dreg + mem[imm8:ireg]
 SUB <dreg>, [imm8:<ireg>] ; dreg <- dreg - mem[imm8:ireg]
 CMP <dreg>, [imm8:<ireg>] ; dreg - mem[imm8:ireg], update SR from results, no writeback
 
 ADC <dreg>, [Z] ; dreg <- dreg + mem[Z] + C
-ADD <dreg>, [Z] ; dreg <- dreg + mem[Z]
 SBC <dreg>, [Z] ; dreg <- dreg - mem[Z] - (~C)
+AND <dreg>, [Z] ; dreg <- dreg & mem[Z]
+OR  <dreg>, [Z] ; dreg <- dreg | mem[Z]
+XOR <dreg>, [Z] ; dreg <- dreg ^ mem[Z]
+ADD <dreg>, [Z] ; dreg <- dreg + mem[Z]
 SUB <dreg>, [Z] ; dreg <- dreg - mem[Z]
 CMP <dreg>, [Z] ; dreg - mem[Z], update SR from results, no writeback
 
 ADC <dreg>, [Z+] ; dreg <- dreg + mem[Z] + C, increment Z
-ADD <dreg>, [Z+] ; dreg <- dreg + mem[Z], increment Z
 SBC <dreg>, [Z+] ; dreg <- dreg - mem[Z] - (~C), increment Z
+AND <dreg>, [Z+] ; dreg <- dreg & mem[Z], increment Z
+OR  <dreg>, [Z+] ; dreg <- dreg | mem[Z], increment Z
+XOR <dreg>, [Z+] ; dreg <- dreg ^ mem[Z], increment Z
+ADD <dreg>, [Z+] ; dreg <- dreg + mem[Z], increment Z
 SUB <dreg>, [Z+] ; dreg <- dreg - mem[Z], increment Z
 CMP <dreg>, [Z+] ; dreg - mem[Z], increment Z, update SR from results, no writeback
 
 ADC <dreg>, [-Z] ; decrement Z, dreg <- dreg + mem[Z] + C
-ADD <dreg>, [-Z] ; decrement Z, dreg <- dreg + mem[Z]
 SBC <dreg>, [-Z] ; decrement Z, dreg <- dreg - mem[Z] - (~C)
+AND <dreg>, [-Z] ; decrement Z, dreg <- dreg & mem[Z]
+OR  <dreg>, [-Z] ; decrement Z, dreg <- dreg | mem[Z]
+XOR <dreg>, [-Z] ; decrement Z, dreg <- dreg ^ mem[Z]
+ADD <dreg>, [-Z] ; decrement Z, dreg <- dreg + mem[Z]
 SUB <dreg>, [-Z] ; decrement Z, dreg <- dreg - mem[Z]
 CMP <dreg>, [-Z] ; decrement Z, dreg - mem[Z], update SR from results, no writeback
 
@@ -123,10 +189,10 @@ INC <dreg> ; dreg <- dreg + 1
 DEC <dreg> ; dreg <- dreg - 1
 ROL <dreg> ; dreg <- dreg <] 1
 ROR <dreg> ; dreg <- dreg [> 1
+NOT <dreg> ; dreg <- ~dreg
 ASR <dreg> ; dreg <- dreg >> 1, sign-extended
 LSL <dreg> ; dreg <- dreg << 1
 LSR <dreg> ; dreg <- dreg >> 1
-NOT <dreg> ; dreg <- ~dreg
 CLR <dreg> ; dreg <- $00
 NEG <dreg> ; dreg <- $00 - dreg
 
@@ -135,28 +201,26 @@ DEC <ireg> ; ireg <- ireg - 1
 CLR <ireg> ; ireg <- $00
 
 ;========  CONTROL   ========
-RTI ; PULL SR, PULL PC
 RTS ; PULL PC
+RTI ; PULL SR, PULL PC
 
-JMP imm16       ; PC <- mem[PC+1]:mem[PC]
-JMP imm8:<ireg> ; PC <- mem[imm8:ireg+1]:mem[imm8:ireg]
-JMP Z           ; PC <- Z
+JMP abs16         ; PC <- mem[PC+1]:mem[PC]
+JMP [<r16>]       ; PC <- mem[r16+1]:mem[r16]
 
-JSR imm16       ; PUSH PC, PC <- mem[PC+1]:mem[PC]
-JSR imm8:<ireg> ; PUSH PC, PC <- mem[imm8:ireg+1]:mem[imm8:ireg]
-JSR Z           ; PUSH PC, PC <- Z
+JSR abs16         ; PUSH PC, PC <- mem[PC+1]:mem[PC]
+JSR [<r16>]       ; PUSH PC, PC <- mem[r16+1]:mem[r16]
 
 BRA rel8 ; PC <- PC + rel8
 BSR rel8 ; PUSH PC, PC <- PC + rel8
 
-BPL rel8 ; IF N=0 THEN PC <- PC + rel8
-BVC rel8 ; IF V=0 THEN PC <- PC + rel8
-BCC rel8 ; IF C=0 THEN PC <- PC + rel8
 BNE rel8 ; IF Z=0 THEN PC <- PC + rel8
-BMI rel8 ; IF N=1 THEN PC <- PC + rel8
-BVS rel8 ; IF V=1 THEN PC <- PC + rel8
-BCS rel8 ; IF C=1 THEN PC <- PC + rel8
+BCC rel8 ; IF C=0 THEN PC <- PC + rel8
+BVC rel8 ; IF V=0 THEN PC <- PC + rel8
+BPL rel8 ; IF N=0 THEN PC <- PC + rel8
 BEQ rel8 ; IF Z=1 THEN PC <- PC + rel8
+BCS rel8 ; IF C=1 THEN PC <- PC + rel8
+BVS rel8 ; IF V=1 THEN PC <- PC + rel8
+BMI rel8 ; IF N=1 THEN PC <- PC + rel8
 
 ---
 

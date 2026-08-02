@@ -1,0 +1,170 @@
+;== LEGEND ==
+<dreg> = A | B | C | D
+<ireg> = X | Y | L | H
+Z = Y:X
+SP = H:L
+<r16> = Z | SP
+<r8> = SR | VBR
+;== ====== ==
+
+;== REGS ==
+<dreg>:
+  00 = A, 01 = B, 10 = C, 11 = D
+<ireg>:
+  00 = X, 01 = Y, 10 = H, 11 = L
+<r16>:
+  0 = Z, 1 = SP
+<r8>:
+  0 = SR, 1 = VBR
+;== ==== ==
+
+;== ENCODING ==
+; The 2 most-significant bits prefixes the instruction family
+Miscellaneous (GG -> 00)
+  TRAP:
+    7 6 5 4 3 2 1 0
+    G G 0 0 0 0 n n ; TRAP #n2
+    - nn -> trap number (0-3)
+  MOV SR:
+    7 6 5 4 3 2 1 0
+    G G 0 0 1 D d d ; SR <- <dreg> | <dreg> <- SR
+    - D  -> 0=SR <- <dreg>, 1=<dreg> <- SR
+    - dd -> one of data registers
+  MOV VBR:
+    7 6 5 4 3 2 1 0
+    G G 0 1 1 D i i ; VBR <- <ireg> | <ireg> <- VBR
+    - D  -> 0=VBR <- <ireg>, 1=<ireg> <- VBR
+    - ii -> one of index reggisters
+  Immediate:
+    7 6 5 4 3 2 1 0
+    G G 1 o o o d d
+    - ooo -> 000=ADCI, 001=SBCI, 010=ANDI, 011=ORI, 100=XORI,
+          101=ADDI, 110=SUBI, 111=CMPI
+    - dd  -> one of data registers
+  MOVI:
+    7 6 5 4 3 2 1 0
+    G G 0 1 0 t R R ; <reg> <- #imm8
+    G G 0 0 0 1 0 t ; <r16> <- #imm16
+    IF bit4=1 THEN
+      - t  -> 0=Data, 1=Index
+      - RR -> reg, one of data/index registers
+    ELSE
+      - t -> 0=Z, 1=SP
+  unused:
+    7 6 5 4 3 2 1 0
+    G G 0 0 0 1 1 0
+    G G 0 0 0 1 1 1
+
+Arithmetic (GG -> 01)
+  Binary:
+    7 6 5 4 3 2 1 0
+    G G 0 0 0 o o o ; <op> <dst>, <src>
+    - ooo -> 000=ADC, 001=SBC, 010=AND, 011=OR, 100=XOR,
+            101=ADD, 110=SUB, 111=CMP
+  CLR/NEG:
+    7 6 5 4 3 2 1 0
+    G G 0 0 1 o d d ; CLR/NEG <dreg>
+    - o  -> 0=CLR, 1=NEG
+    - dd -> one of data register
+  INC/DEC:
+    7 6 5 4 3 2 1 0
+    G G 0 1 0 t i i ; INC/DEC <ireg>
+    - t  -> 0=INC, 1=DEC
+    - ii -> One of index registers
+  CLR:
+    7 6 5 4 3 2 1 0
+    G G 0 1 1 0 i i ; CLR <ireg>
+  MOV:
+    7 6 5 4 3 2 1 0
+    G G 0 1 1 1 0 0 ; MOV <dst>, <src>
+  EXG:
+    7 6 5 4 3 2 1 0
+    G G 0 1 1 1 0 1 ; EXG <regx>, <regy>
+  Unary:
+    7 6 5 4 3 2 1 0
+    G G 1 o o o d d ; <op> <dreg>
+    - ooo -> 000=INC, 001=DEC, 010=ROL, 011=ROR,
+            100=NOT, 101=ASR, 110=LSL, 111=LSR
+    - dd  -> one of data register
+  unused:
+    7 6 5 4 3 2 1 0
+    G G 0 1 1 1 1 0
+    G G 0 1 1 1 1 1
+
+Complex (G -> 10)
+  MULU/MULS:
+    7 6 5 4 3 2 1 0
+    G G 0 S y y x x ; MULU/MULS <dregx>, <dregy>
+    - S  -> 0=Unsigned, 1=Signed
+    - yy -> one of data registers, second operand
+    - xx -> one of data registers, first operand
+  DIVU/DIVS:
+    7 6 5 4 3 2 1 0
+    G G 1 S y y x x ; DIVU/DIVS <dregx>, <dregy>
+    - S  -> 0=Unsigned, 1=Signed
+    - yy -> one of data registers, second operand
+    - xx -> one of data registers, first operand
+
+System (GG -> 11):
+  BCLR/BSET:
+    7 6 5 4 3 2 1 0
+    G G 0 0 0 t d d ; BCLR/BSET <dreg>, #imm8
+    - t -> 0=BCLR, 1=BSET
+  BTST/BCHG:
+    7 6 5 4 3 2 1 0
+    G G 0 1 0 t d d ; BTST/BCHG <dreg>, #imm8
+    - t -> 0=BTST, 1=BCHG
+  BIT:
+    7 6 5 4 3 2 1 0
+    G G 0 0 1 t d d ; <dreg> & #imm8 / abs16
+    G G 0 1 1 t d d ; <dreg> & [<r16>]
+    IF bit3=0 THEN
+      - t  -> 0=<dreg> & #imm8, 1=<dreg> & abs16
+      - dd -> one of data registers
+    ELSE
+      - t  -> 0=<dreg> & [Z], 1=<dreg> & [SP]
+      - dd -> one of data registers
+  NOP:
+    7 6 5 4 3 2 1 0
+    G G 1 0 1 0 1 0
+  JMP:
+    7 6 5 4 3 2 1 0
+    G G 1 0 1 0 0 0 ; JMP abs16
+    G G 1 0 1 0 t 1 ; JMP [<r16>]
+    IF bit0=1 THEN
+      - t -> 0=Z, 1=SP
+  JSR:
+    7 6 5 4 3 2 1 0
+    G G 1 0 1 1 0 0 ; JSR abs16
+    G G 1 0 1 1 t 1 ; JSR [<r16>]
+    IF bit0=1 THEN
+      - t -> 0=Z, 1=SP
+  Bcc:
+    7 6 5 4 3 2 1 0
+    G G 1 1 0 S c c
+    - S  -> 0=Test if clear, 1=Test if set
+    - cc -> 00=Z, 01=C, 10=V, 11=N
+  BRA/BSR:
+    7 6 5 4 3 2 1 0
+    G G 1 1 1 0 0 s ; BRA/BSR rel8
+    - s -> 0=BRA, 1=BSR
+  RTS/RTI:
+    7 6 5 4 3 2 1 0
+    G G 1 1 1 0 1 t ; RTS/RTI
+    - t -> 0=RTS, 1=RTI
+  HALT:
+    7 6 5 4 3 2 1 0
+    G G 1 1 1 1 1 1
+  unused:
+    7 6 5 4 3 2 1 0
+    G G 1 0 0 . . .
+    G G 1 0 1 1 1 0
+    G G 1 1 1 1 0 0
+    G G 1 1 1 1 0 1
+    G G 1 1 1 1 1 0
+;== ======== ==
+
+---
+
+> Documentation is licensed under CC BY-SA 4.0. <br>
+> See https://creativecommons.org/licenses/by-sa/4.0/
