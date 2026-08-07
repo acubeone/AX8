@@ -25,6 +25,15 @@ Miscellaneous (GG -> 00)
     7 6 5 4 3 2 1 0
     G G 0 0 0 0 n n ; TRAP #n2
     - nn -> trap number (0-3)
+  MOVI:
+    7 6 5 4 3 2 1 0
+    G G 0 0 0 1 0 t ; <r16> <- #imm16
+    G G 0 1 0 t R R ; <reg> <- #imm8
+    IF bit4=1 THEN
+      - t  -> 0=Data, 1=Index
+      - RR -> reg, one of data/index registers
+    ELSE
+      - t -> 0=Z, 1=SP
   MOV SR:
     7 6 5 4 3 2 1 0
     G G 0 0 1 D d d ; SR <- <dreg> | <dreg> <- SR
@@ -41,15 +50,6 @@ Miscellaneous (GG -> 00)
     - ooo -> 000=ADCI, 001=SBCI, 010=ANDI, 011=ORI, 100=XORI,
           101=ADDI, 110=SUBI, 111=CMPI
     - dd  -> one of data registers
-  MOVI:
-    7 6 5 4 3 2 1 0
-    G G 0 1 0 t R R ; <reg> <- #imm8
-    G G 0 0 0 1 0 t ; <r16> <- #imm16
-    IF bit4=1 THEN
-      - t  -> 0=Data, 1=Index
-      - RR -> reg, one of data/index registers
-    ELSE
-      - t -> 0=Z, 1=SP
   unused:
     7 6 5 4 3 2 1 0
     G G 0 0 0 1 1 0
@@ -91,7 +91,7 @@ Arithmetic (GG -> 01)
     G G 0 1 1 1 1 0
     G G 0 1 1 1 1 1
 
-Complex (G -> 10)
+Complex (GG -> 10)
   MULU/MULS:
     7 6 5 4 3 2 1 0
     G G 0 S y y x x ; MULU/MULS <dregx>, <dregy>

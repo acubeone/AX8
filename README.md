@@ -3,8 +3,8 @@
 ## Overview
 
 AX8, also called Axle, is an 8-bit CISC microprocessor with a strictly
-little-endian memory model. It uses 8-bit internal. It uses an 8-bit internal
-data path and a 16-bit address bus, allowing direct access to up 64KB of memory.
+little-endian memory model. It uses an 8-bit internal data path and a 16-bit
+address bus, allowing direct access to up 64KB of memory.
 
 ### Key Features
 

@@ -18,7 +18,7 @@ RegReg (MM -> 00):
 Absolute (MM -> 01):
   7 6 5 4 3 2 1 0
   0 1 0 T D 0 x x ; abs16 <- <reg> | <reg> <- abs16
-  0 1 1 T D 0 d d ; abs16 <- <r16> | <r16> <- abs16
+  0 1 1 T D 0 0 0 ; abs16 <- <r16> | <r16> <- abs16
 
   IF bit5=0 THEN
     T  -> 0=Data, 1=Index
@@ -27,7 +27,6 @@ Absolute (MM -> 01):
   ELSE
     T  -> 0=Z, 1=SP
     D  -> 0=mem <- <reg>, 1=<reg> <- mem
-    dd -> dreg, One of data registers
 
 Indirect (MM -> 10):
   7 6 5 4 3 2 1 0
