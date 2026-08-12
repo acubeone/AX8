@@ -7,13 +7,24 @@ SP = H:L
 <r8> = SR | VBR
 ;== ====== ==
 
+;== REGS ==
+<dreg>:
+  00 = A, 01 = B, 10 = C, 11 = D
+<ireg>:
+  00 = X, 01 = Y, 10 = H, 11 = L
+<r16>:
+  0 = Z, 1 = SP
+<r8>:
+  0 = SR, 1 = VBR
+;== ==== ==
+
 RegReg (MM -> 00):
   7 6 5 4 3 2 1 0
   0 0 T T y y x x ; <regx>,<regy>
 
   TT -> 00=Data/Data, 01=Index/Index, 10=Data/Index, 11=Index/Data
-  yy -> regy, one of data/index registers
-  xx -> regx, one of data/index registers
+  yy -> one of data registers, second operand
+  xx -> one of data registers, first operand
 
 Absolute (MM -> 01):
   7 6 5 4 3 2 1 0
@@ -23,7 +34,7 @@ Absolute (MM -> 01):
   IF bit5=0 THEN
     T  -> 0=Data, 1=Index
     D  -> 0=mem <- <reg>, 1=<reg> <- mem
-    xx -> reg, One of data/index registers
+    xx -> one of data/index registers
   ELSE
     T  -> 0=Z, 1=SP
     D  -> 0=mem <- <reg>, 1=<reg> <- mem
@@ -35,12 +46,12 @@ Indirect (MM -> 10):
 
   IF bit5=0 THEN
     D  -> 0=mem <- <dreg>, 1=<dreg> <- mem
-    ii -> ireg, One of index registers
-    dd -> dreg, One of data registers
+    ii -> one of index registers
+    dd -> one of data registers
   ELSE
     D  -> 0=[<r16>] <- <dreg>, 1=<dreg> <- [<r16>]
     t  -> 0=Z, 1=SP
-    dd -> dreg, One of data registers
+    dd -> one of data registers
 
 Miscellaneous (MM -> 11):
   7 6 5 4 3 2 1 0
@@ -50,11 +61,11 @@ Miscellaneous (MM -> 11):
   IF bit3=0 THEN
     D  -> 0=[<r16>+] <- <dreg>, 1=<dreg> <- [<r16>+]
     t  -> 0=Z, 1=SP
-    dd -> dreg, One of data registers
+    dd -> one of data registers
   ELSE
     D  -> 0=[-<r16>] <- <dreg>, 1=<dreg> <- [-<r16>]
     t  -> 0=Z, 1=SP
-    dd -> dreg, One of data registers
+    dd -> one of data registers
 
 ---
 

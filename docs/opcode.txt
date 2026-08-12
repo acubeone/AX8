@@ -28,15 +28,15 @@ Miscellaneous (GG -> 00)
   MOVI:
     7 6 5 4 3 2 1 0
     G G 0 0 0 1 0 t ; <r16> <- #imm16
-    G G 0 1 0 t R R ; <reg> <- #imm8
-    IF bit4=1 THEN
+    G G 0 0 1 t R R ; <reg> <- #imm8
+    IF bit3=1 THEN
       - t  -> 0=Data, 1=Index
       - RR -> reg, one of data/index registers
     ELSE
       - t -> 0=Z, 1=SP
   MOV SR:
     7 6 5 4 3 2 1 0
-    G G 0 0 1 D d d ; SR <- <dreg> | <dreg> <- SR
+    G G 0 1 0 D d d ; SR <- <dreg> | <dreg> <- SR
     - D  -> 0=SR <- <dreg>, 1=<dreg> <- SR
     - dd -> one of data registers
   MOV VBR:
@@ -50,7 +50,7 @@ Miscellaneous (GG -> 00)
     - ooo -> 000=ADCI, 001=SBCI, 010=ANDI, 011=ORI, 100=XORI,
           101=ADDI, 110=SUBI, 111=CMPI
     - dd  -> one of data registers
-  unused:
+  invalid:
     7 6 5 4 3 2 1 0
     G G 0 0 0 1 1 0
     G G 0 0 0 1 1 1
@@ -86,7 +86,7 @@ Arithmetic (GG -> 01)
     - ooo -> 000=INC, 001=DEC, 010=ROL, 011=ROR,
             100=NOT, 101=ASR, 110=LSL, 111=LSR
     - dd  -> one of data register
-  unused:
+  invalid:
     7 6 5 4 3 2 1 0
     G G 0 1 1 1 1 0
     G G 0 1 1 1 1 1
@@ -106,62 +106,60 @@ Complex (GG -> 10)
     - xx -> one of data registers, first operand
 
 System (GG -> 11):
-  BCLR/BSET:
-    7 6 5 4 3 2 1 0
-    G G 0 0 0 t d d ; BCLR/BSET <dreg>, #imm8
-    - t -> 0=BCLR, 1=BSET
-  BTST/BCHG:
-    7 6 5 4 3 2 1 0
-    G G 0 1 0 t d d ; BTST/BCHG <dreg>, #imm8
-    - t -> 0=BTST, 1=BCHG
   BIT:
     7 6 5 4 3 2 1 0
-    G G 0 0 1 t d d ; <dreg> & #imm8 / abs16
-    G G 0 1 1 t d d ; <dreg> & [<r16>]
+    G G 0 0 0 t d d ; <dreg> & #imm8 / abs16
+    G G 0 0 1 t d d ; <dreg> & [<r16>]
     IF bit3=0 THEN
       - t  -> 0=<dreg> & #imm8, 1=<dreg> & abs16
       - dd -> one of data registers
     ELSE
-      - t  -> 0=<dreg> & [Z], 1=<dreg> & [SP]
+      - t  -> 0=Z, 1=SP
       - dd -> one of data registers
-  NOP:
+  BCLR/BSET:
     7 6 5 4 3 2 1 0
-    G G 1 0 1 0 1 0
-  JMP:
-    7 6 5 4 3 2 1 0
-    G G 1 0 1 0 0 0 ; JMP abs16
-    G G 1 0 1 0 t 1 ; JMP [<r16>]
-    IF bit0=1 THEN
-      - t -> 0=Z, 1=SP
-  JSR:
-    7 6 5 4 3 2 1 0
-    G G 1 0 1 1 0 0 ; JSR abs16
-    G G 1 0 1 1 t 1 ; JSR [<r16>]
-    IF bit0=1 THEN
-      - t -> 0=Z, 1=SP
+    G G 0 1 0 t d d ; <dreg>, #imm8
+    G G 0 1 1 t d d ; abs16, <dreg>
+    - t  - 0=BCLR, 1=BSET
+    - dd - one of data registers
   Bcc:
     7 6 5 4 3 2 1 0
-    G G 1 1 0 S c c
+    G G 1 0 0 S c c ; Bcc rel8
+    G G 1 0 1 S c c ; Bcc rel16
     - S  -> 0=Test if clear, 1=Test if set
     - cc -> 00=Z, 01=C, 10=V, 11=N
-  BRA/BSR:
+  JSR:
     7 6 5 4 3 2 1 0
-    G G 1 1 1 0 0 s ; BRA/BSR rel8
-    - s -> 0=BRA, 1=BSR
+    G G 1 1 0 0 0 0 ; JSR abs16
+    G G 1 1 0 t 0 1 ; JSR [<r16>]
+    IF bit0=1 THEN
+      - t -> 0=Z, 1=SP
+  JMP:
+    7 6 5 4 3 2 1 0
+    G G 1 1 0 0 1 0 ; JMP abs16
+    G G 1 1 0 t 1 1 ; JMP [<r16>]
+    IF bit0=1 THEN
+      - t -> 0=Z, 1=SP
   RTS/RTI:
     7 6 5 4 3 2 1 0
-    G G 1 1 1 0 1 t ; RTS/RTI
+    G G 1 1 0 1 t 0 ; RTS/RTI
     - t -> 0=RTS, 1=RTI
+  BSR/BRA:
+    7 6 5 4 3 2 1 0
+    G G 1 1 1 0 t 0 ; BSR/BRA rel8
+    G G 1 1 1 0 t 1 ; BSR/BRA rel16
+    - t -> 0=BSR, 1=BRA
+  NOP:
+    7 6 5 4 3 2 1 0
+    G G 1 1 1 1 0 0
   HALT:
     7 6 5 4 3 2 1 0
     G G 1 1 1 1 1 1
-  unused:
+  invalid:
     7 6 5 4 3 2 1 0
-    G G 1 0 0 . . .
-    G G 1 0 1 1 1 0
-    G G 1 1 1 1 0 0
     G G 1 1 1 1 0 1
     G G 1 1 1 1 1 0
+
 ;== ======== ==
 
 ---

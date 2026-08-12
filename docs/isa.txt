@@ -44,7 +44,7 @@ VBR, <ireg>
 
 abs16, <dreg>
 abs16, <ireg>
-asb16, <r16>
+abs16, <r16>
 
 <dreg>, [imm8:<ireg>]
 [imm8:<ireg>], <dreg>
@@ -64,14 +64,15 @@ NOP  ; Do Nothing
 
 TRAP #n2 ; Trigger Nth TRAP vector
 
-BCLR <dreg>, #imm8 ; Clear bit in register, immediate is module 8
-BSET <dreg>, #imm8 ; Set bit in register, immediate is module 8
-BTST <dreg>, #imm8 ; Test bit in register, immediate is module 8
-BCHG <dreg>, #imm8 ; Change bit in register, immediate is module 8
+BCLR <dreg>, #imm8 ; dreg <- dreg & ~mask, mask = 1 << imm8[3:0]
+BSET <dreg>, #imm8 ; dreg <- dreg | mask, mask = 1 << imm8[3:0]
 
-BIT <dreg>, #imm8   ; <dreg> & #imm8, update SR from results, no writeback
-BIT <dreg>, abs16   ; <dreg> & mem[abs16], update SR from results, no writeback
-BIT <dreg>, [<r16>] ; <dreg> & mem[r16], update SR from results, no writeback
+BCLR abs16, <dreg> ; mem[abs16] <- mem[abs16] & ~mask, mask = 1 << dreg[3:0]
+BSET abs16, <dreg> ; mem[abs16] <- mem[abs16] | mask, mask = 1 << dreg[3:0]
+
+BIT <dreg>, #imm8   ; 0 <- <dreg> & #imm8, update SR from results
+BIT <dreg>, abs16   ; 0 <- <dreg> & mem[abs16], update SR from results
+BIT <dreg>, [<r16>] ; 0 <- <dreg> & mem[r16], update SR from results
 
 ;========  TRANSFER  ========
 ; These do not use extension byte
@@ -122,7 +123,7 @@ ORI  <dreg>, #imm8 ; dreg <- dreg | mem[PC]
 XORI <dreg>, #imm8 ; dreg <- dreg ^ mem[PC]
 ADDI <dreg>, #imm8 ; dreg <- dreg + mem[PC]
 SUBI <dreg>, #imm8 ; dreg <- dreg - mem[PC]
-CMPI <dreg>, #imm8 ; dreg - mem[PC], update SR from results, no writeback
+CMPI <dreg>, #imm8 ; 0 <- dreg - mem[PC], update SR from results
 
 ; These do use extension byte
 ADC <dregx>, <dregy> ; dregx <- dregx + dregy + C
@@ -132,7 +133,7 @@ OR  <dregx>, <dregy> ; dregx <- dregx | dregy
 XOR <dregx>, <dregy> ; dregx <- dregx ^ dregy
 ADD <dregx>, <dregy> ; dregx <- dregx + dregy
 SUB <dregx>, <dregy> ; dregx <- dregx - dregy
-CMP <dregx>, <dregy> ; dregx - dregy, update SR from results, no writeback
+CMP <dregx>, <dregy> ; 0 <- dregx - dregy, update SR from results
 
 ADC <dreg>, abs16 ; dreg <- dreg + mem[abs16] + C
 SBC <dreg>, abs16 ; dreg <- dreg - mem[abs16] - (~C)
@@ -141,7 +142,7 @@ OR  <dreg>, abs16 ; dreg <- dreg | mem[abs16]
 XOR <dreg>, abs16 ; dreg <- dreg ^ mem[abs16]
 ADD <dreg>, abs16 ; dreg <- dreg + mem[abs16]
 SUB <dreg>, abs16 ; dreg <- dreg - mem[abs16]
-CMP <dreg>, abs16 ; dreg - mem[abs16], update SR from results, no writeback
+CMP <dreg>, abs16 ; 0 <- dreg - mem[abs16], update SR from results
 
 ADC <dreg>, [imm8:<ireg>] ; dreg <- dreg + mem[imm8:ireg] + C
 SBC <dreg>, [imm8:<ireg>] ; dreg <- dreg - mem[imm8:ireg] - (~C)
@@ -150,7 +151,7 @@ OR  <dreg>, [imm8:<ireg>] ; dreg <- dreg | mem[imm8:ireg]
 XOR <dreg>, [imm8:<ireg>] ; dreg <- dreg ^ mem[imm8:ireg]
 ADD <dreg>, [imm8:<ireg>] ; dreg <- dreg + mem[imm8:ireg]
 SUB <dreg>, [imm8:<ireg>] ; dreg <- dreg - mem[imm8:ireg]
-CMP <dreg>, [imm8:<ireg>] ; dreg - mem[imm8:ireg], update SR from results, no writeback
+CMP <dreg>, [imm8:<ireg>] ; 0 <- dreg - mem[imm8:ireg], update SR from results
 
 ADC <dreg>, [<r16>] ; dreg <- dreg + mem[r16] + C
 SBC <dreg>, [<r16>] ; dreg <- dreg - mem[r16] - (~C)
@@ -159,7 +160,7 @@ OR  <dreg>, [<r16>] ; dreg <- dreg | mem[r16]
 XOR <dreg>, [<r16>] ; dreg <- dreg ^ mem[r16]
 ADD <dreg>, [<r16>] ; dreg <- dreg + mem[r16]
 SUB <dreg>, [<r16>] ; dreg <- dreg - mem[r16]
-CMP <dreg>, [<r16>] ; dreg - mem[r16], update SR from results, no writeback
+CMP <dreg>, [<r16>] ; 0 <- dreg - mem[r16], update SR from results
 
 ADC <dreg>, [<r16>+] ; dreg <- dreg + mem[r16] + C, increment r16
 SBC <dreg>, [<r16>+] ; dreg <- dreg - mem[r16] - (~C), increment r16
@@ -168,7 +169,7 @@ OR  <dreg>, [<r16>+] ; dreg <- dreg | mem[r16], increment r16
 XOR <dreg>, [<r16>+] ; dreg <- dreg ^ mem[r16], increment r16
 ADD <dreg>, [<r16>+] ; dreg <- dreg + mem[r16], increment r16
 SUB <dreg>, [<r16>+] ; dreg <- dreg - mem[r16], increment r16
-CMP <dreg>, [<r16>+] ; dreg - mem[r16], increment r16, update SR from results, no writeback
+CMP <dreg>, [<r16>+] ; 0 <- dreg - mem[r16], increment r16, update SR from results
 
 ADC <dreg>, [-<r16>] ; decrement r16, dreg <- dreg + mem[r16] + C
 SBC <dreg>, [-<r16>] ; decrement r16, dreg <- dreg - mem[r16] - (~C)
@@ -177,7 +178,7 @@ OR  <dreg>, [-<r16>] ; decrement r16, dreg <- dreg | mem[r16]
 XOR <dreg>, [-<r16>] ; decrement r16, dreg <- dreg ^ mem[r16]
 ADD <dreg>, [-<r16>] ; decrement r16, dreg <- dreg + mem[r16]
 SUB <dreg>, [-<r16>] ; decrement r16, dreg <- dreg - mem[r16]
-CMP <dreg>, [-<r16>] ; decrement r16, dreg - mem[r16], update SR from results, no writeback
+CMP <dreg>, [-<r16>] ; decrement r16, 0 <- dreg - mem[r16], update SR from results
 
 MULU <dregx>, <dregy> ; y = x * y; dregx <- y[7:0]; dregy <- y[15:8]
 DIVU <dregx>, <dregy> ; q = x/y; r = x%y; dregx <- q; dregy <- r
@@ -204,23 +205,35 @@ CLR <ireg> ; ireg <- $00
 RTS ; PULL PC
 RTI ; PULL SR, PULL PC
 
-JMP abs16         ; PC <- mem[PC+1]:mem[PC]
-JMP [<r16>]       ; PC <- mem[r16+1]:mem[r16]
+JSR abs16   ; PUSH PC, PC <- mem[PC+1]:mem[PC]
+JSR [<r16>] ; PUSH PC, PC <- mem[r16+1]:mem[r16]
 
-JSR abs16         ; PUSH PC, PC <- mem[PC+1]:mem[PC]
-JSR [<r16>]       ; PUSH PC, PC <- mem[r16+1]:mem[r16]
+JMP abs16   ; PC <- mem[PC+1]:mem[PC]
+JMP [<r16>] ; PC <- mem[r16+1]:mem[r16]
 
-BRA rel8 ; PC <- PC + rel8
-BSR rel8 ; PUSH PC, PC <- PC + rel8
+BSR rel8 ; PUSH PC, PC <- PC + sign_extend(rel8)
+BRA rel8 ; PC <- PC + sign_extend(rel8)
 
-BNE rel8 ; IF Z=0 THEN PC <- PC + rel8
-BCC rel8 ; IF C=0 THEN PC <- PC + rel8
-BVC rel8 ; IF V=0 THEN PC <- PC + rel8
-BPL rel8 ; IF N=0 THEN PC <- PC + rel8
-BEQ rel8 ; IF Z=1 THEN PC <- PC + rel8
-BCS rel8 ; IF C=1 THEN PC <- PC + rel8
-BVS rel8 ; IF V=1 THEN PC <- PC + rel8
-BMI rel8 ; IF N=1 THEN PC <- PC + rel8
+BSR rel16 ; PUSH PC, PC <- PC + rel16
+BRA rel16 ; PC <- PC + rel16
+
+BNE rel8 ; IF Z=0 THEN PC <- PC + sign_extend(rel8)
+BCC rel8 ; IF C=0 THEN PC <- PC + sign_extend(rel8)
+BVC rel8 ; IF V=0 THEN PC <- PC + sign_extend(rel8)
+BPL rel8 ; IF N=0 THEN PC <- PC + sign_extend(rel8)
+BEQ rel8 ; IF Z=1 THEN PC <- PC + sign_extend(rel8)
+BCS rel8 ; IF C=1 THEN PC <- PC + sign_extend(rel8)
+BVS rel8 ; IF V=1 THEN PC <- PC + sign_extend(rel8)
+BMI rel8 ; IF N=1 THEN PC <- PC + sign_extend(rel8)
+
+BNE rel16 ; IF Z=0 THEN PC <- PC + rel16
+BCC rel16 ; IF C=0 THEN PC <- PC + rel16
+BVC rel16 ; IF V=0 THEN PC <- PC + rel16
+BPL rel16 ; IF N=0 THEN PC <- PC + rel16
+BEQ rel16 ; IF Z=1 THEN PC <- PC + rel16
+BCS rel16 ; IF C=1 THEN PC <- PC + rel16
+BVS rel16 ; IF V=1 THEN PC <- PC + rel16
+BMI rel16 ; IF N=1 THEN PC <- PC + rel16
 
 ---
 
