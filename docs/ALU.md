@@ -93,7 +93,7 @@ operation.
   - Modify: The `Carry` is forced to `0`.
 - SUB - Subtract Binary
   - Parent: `SBC`
-  - Operation: `Y <- A - B + 1`
+  - Operation: `Y <- A - B`
   - Modify: The `Carry` is forced to `1`.
 - INC - Increment
   - Parent: `ADC`
