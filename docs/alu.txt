@@ -78,8 +78,10 @@ IF EOP[4:3]=10 THEN
 
   IF EOP[2:1]=01 THEN ; BIT
     discard_y <- 1
+    out_force_nf <- 1
+    out_n <- b[7]
     out_force_vf <- 1
-    out_v <- y[6]
+    out_v <- b[6]
 
   IF EOP[2:1]=10 THEN ; ASR
     u_cin <- a[7]
@@ -109,35 +111,35 @@ IF EOP[4:3]=11 THEN
 
 ;== TRUTH TABLE ==
 
-opcode        | u_op | u_cin    | u_a | u_b   | discard_y | out_v | out_z
-ADC  [00_000] | ADC  | carry_in | a   | b     | no        | u_vf  | u_zf
-SBC  [00_001] | SBC  | carry_in | a   | b     | no        | u_vf  | u_zf
-AND  [00_010] | AND  | -        | a   | b     | no        | u_vf  | u_zf
-OR   [00_011] | OR   | -        | a   | b     | no        | u_vf  | u_zf
-XOR  [00_100] | XOR  | -        | a   | b     | no        | u_vf  | u_zf
-ROR  [00_101] | ROR  | carry_in | a   | -     | no        | u_vf  | u_zf
-ROL  [00_110] | ROL  | carry_in | a   | -     | no        | u_vf  | u_zf
-MOV  [00_111] | MOV  | -        | -   | b     | no        | u_vf  | u_zf
-ADD  [01_000] | ADC  | 0        | a   | b     | no        | u_vf  | u_zf
-SUB  [01_001] | SBC  | 1        | a   | b     | no        | u_vf  | u_zf
-BCLR [01_010] | AND  | -        | a   | ~mask | no        | u_vf  | test_bit
-BSET [01_011] | OR   | -        | a   | mask  | no        | u_vf  | test_bit
-NOT  [01_100] | XOR  | -        | a   | $ff   | no        | u_vf  | u_zf
-LSR  [01_101] | ROR  | 0        | a   | -     | no        | u_vf  | u_zf
-LSL  [01_110] | ROL  | 0        | a   | -     | no        | u_vf  | u_zf
-CLR  [01_111] | MOV  | -        | -   | $00   | no        | u_vf  | u_zf
-INC  [10_000] | ADC  | 1        | a   | $00   | no        | u_vf  | u_zf
-DEC  [10_001] | SBC  | 0        | a   | $00   | no        | u_vf  | u_zf
-BIT  [10_010] | AND  | -        | a   | b     | yes       | y[6]  | u_zf
-...  [10_011] | OR   | -        | a   | b     | yes       | y[6]  | u_zf
-...  [10_100] | XOR  | -        | a   | b     | no        | u_vf  | u_zf
-ASR  [10_101] | ROR  | a[7]     | a   | -     | no        | u_vf  | u_zf
-...  [10_110] | ROL  | 0        | a   | -     | no        | u_vf  | u_zf
-...  [10_111] | MOV  | -        | -   | b     | no        | u_vf  | u_zf
-...  [11_000] | ADC  | 0        | a   | b     | yes       | u_vf  | u_zf
-CMP  [11_001] | SBC  | 1        | a   | b     | yes       | u_vf  | u_zf
-...  [11_010] | ADC  | 0        | $00 | b     | no        | u_vf  | u_zf
-NEG  [11_011] | SBC  | 1        | $00 | b     | no        | u_vf  | u_zf
+opcode        | u_op | u_cin    | u_a | u_b   | discard_y | out_n | out_v | out_z
+ADC  [00_000] | ADC  | carry_in | a   | b     | no        | u_nf | u_vf  | u_zf
+SBC  [00_001] | SBC  | carry_in | a   | b     | no        | u_nf | u_vf  | u_zf
+AND  [00_010] | AND  | -        | a   | b     | no        | u_nf | u_vf  | u_zf
+OR   [00_011] | OR   | -        | a   | b     | no        | u_nf | u_vf  | u_zf
+XOR  [00_100] | XOR  | -        | a   | b     | no        | u_nf | u_vf  | u_zf
+ROR  [00_101] | ROR  | carry_in | a   | -     | no        | u_nf | u_vf  | u_zf
+ROL  [00_110] | ROL  | carry_in | a   | -     | no        | u_nf | u_vf  | u_zf
+MOV  [00_111] | MOV  | -        | -   | b     | no        | u_nf | u_vf  | u_zf
+ADD  [01_000] | ADC  | 0        | a   | b     | no        | u_nf | u_vf  | u_zf
+SUB  [01_001] | SBC  | 1        | a   | b     | no        | u_nf | u_vf  | u_zf
+BCLR [01_010] | AND  | -        | a   | ~mask | no        | u_nf | u_vf  | test_bit
+BSET [01_011] | OR   | -        | a   | mask  | no        | u_nf | u_vf  | test_bit
+NOT  [01_100] | XOR  | -        | a   | $ff   | no        | u_nf | u_vf  | u_zf
+LSR  [01_101] | ROR  | 0        | a   | -     | no        | u_nf | u_vf  | u_zf
+LSL  [01_110] | ROL  | 0        | a   | -     | no        | u_nf | u_vf  | u_zf
+CLR  [01_111] | MOV  | -        | -   | $00   | no        | u_nf | u_vf  | u_zf
+INC  [10_000] | ADC  | 1        | a   | $00   | no        | u_nf | u_vf  | u_zf
+DEC  [10_001] | SBC  | 0        | a   | $00   | no        | u_nf | u_vf  | u_zf
+BIT  [10_010] | AND  | -        | a   | b     | yes       | b[7] | b[6]  | u_zf
+...  [10_011] | OR   | -        | a   | b     | yes       | b[7] | b[6]  | u_zf
+...  [10_100] | XOR  | -        | a   | b     | no        | u_nf | u_vf  | u_zf
+ASR  [10_101] | ROR  | a[7]     | a   | -     | no        | u_nf | u_vf  | u_zf
+...  [10_110] | ROL  | 0        | a   | -     | no        | u_nf | u_vf  | u_zf
+...  [10_111] | MOV  | -        | -   | b     | no        | u_nf | u_vf  | u_zf
+...  [11_000] | ADC  | 0        | a   | b     | yes       | u_nf | u_vf  | u_zf
+CMP  [11_001] | SBC  | 1        | a   | b     | yes       | u_nf | u_vf  | u_zf
+...  [11_010] | ADC  | 0        | $00 | b     | no        | u_nf | u_vf  | u_zf
+NEG  [11_011] | SBC  | 1        | $00 | b     | no        | u_nf | u_vf  | u_zf
 
 opcode        | v_op | v_is_signed | v_a | v_b | is_wide | div_by_zero
 MULU [11_100] | MUL  | no          | a   | b   | yes     | no

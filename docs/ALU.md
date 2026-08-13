@@ -107,7 +107,7 @@ operation.
     forced to `0`.
 - CMP - Compare
   - Parent: `SBC`
-  - Operation: `0 <- A - B`
+  - Operation: `0 <- A - B; N <- B[7]; V <- B[6]`
   - Modify: The `Carry` is forced to `1` and `Y` result is discarded.
 - BIT - Bit Test
   - Parent: `AND`

@@ -71,9 +71,9 @@ BSET <dreg>, #imm8 ; dreg <- dreg | mask, mask = 1 << imm8[2:0]
 BCLR abs16, <dreg> ; mem[abs16] <- mem[abs16] & ~mask, mask = 1 << dreg[2:0]
 BSET abs16, <dreg> ; mem[abs16] <- mem[abs16] | mask, mask = 1 << dreg[2:0]
 
-BIT <dreg>, #imm8   ; 0 <- <dreg> & #imm8, update SR from results
-BIT <dreg>, abs16   ; 0 <- <dreg> & mem[abs16], update SR from results
-BIT <dreg>, [<r16>] ; 0 <- <dreg> & mem[r16], update SR from results
+BIT <dreg>, #imm8   ; 0 <- <dreg> & #imm8, copy 7th and 6th bits from memory to SR.N and SR.V
+BIT <dreg>, abs16   ; 0 <- <dreg> & mem[abs16], copy 7th and 6th bits from memory to SR.N and SR.V
+BIT <dreg>, [<r16>] ; 0 <- <dreg> & mem[r16], copy 7th and 6th bits from memory to SR.N and SR.V
 
 ;========  TRANSFER  ========
 ; These do not use extension byte
