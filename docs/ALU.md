@@ -101,9 +101,9 @@ operation.
   - Modify: The `B` operand is overwritten to `$00` and the `Carry` is
     forced to `1`.
 - DEC - Decrement
-  - Parent: `ADC`
+  - Parent: `SBC`
   - Operation: `Y <- A - 1`
-  - Modify: The `B` operand is overwritten to `$ff` and the `Carry` is
+  - Modify: The `B` operand is overwritten to `$00` and the `Carry` is
     forced to `0`.
 - CMP - Compare
   - Parent: `SBC`
@@ -113,7 +113,7 @@ operation.
   - Parent: `AND`
   - Operation: `0 <- A & B`
   - Modify: The `Y` result is discarded. The `Y[7]` is copied to the `N` and
-    the `Y[6]` is copied to `V`
+    the `Y[6]` is copied to `V`.
 - BCLR - Bit Test and Clear
   - Parent: `AND`
   - Operation: `Y <- A & ~(1 << B[2:0])`

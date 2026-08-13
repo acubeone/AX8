@@ -28,41 +28,83 @@ output:
 
 4 3 2 1 0
 1 0 o o o
-- ooo -> 000=INC, 001=CMP, 010=BIT, 011=...,
-         100=DEC, 101=ASR, 110=..., 111=...,
+- ooo -> 000=INC, 001=DEC, 010=BIT, 011=...,
+         100=..., 101=ASR, 110=..., 111=...,
 
 4 3 2 1 0
 1 1 o o o
-- ooo -> 000=...,  001=NEG,  010=...,  011=...,
+- ooo -> 000=...,  001=CMP,  010=...,  011=NEG,
          100=MULU, 101=DIVU, 110=MULS, 111=DIVS
 ;== ======== ==
 
 ;== DECODING ==
+
 EOP[4:0] = encoded_op[4:0]
 
-IF EOP[4:3]=00 THEN
+IF EOP[4:3]=00 THEN ; ADC/SBC/AND/OR/XOR/ROR/ROL/MOV
   u_op <- EOP[2:0]
 
 IF EOP[4:3]=01 THEN
   u_op <- EOP[2:0]
   u_force_cin <- 1
 
-  IF EOP[2:1]=00 THEN
+  IF EOP[2:1]=00 THEN ; ADD/SUB
     u_cin <- EOP[0]
   ELSE
     u_cin <- 0
 
-  IF EOP[2:1]=01 THEN
+  IF EOP[2:1]=01 THEN ; BCLR/BSET
     u_force_b <- 1
     u_b <- {8{~EOP[0]}} xor demux(.sel=b[2:0]) ; Generate mask. Invert it if EOP[0]=0
+    out_force_vf <- 1
+    out_v <- a[b[2:0]]
 
-  IF EOP[2:1]=10 THEN
+  IF EOP[2:1]=10 THEN ; NOT/LSR
     u_force_b <- 1
-    u_b = $ff
+    u_b <- $ff
 
-  IF EOP[2:1]=11 THEN
+  IF EOP[2:1]=11 THEN ; LSL/CLR
     u_force_b <- 1
-    u_b = $00
+    u_b <- $00
+
+IF EOP[4:3]=10 THEN
+  u_op <- EOP[2:0]
+  u_force_cin <- 1
+
+  IF EOP[2:1]=00 THEN ; INC/DEC
+    u_cin <- ~EOP[0]
+    u_force_b <- 1
+    u_b <- $00
+
+  IF EOP[2:1]=01 THEN ; BIT
+    discard_y <- 1
+    out_force_vf <- 1
+    out_v <- y[6]
+
+  IF EOP[2:1]=10 THEN ; ASR
+    u_cin <- a[7]
+
+IF EOP[4:3]=11 THEN
+  IF EOP[2]=0 THEN
+    u_op <- {0, 0, EOP[0]}
+    u_force_cin <- 1
+    u_cin <- EOP[0]
+
+    IF EOP[1]=0 THEN ; CMP
+      discard_y <- 1
+    ELSE ; NEG
+      u_force_a <- 1
+      u_a <- $00
+  ELSE
+    is_wide <- 1
+    v_start <- 1
+    v_is_signed <- EOP[1]
+
+    IF EOP[0]=0 THEN ; MULU/MULS
+      div_by_zero <- 0
+    ELSE ; DIVU/DIVS
+      div_by_zero <- ~{b[7] + .. + b[0]}
+
 ;== ======== ==
 
 ;== TRUTH TABLE ==
@@ -85,17 +127,17 @@ LSR  [01_101] | ROR  | 0        | a   | -     | no        | u_vf  | u_zf
 LSL  [01_110] | ROL  | 0        | a   | -     | no        | u_vf  | u_zf
 CLR  [01_111] | MOV  | -        | -   | $00   | no        | u_vf  | u_zf
 INC  [10_000] | ADC  | 1        | a   | $00   | no        | u_vf  | u_zf
-CMP  [10_001] | SBC  | 1        | a   | b     | yes       | u_vf  | u_zf
+DEC  [10_001] | SBC  | 0        | a   | $00   | no        | u_vf  | u_zf
 BIT  [10_010] | AND  | -        | a   | b     | yes       | y[6]  | u_zf
-...  [10_011] | OR   | -        | a   | b     | no        | u_vf  | u_zf
-DEC  [10_100] | ADC  | 0        | a   | $ff   | no        | u_vf  | u_zf
+...  [10_011] | OR   | -        | a   | b     | yes       | y[6]  | u_zf
+...  [10_100] | XOR  | -        | a   | b     | no        | u_vf  | u_zf
 ASR  [10_101] | ROR  | a[7]     | a   | -     | no        | u_vf  | u_zf
-...  [10_110] | ROL  | carry_in | a   | -     | no        | u_vf  | u_zf
+...  [10_110] | ROL  | 0        | a   | -     | no        | u_vf  | u_zf
 ...  [10_111] | MOV  | -        | -   | b     | no        | u_vf  | u_zf
-...  [11_000] | ADC  | 1        | $00 | b     | no        | u_vf  | u_zf
-NEG  [11_001] | SBC  | 1        | $00 | b     | no        | u_vf  | u_zf
-...  [11_010] | AND  | 1        | $00 | b     | no        | u_vf  | u_zf
-...  [11_011] | OR   | 1        | $00 | b     | no        | u_vf  | u_zf
+...  [11_000] | ADC  | 0        | a   | b     | yes       | u_vf  | u_zf
+CMP  [11_001] | SBC  | 1        | a   | b     | yes       | u_vf  | u_zf
+...  [11_010] | ADC  | 0        | $00 | b     | no        | u_vf  | u_zf
+NEG  [11_011] | SBC  | 1        | $00 | b     | no        | u_vf  | u_zf
 
 opcode        | v_op | v_is_signed | v_a | v_b | is_wide | div_by_zero
 MULU [11_100] | MUL  | no          | a   | b   | yes     | no
