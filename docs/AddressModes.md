@@ -4,7 +4,7 @@
 
 #### Syntax
 
-```
+```asm
 <dreg>
 ```
 
@@ -16,7 +16,7 @@ The operand is stored in an 8-bit data register (`A`, `B`, `C` or `D`).
 
 #### Syntax
 
-```
+```asm
 <ireg>
 ```
 
@@ -29,7 +29,7 @@ registers may also participate in address formation.
 
 #### Syntax
 
-```
+```asm
 <r16>
 ```
 
@@ -41,7 +41,7 @@ The operand is stored in a 16-bit register pair (`Z` or `SP`).
 
 #### Syntax
 
-```
+```asm
 <r8>
 ```
 
@@ -53,13 +53,13 @@ The operand is stored in a 8-bit system register (`SR` or `VBR`)
 
 #### Syntax
 
-```
+```asm
 <instruction>
 ```
 
 or
 
-```
+```asm
 <instruction> #n
 ```
 
@@ -73,23 +73,40 @@ immediate value directly within the opcode.
 
 #### Syntax
 
-```
+```asm
 #imm8
 
-#imm16
+or
 
-rel8
+#imm16
 ```
 
 #### Description
 
 The operand is encoded in the byte/word immediately following the opcode.
 
+### Relative
+
+#### Syntax
+
+```asm
+rel8
+
+or
+
+rel16
+```
+
+#### Description
+
+The operand is encoded in the byte/word immediately following the opcode. The
+value contained in the operand is encoded as a signed integer.
+
 ### Absolute
 
 #### Syntax
 
-```
+```asm
 abs16
 ```
 
@@ -102,13 +119,11 @@ operand is read from or written to that address.
 
 #### Syntax
 
-```
+```asm
 [imm8:<ireg>]
-```
 
 or
 
-```
 imm8:<ireg>
 ```
 
@@ -117,7 +132,7 @@ imm8:<ireg>
 A 16-bit address is formed by concatenating the immediate high-byte with the
 selected index register as the low byte.
 
-```
+```asm
 Address = (imm8 << 8) | <ireg>
 ```
 
@@ -125,7 +140,7 @@ Address = (imm8 << 8) | <ireg>
 
 #### Syntax
 
-```
+```asm
 [<r16>]
 ```
 
@@ -138,7 +153,7 @@ is accessed through the address stored in register-pair.
 
 #### Syntax
 
-```
+```asm
 [<r16>+]
 ```
 
@@ -151,7 +166,7 @@ immediately after the memory access, the pair-register is incremented.
 
 #### Syntax
 
-```
+```asm
 [-<r16>]
 ```
 
@@ -218,13 +233,15 @@ Bcc rel8
 ```
 
 After the opcode byte there is two additional bytes as an operand. The bytes
-following the opcode form a 16-bit word. Examples:
+following the opcode form a 16-bit word, which can encode either an unsigned or
+a signed integer. Examples:
 
 ```asm
 BIT <dreg>, abs16
 MOVI <r16>, #imm16
 JMP abs16
 JSR abs16
+BSR rel16
 ```
 
 #### Format D - Opcode + Extension

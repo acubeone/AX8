@@ -23,6 +23,7 @@ PreDecrement   | [-<r16>]
 None
 #n
 rel8
+rel16
 
 <dregx>, <dregy>
 <dregx>, <iregy>
@@ -64,11 +65,11 @@ NOP  ; Do Nothing
 
 TRAP #n2 ; Trigger Nth TRAP vector
 
-BCLR <dreg>, #imm8 ; dreg <- dreg & ~mask, mask = 1 << imm8[3:0]
-BSET <dreg>, #imm8 ; dreg <- dreg | mask, mask = 1 << imm8[3:0]
+BCLR <dreg>, #imm8 ; dreg <- dreg & ~mask, mask = 1 << imm8[2:0]
+BSET <dreg>, #imm8 ; dreg <- dreg | mask, mask = 1 << imm8[2:0]
 
-BCLR abs16, <dreg> ; mem[abs16] <- mem[abs16] & ~mask, mask = 1 << dreg[3:0]
-BSET abs16, <dreg> ; mem[abs16] <- mem[abs16] | mask, mask = 1 << dreg[3:0]
+BCLR abs16, <dreg> ; mem[abs16] <- mem[abs16] & ~mask, mask = 1 << dreg[2:0]
+BSET abs16, <dreg> ; mem[abs16] <- mem[abs16] | mask, mask = 1 << dreg[2:0]
 
 BIT <dreg>, #imm8   ; 0 <- <dreg> & #imm8, update SR from results
 BIT <dreg>, abs16   ; 0 <- <dreg> & mem[abs16], update SR from results
