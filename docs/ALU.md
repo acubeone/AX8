@@ -108,12 +108,22 @@ operation.
 - CMP - Compare
   - Parent: `SBC`
   - Operation: `0 <- A - B`
-  - Modify: The `Y` result is discarded.
+  - Modify: The `Carry` is forced to `1` and `Y` result is discarded.
 - BIT - Bit Test
   - Parent: `AND`
   - Operation: `0 <- A & B`
   - Modify: The `Y` result is discarded. The `Y[7]` is copied to the `N` and
     the `Y[6]` is copied to `V`
+- BCLR - Bit Test and Clear
+  - Parent: `AND`
+  - Operation: `Y <- A & ~(1 << B[2:0])`
+  - Modify: The `B[2:0]` bits are used to make the bitmask. Then the bit is
+    tested against `B`, then `Z` is reflected from that bit.
+- BSET - Bit Test and Set
+  - Parent: `OR`
+  - Operation: `Y <- A | (1 << B[2:0])`
+  - Modify: The `B[2:0]` bits are used to make the bitmask. Then the bit is
+    tested against `B`, then `Z` is reflected from that bit.
 - ASR - Arithmetic Shift Right
   - Parent: `ROR`
   - Operation: `Y <- A >> 1`
