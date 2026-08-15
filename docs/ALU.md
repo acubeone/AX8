@@ -118,12 +118,14 @@ operation.
   - Parent: `AND`
   - Operation: `Y <- A & ~(1 << B[2:0])`
   - Modify: The `B[2:0]` bits are used to make the bitmask. Then the bit is
-    tested against `B`, then `Z` is reflected from that bit.
+    tested against `B`, then `Z` is reflected from that bit. All other flags
+    should be left intact.
 - BSET - Bit Test and Set
   - Parent: `OR`
   - Operation: `Y <- A | (1 << B[2:0])`
   - Modify: The `B[2:0]` bits are used to make the bitmask. Then the bit is
-    tested against `B`, then `Z` is reflected from that bit.
+    tested against `B`, then `Z` is reflected from that bit. All other flags
+    should be left intact.
 - ASR - Arithmetic Shift Right
   - Parent: `ROR`
   - Operation: `Y <- A >> 1`

@@ -1,0 +1,80 @@
+# inputs:
+#   encoded_op[4:0]
+#
+# outputs:
+#   alu_op[2:0]
+#   u_cin_sel[1:0]
+#   u_force_a
+#   u_force_b
+#   u_b_sel[1:0]
+#   discard_y
+#   force_nf
+#   force_vf
+#   force_zf
+#   alu_sel
+#
+#  u_op[2:0]:
+#   000=ADC/MULU, 001=SBC/DIVU, 010=AND/MULS, 011=OR/DIVS
+#   100=XOR/MULU, 101=ROR/DIVU, 110=ROL/MULS, 111=MOV/DIVS
+#  u_cin_sel[1:0]:
+#   00=carry_in
+#   01=0
+#   10=1
+#   11=a[7]
+#  u_b_sel[1:0]:
+#   00=$00
+#   01=$ff
+#   10=~mask
+#   11=mask
+#  alu_sel:
+#   0=U-ALU
+#   1=V-ALU
+#
+# 'x' = don't care
+#
+#
+# OOOCCABSSDNVZU
+# - AAA <- alu_op
+# - CC  <- u_cin_sel
+# - A   <- u_force_a
+# - B   <- u_force_b
+# - SS  <- u_b_sel
+# - D   <- discard_y
+# - N   <- force_nf
+# - V   <- force_vf
+# - Z   <- force_zf
+# - U   <- alu_sel
+
+.i 5
+.o 14
+.p 32
+
+#     OOOCCABSSDNVZU
+00000 00000000000000 # ADC
+00001 00100000000000 # SBC
+00010 01000000000000 # AND
+00011 01100000000000 # OR
+00100 10000000000000 # XOR
+00101 10100000000000 # ROR
+00110 11000000000000 # ROL
+00111 11100000000000 # MOV
+01000 00001000000000 # ADD
+01001 00110000000000 # SUB
+01010 01000011000010 # BCLR
+01011 01100011100010 # BSET
+01100 10000010100000 # NOT
+01101 10101000000000 # LSR
+01110 11001000000000 # LSL
+01111 11100010000000 # CLR
+10000 00010010000000 # INC
+10001 00101010000000 # DEC
+1001x 01000000011100 # BIT
+101xx 10111000000000 # ASR
+1100x 00110000010000 # CMP
+1101x 00110100000000 # NEG
+11100 00000000000001 # MULU
+11101 00100000000001 # DIVU
+11110 01000000000001 # MULS
+11111 01100000000001 # DIVS
+
+.e
