@@ -1,4 +1,4 @@
---column_limit=100
+--column_limit=90
 --indentation_spaces=4
 --wrap_spaces=4
 --line_terminator=LF

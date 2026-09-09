@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/hudson-trading/slang-server/refs/heads/main/clients/vscode/resources/config.schema.json",
+  "index": [
+    {
+      "dirs": ["fpga/src", "fpga/tb"],
+      "excludeDirs": ["build"]
+    }
+  ],
+  "buildPattern": "fpga/tb/{}.f",
+  "builds": [
+    {
+      "glob": "fpga/tb/*.f",
+      "excludeGlob": "fpga/tb/common.f"
+    }
+  ],
+  "indexingThreads": 4
+}
