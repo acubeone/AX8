@@ -1,9 +1,11 @@
 # Sources
 fpga/src/adder_subtractor_8.sv
 fpga/src/full_adder.sv
+fpga/src/shift_rotator_8.sv
 fpga/src/sign_bridge_8.sv
 
 # Testbenches
 fpga/tb/adder_subtractor_8_tb.sv
 fpga/tb/full_adder_tb.sv
+fpga/tb/shift_rotator_8_tb.sv
 fpga/tb/sign_bridge_8_tb.sv

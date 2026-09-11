@@ -55,6 +55,7 @@ module full_adder_tb;
         drive('{1, 0, 1}, '{0, 1});
         drive('{1, 1, 1}, '{1, 1});
 
+        report();
         $finish;
     end
 endmodule

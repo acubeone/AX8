@@ -66,6 +66,7 @@ module sign_bridge_8_tb;
         drive('{8'h03, 0, 1}, '{8'h03, 1});
         drive('{8'hc0, 1, 0}, '{8'h40, 1});
 
+        report();
         $finish;
     end
 endmodule
