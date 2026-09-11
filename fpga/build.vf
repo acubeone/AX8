@@ -1,0 +1,5 @@
+-f common.vf
+src/adder_subtractor_8.sv
+src/full_adder.sv
+tb/adder_subtractor_8_tb.sv
+tb/full_adder_tb.sv

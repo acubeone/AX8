@@ -1,3 +1,4 @@
 # Configuration
 +incdir+src
++incdir+tb
 +timescale+1ns/1ps

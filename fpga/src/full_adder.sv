@@ -5,9 +5,9 @@ module full_adder (
     output y,
     output cout
 );
-  wire halfadd;
-  assign halfadd = a ^ b;
+    wire halfadd;
+    assign halfadd = a ^ b;
 
-  assign y = halfadd ^ cin;
-  assign cout = (a & b) | (halfadd & cin);
+    assign y = halfadd ^ cin;
+    assign cout = (a & b) | (halfadd & cin);
 endmodule

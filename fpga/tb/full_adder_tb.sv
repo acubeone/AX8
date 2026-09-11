@@ -1,30 +1,60 @@
+`include "utils.svh"
+
 module full_adder_tb;
-  reg a, b, cin;
-  wire y, cout;
+    typedef struct packed {
+        logic a, b, cin;  //
+    } Input;
 
-  full_adder uut (
-      .a(a),
-      .b(b),
-      .cin(cin),
-      .y(y),
-      .cout(cout)
-  );
+    typedef struct packed {
+        logic y, cout;  //
+    } Output;
 
-  initial begin
-    $dumpfile("full_adder.vcd");
-    $dumpvars(0, full_adder_tb);
+    Input  in;
+    Output out;
 
-    // verilog_format: off
-    a = 1'b0; b = 1'b0; cin = 1'b0; #10;
-    a = 1'b0; b = 1'b0; cin = 1'b1; #10;
-    a = 1'b0; b = 1'b1; cin = 1'b0; #10;
-    a = 1'b0; b = 1'b1; cin = 1'b1; #10;
-    a = 1'b1; b = 1'b0; cin = 1'b0; #10;
-    a = 1'b1; b = 1'b0; cin = 1'b1; #10;
-    a = 1'b1; b = 1'b1; cin = 1'b0; #10;
-    a = 1'b1; b = 1'b1; cin = 1'b1; #10;
-    // verilog_format: on
+    wire w_in_a = in.a;
+    wire w_in_b = in.b;
+    wire w_in_cin = in.cin;
+    wire w_out_y = out.y;
+    wire w_out_cout = out.cout;
 
-    $finish;
-  end
+    full_adder uut (
+        .a   (in.a),
+        .b   (in.b),
+        .cin (in.cin),
+        .y   (out.y),
+        .cout(out.cout)
+    );
+
+    task automatic drive;
+        input Input tin;
+        input Output texpected;
+
+        logic [MAXWIDTH-1:0] gotbits, expbits;
+
+        in.a = tin.a;
+        in.b = tin.b;
+        in.cin = tin.cin;
+        #10;
+
+        gotbits = MAXWIDTH'(out);
+        expbits = MAXWIDTH'(texpected);
+        check($sformatf("a=%b b=%b cin=%b", tin.a, tin.b, tin.cin), gotbits, expbits,
+              $bits(Output));
+    endtask
+
+    initial begin
+        $dumpfile("full_adder.vcd");
+        $dumpvars(0, full_adder_tb);
+
+        drive('{0, 0, 0}, '{0, 0});
+        drive('{1, 0, 0}, '{1, 0});
+        drive('{0, 1, 0}, '{1, 0});
+        drive('{1, 1, 0}, '{0, 1});
+        drive('{0, 0, 1}, '{1, 0});
+        drive('{1, 0, 1}, '{0, 1});
+        drive('{1, 1, 1}, '{1, 1});
+
+        $finish;
+    end
 endmodule
