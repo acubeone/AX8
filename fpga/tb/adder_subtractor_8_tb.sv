@@ -16,11 +16,11 @@ module adder_subtractor_8_tb;
 
     wire [7:0] w_in_a = in.a;
     wire [7:0] w_in_b = in.b;
-    wire w_in_cin = in.cin;
-    wire w_in_mode = in.mode;
+    wire       w_in_cin = in.cin;
+    wire       w_in_mode = in.mode;
     wire [7:0] w_out_y = out.y;
-    wire w_out_cout = out.cout;
-    wire w_out_vout = out.vout;
+    wire       w_out_cout = out.cout;
+    wire       w_out_vout = out.vout;
 
     adder_subtractor_8 uut (
         .a   (in.a),

@@ -1,4 +1,7 @@
 # Configuration
-+incdir+src
-+incdir+tb
 +timescale+1ns/1ps
++incdir+fpga/src
++incdir+fpga/tb
+
+# Source
+-f build.vf
