@@ -1,6 +1,6 @@
 `include "utils.svh"
 
-module adder_subtractor_8_tb;
+module tb_adder_subtractor_8;
     typedef struct packed {
         logic [7:0] a, b;
         logic cin, mode;
@@ -52,7 +52,7 @@ module adder_subtractor_8_tb;
 
     initial begin
         $dumpfile("adder_subtractor_8.vcd");
-        $dumpvars(0, adder_subtractor_8_tb);
+        $dumpvars(0, tb_adder_subtractor_8);
 
         // ADD (m=0) - basic
         drive('{8'h00, 8'h00, 0, 0}, '{8'h00, 0, 0});  // 0 + 0 = 0

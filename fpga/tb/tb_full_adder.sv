@@ -1,6 +1,6 @@
 `include "utils.svh"
 
-module full_adder_tb;
+module tb_full_adder;
     typedef struct packed {
         logic a, b, cin;  //
     } Input;
@@ -45,7 +45,7 @@ module full_adder_tb;
 
     initial begin
         $dumpfile("full_adder.vcd");
-        $dumpvars(0, full_adder_tb);
+        $dumpvars(0, tb_full_adder);
 
         drive('{0, 0, 0}, '{0, 0});
         drive('{1, 0, 0}, '{1, 0});

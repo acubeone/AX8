@@ -1,6 +1,6 @@
 `include "utils.svh"
 
-module sign_bridge_8_tb;
+module tb_sign_bridge_8;
     typedef struct packed {
         logic [7:0] a;
         logic sign, chain_in;
@@ -47,7 +47,7 @@ module sign_bridge_8_tb;
 
     initial begin
         $dumpfile("sign_bridge_8");
-        $dumpvars(0, sign_bridge_8_tb);
+        $dumpvars(0, tb_sign_bridge_8);
 
         drive('{8'h00, 0, 0}, '{8'h00, 0});
         drive('{8'h00, 0, 1}, '{8'h00, 1});

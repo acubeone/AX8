@@ -10,9 +10,9 @@ WAVEVIEWER := gtkwave  # Path to the wave-viewer binary
 IFLAGS   := -g2012 -Wall -f $(FPGA_DIR)/common.vf
 
 SRCS    := $(wildcard $(SRC_DIR)/*.sv)
-TB_SRCS := $(wildcard $(TB_DIR)/*_tb.sv)
+TB_SRCS := $(wildcard $(TB_DIR)/tb_*.sv)
 
-MODULES := $(patsubst $(TB_DIR)/%_tb.sv,%,$(TB_SRCS)) # Extract base name from files
+MODULES := $(patsubst $(TB_DIR)/tb_%.sv,%,$(TB_SRCS)) # Extract base name from files
 SIMS    := $(patsubst %,$(BUILD_DIR)/%_sim,$(MODULES))
 VCDS    := $(patsubst %,$(BUILD_DIR)/%.vcd,$(MODULES))
 
@@ -23,8 +23,8 @@ $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
 # Generate simulators
-$(BUILD_DIR)/%_sim: $(FPGA_DIR)/common.vf $(FPGA_DIR)/build.vf $(SRCS) $(TB_DIR)/%_tb.sv | $(BUILD_DIR)
-	$(IVERILOG) $(IFLAGS) -s $*_tb -o $@
+$(BUILD_DIR)/%_sim: $(FPGA_DIR)/common.vf $(FPGA_DIR)/build.vf $(SRCS) $(TB_DIR)/tb_%.sv | $(BUILD_DIR)
+	$(IVERILOG) $(IFLAGS) -s tb_$* -o $@
 
 # Run simulation and generate waveforms
 $(BUILD_DIR)/%.vcd: $(BUILD_DIR)/%_sim
