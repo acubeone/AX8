@@ -2,7 +2,7 @@ module adder_subtractor_8 (
     input  [7:0] a,
     input  [7:0] b,
     input        cin,
-    input        mode,
+    input        op,    // 0=ADC, 1=SBC
     output [7:0] y,
     output       cout,
     output       vout
@@ -17,7 +17,7 @@ module adder_subtractor_8 (
     genvar i;
     generate
         for (i = 0; i < 8; i++) begin : gen_partial_sum
-            assign xored_b[i] = b[i] ^ mode;
+            assign xored_b[i] = b[i] ^ op;
 
             full_adder full_adder (
                 .a   (a[i]),

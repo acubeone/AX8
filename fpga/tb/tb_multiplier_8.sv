@@ -1,55 +1,55 @@
 `include "utils.svh"
 
 module tb_multiplier_8;
-    reg         clk = 0;
-    reg         rst_n = 1;
-    logic [7:0] in_m;
-    logic [7:0] in_q;
+    logic clk = 0;
+    logic rst_n = 1;
 
-    logic [15:0] out_y;
-    logic [ 7:0] out_m;
-    logic [ 7:0] out_q;
+    logic [7:0] in_q;
+    logic [7:0] in_m;
+    logic [7:0] in_acc;
+
+    logic [7:0] out_q;
+    logic [7:0] out_acc;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            in_m <= 8'h00;
             in_q <= 8'h00;
+            in_m <= 8'h00;
+            in_acc <= 8'h00;
         end else begin
-            in_m <= out_m;
             in_q <= out_q;
+            in_acc <= out_acc;
         end
     end
 
     multiplier_8 uut (
-        .clk  (clk),
-        .rst_n(rst_n),
-        .in_m (in_m),
-        .in_q (in_q),
-        .y    (out_y),
-        .out_m(out_m),
-        .out_q(out_q)
+        .in_q   (in_q),
+        .in_m   (in_m),
+        .in_acc (in_acc),
+        .out_q  (out_q),
+        .out_acc(out_acc)
     );
 
     task automatic drive;
-        input logic [7:0] tin_m;
         input logic [7:0] tin_q;
+        input logic [7:0] tin_m;
         input logic [15:0] texp_y;
 
         logic [MAXWIDTH-1:0] gotbits, expbits;
 
         rst_n = 0;
         #10 rst_n = 1;
-        in_m = tin_m;
         in_q = tin_q;
+        in_m = tin_m;
 
         for (int i = 0; i < 8; i += 1) begin
             #10 clk = 1;
             #10 clk = 0;
         end
 
-        gotbits = MAXWIDTH'(out_y);
+        gotbits = MAXWIDTH'({in_acc, in_q});
         expbits = MAXWIDTH'(texp_y);
-        check($sformatf("m=%h q=%h", tin_m, tin_q), gotbits, expbits, $bits(texp_y));
+        check($sformatf("q=%h m=%h", tin_q, tin_m), gotbits, expbits, $bits(texp_y));
     endtask
 
     initial begin

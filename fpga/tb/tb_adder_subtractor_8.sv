@@ -3,7 +3,7 @@
 module tb_adder_subtractor_8;
     typedef struct packed {
         logic [7:0] a, b;
-        logic cin, mode;
+        logic cin, op;
     } Input;
 
     typedef struct packed {
@@ -17,7 +17,7 @@ module tb_adder_subtractor_8;
     wire [7:0] w_in_a = in.a;
     wire [7:0] w_in_b = in.b;
     wire       w_in_cin = in.cin;
-    wire       w_in_mode = in.mode;
+    wire       w_in_op = in.op;
     wire [7:0] w_out_y = out.y;
     wire       w_out_cout = out.cout;
     wire       w_out_vout = out.vout;
@@ -26,7 +26,7 @@ module tb_adder_subtractor_8;
         .a   (in.a),
         .b   (in.b),
         .cin (in.cin),
-        .mode(in.mode),
+        .op  (in.op),
         .y   (out.y),
         .cout(out.cout),
         .vout(out.vout)
@@ -41,12 +41,12 @@ module tb_adder_subtractor_8;
         in.a = tin.a;
         in.b = tin.b;
         in.cin = tin.cin;
-        in.mode = tin.mode;
+        in.op = tin.op;
         #10;
 
         gotbits = MAXWIDTH'(out);
         expbits = MAXWIDTH'(texpected);
-        check($sformatf("a=%h b=%h cin=%b mode=%b", tin.a, tin.b, tin.cin, tin.mode),
+        check($sformatf("a=%h b=%h cin=%b mode=%b", tin.a, tin.b, tin.cin, tin.op),
               gotbits, expbits, $bits(Output));
     endtask
 
@@ -54,7 +54,7 @@ module tb_adder_subtractor_8;
         $dumpfile("adder_subtractor_8.vcd");
         $dumpvars(0, tb_adder_subtractor_8);
 
-        // ADD (m=0) - basic
+        // ADD (op=0) - basic
         drive('{8'h00, 8'h00, 0, 0}, '{8'h00, 0, 0});  // 0 + 0 = 0
         drive('{8'h01, 8'h01, 0, 0}, '{8'h02, 0, 0});  // 1 + 1 = 2
         drive('{8'h00, 8'h10, 0, 0}, '{8'h10, 0, 0});  // 0 + 16 = 16
@@ -62,36 +62,36 @@ module tb_adder_subtractor_8;
         drive('{8'hFF, 8'hFF, 0, 0}, '{8'hFE, 1, 0});  // max + max
         drive('{8'hFF, 8'hFF, 1, 0}, '{8'hFF, 1, 0});  // max + max + cin
 
-        // ADD (m=0) - cin
+        // ADD (op=0) - cin
         drive('{8'h00, 8'h00, 1, 0}, '{8'h01, 0, 0});  // 0 + 0 + 1 = 1
         drive('{8'h00, 8'h10, 1, 0}, '{8'h11, 0, 0});  // 0 + 16 + 1 = 17
         drive('{8'hF0, 8'h10, 1, 0}, '{8'h01, 1, 0});  // carry out with cin
 
-        // ADD (m=0) - signed overflow (V=1)
+        // ADD (op=0) - signed overflow (V=1)
         drive('{8'h70, 8'h10, 0, 0}, '{8'h80, 0, 1});  // +112 + +16 = -128 overflow
         drive('{8'h7F, 8'h01, 0, 0}, '{8'h80, 0, 1});  // +127 + +1  = -128 overflow
         drive('{8'h90, 8'h90, 0, 0}, '{8'h20, 1, 1});  // -112 + -112 = +32 overflow
         drive('{8'h80, 8'h80, 0, 0}, '{8'h00, 1, 1});  // -128 + -128 = 0 no overflow
 
-        // ADD (m=0) - no signed overflow
+        // ADD (op=0) - no signed overflow
         drive('{8'h70, 8'h0F, 0, 0}, '{8'h7F, 0, 0});  // +112 + +15 = +127 no overflow
         drive('{8'h80, 8'h0E, 0, 0}, '{8'h8E, 0, 0});  // -128 + +15 = -114 no overflow
 
-        // SUB (m=1) - basic, cin=1 means no borrow
+        // SUB (op=1) - basic, cin=1 means no borrow
         drive('{8'h10, 8'h10, 1, 1}, '{8'h00, 1, 0});  // 16 - 16 = 0
         drive('{8'h20, 8'h10, 1, 1}, '{8'h10, 1, 0});  // 32 - 16 = 16
         drive('{8'hFF, 8'h01, 1, 1}, '{8'hFE, 1, 0});  // 255 - 1 = 254
         drive('{8'h00, 8'h01, 1, 1}, '{8'hFF, 0, 0});  // 0 - 1 = borrow
 
-        // SUB (m=1) - cin=0 means borrow in
+        // SUB (op=1) - cin=0 means borrow in
         drive('{8'h10, 8'h10, 0, 1}, '{8'hFF, 0, 0});  // 16 - 16 - 1 = -1
         drive('{8'h20, 8'h10, 0, 1}, '{8'h0F, 1, 0});  // 32 - 16 - 1 = 15
 
-        // SUB (m=1) - signed overflow (V=1)
+        // SUB (op=1) - signed overflow (V=1)
         drive('{8'h80, 8'h01, 1, 1}, '{8'h7F, 1, 1});  // -128 - +1  = +127 overflow
         drive('{8'h7F, 8'hFF, 1, 1}, '{8'h80, 0, 1});  // +127 - -1  = -128 overflow
 
-        // SUB (m=1) - no signed overflow
+        // SUB (op=1) - no signed overflow
         drive('{8'h70, 8'h10, 1, 1}, '{8'h60, 1, 0});  // +112 - +16 = +96
         drive('{8'h80, 8'h90, 1, 1}, '{8'hF0, 0, 0});  // -128 - -112 = -16
 
