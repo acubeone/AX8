@@ -56,22 +56,31 @@ module tb_multiplier_8;
         $dumpfile("multiplier_8.vcd");
         $dumpvars(0, tb_multiplier_8);
 
-        drive(8'h00, 8'h00, 16'h0000);
-        drive(8'h00, 8'hff, 16'h0000);
-        drive(8'hff, 8'h00, 16'h0000);
-        drive(8'h01, 8'h01, 16'h0001);
-        drive(8'h01, 8'hff, 16'h00ff);
-        drive(8'hff, 8'h01, 16'h00ff);
-        drive(8'h02, 8'h80, 16'h0100);
-        drive(8'h80, 8'h02, 16'h0100);
-        drive(8'h10, 8'h10, 16'h0100);
-        drive(8'h0f, 8'h0f, 16'h00e1);
-        drive(8'h55, 8'haa, 16'h3872);
-        drive(8'hff, 8'hff, 16'hfe01);
-        drive(8'h80, 8'h80, 16'h4000);
-        drive(8'hc8, 8'hc8, 16'h9c40);
-        drive(8'h0a, 8'h0a, 16'h0064);
-        drive(8'h7f, 8'h02, 16'h00fe);
+        // drive(8'h00, 8'h00, 16'h0000);
+        // drive(8'h00, 8'hff, 16'h0000);
+        // drive(8'hff, 8'h00, 16'h0000);
+        // drive(8'h01, 8'h01, 16'h0001);
+        // drive(8'h01, 8'hff, 16'h00ff);
+        // drive(8'hff, 8'h01, 16'h00ff);
+        // drive(8'h02, 8'h80, 16'h0100);
+        // drive(8'h80, 8'h02, 16'h0100);
+        // drive(8'h10, 8'h10, 16'h0100);
+        // drive(8'h0f, 8'h0f, 16'h00e1);
+        // drive(8'h55, 8'haa, 16'h3872);
+        // drive(8'hff, 8'hff, 16'hfe01);
+        // drive(8'h80, 8'h80, 16'h4000);
+        // drive(8'hc8, 8'hc8, 16'h9c40);
+        // drive(8'h0a, 8'h0a, 16'h0064);
+        // drive(8'h7f, 8'h02, 16'h00fe);
+
+        // Test all 65536 possible results
+        for (logic [7:0] q = 0; q < 256; q += 1) begin
+            for (logic [7:0] m = 0; m < 256; m += 1) begin
+                drive(q, m, q * m);
+                if (m == 255) break;
+            end
+            if (q == 255) break;
+        end
 
         report();
         $finish;
