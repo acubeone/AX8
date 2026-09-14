@@ -1,6 +1,6 @@
 `include "utils.svh"
 
-module tb_shift_rotator_8;
+module tb_shift_rotator;
     typedef struct packed {
         logic [7:0] a;
         logic dir, cin;
@@ -20,7 +20,7 @@ module tb_shift_rotator_8;
     wire [7:0] w_out_y = out.y;
     wire       w_out_cout = out.cout;
 
-    shift_rotator_8 uut (
+    shift_rotator uut (
         .a   (in.a),
         .dir (in.dir),
         .cin (in.cin),
@@ -46,8 +46,8 @@ module tb_shift_rotator_8;
     endtask
 
     initial begin
-        $dumpfile("shift_rotator_8.vcd");
-        $dumpvars(0, tb_shift_rotator_8);
+        $dumpfile("shift_rotator.vcd");
+        $dumpvars(0, tb_shift_rotator);
 
         // dir="left", cin=0 -> cout=0
         drive('{8'h01, 0, 0}, '{8'h02, 0});

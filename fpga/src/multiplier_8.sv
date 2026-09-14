@@ -10,7 +10,7 @@ module multiplier_8 (
 
     wire [7:0] multiplicand = in_m & {8{in_q[0]}};
 
-    adder_subtractor_8 adder (
+    adder_subtractor adder (
         .a   (multiplicand),
         .b   (in_acc),
         .cin (1'b0),
