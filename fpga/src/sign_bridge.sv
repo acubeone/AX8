@@ -18,6 +18,6 @@ module sign_bridge #(
     endgenerate
 
     // If sign then apply inversion-mask, if not, just pass bit through
-    assign y = a ^ (mask & {8{sign}});
+    assign y = a ^ (mask & {WIDTH{sign}});
     assign chain_out = mask[WIDTH-1] | a[WIDTH-1]; // Continue chain if byte is all-zeroes
 endmodule

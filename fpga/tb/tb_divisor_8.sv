@@ -12,7 +12,7 @@ module tb_divisor_8;
     logic [7:0] out_q;
     logic [8:0] out_acc;
 
-    always @(posedge clk or negedge rst_n) begin
+    always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             in_q <= 8'h00;
             in_m <= 8'h00;

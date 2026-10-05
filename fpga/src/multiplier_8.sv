@@ -1,3 +1,6 @@
+// param: Q -> Low Byte
+// param: M -> Never modified
+// param: Acc -> High Byte
 module multiplier_8 (
     input  [7:0] in_q,    // Multiplier
     input  [7:0] in_m,    // Multiplicand

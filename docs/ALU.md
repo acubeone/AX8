@@ -59,11 +59,10 @@ All operations can take multiple cycles to complete.
 - DIVU - Divide Unsigned
     - OP: `01`
     - Operation: `Q <- A / B; R <- A % B; A <- Q; B <- R`
-    - Flags: `[V=*, C=0, N=*, Z=*]`
-    - Notes: Division uses unsigned arithmetic. Exception is triggered if operand
-      `B` is zero. Overflow flag is set if operand `B` is greater than `A`. The
-      quocient is stored in operand `A`, and the remainder is stored in
-      operand `B`.
+    - Flags: `[V=0, C=0, N=*, Z=*]`
+    - Notes: Division uses unsigned arithmetic. Exception is triggered if
+      operand `B` is zero. The quocient is stored in operand `A`, and the
+      remainder is stored in operand `B`.
 - MULS - Multiply Signed
     - OP: `10`
     - Operation: `signed multiply; A <- Y[7:0]; B <- Y[15:8]`
@@ -73,11 +72,10 @@ All operations can take multiple cycles to complete.
 - DIVS - Divide Signed
     - OP: `11`
     - Operation: `signed divide; R <- A % B; A <- Q; B <- R`
-    - Flags: `[V=*, C=0, N=*, Z=*]`
+    - Flags: `[V=0, C=0, N=*, Z=*]`
     - Notes: Division uses signed arithmetic in two's complement. Exception is
-      triggered if operand `B` is zero. Overflow flag is set if operand `B` is
-      greater than `A`. The quocient is stored in operand `A`, and the remainder
-      is stored in operand `B`.
+      triggered if operand `B` is zero. The quocient is stored in operand `A`,
+      and the remainder is stored in operand `B`.
 
 The `Y` result is always 16-bits. Differently the Unit `U`, the unit `V` always
 write back the results into the operand.

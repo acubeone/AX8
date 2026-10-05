@@ -5,6 +5,7 @@ fpga/src/full_adder.sv
 fpga/src/multiplier_8.sv
 fpga/src/shift_rotator.sv
 fpga/src/sign_bridge.sv
+fpga/src/v_alu.sv
 
 # Testbenches
 fpga/tb/tb_adder_subtractor.sv
@@ -13,3 +14,4 @@ fpga/tb/tb_full_adder.sv
 fpga/tb/tb_multiplier_8.sv
 fpga/tb/tb_shift_rotator.sv
 fpga/tb/tb_sign_bridge.sv
+fpga/tb/tb_v_alu.sv

@@ -1,3 +1,6 @@
+// param: Q -> Quotient
+// param: M -> Never modified
+// param: Acc -> Remainder
 module divisor_8 (
     input        done,
     input  [7:0] in_q,    // Dividend
